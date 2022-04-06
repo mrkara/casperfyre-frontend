@@ -1,0 +1,97 @@
+:global .btn {
+  @apply text-white relative capitalize font-semibold text-sm transition-all duration-500 ease-in-out inline-block;
+  .ripple-box {
+    @apply absolute inset-0 overflow-hidden;
+  }
+  .ripple-element {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba($color: gray, $alpha: 0.2);
+    animation: ripple 1s;
+    opacity: 0;
+    transition: opacity,transform 0ms cubic-bezier(0,0,.2,1);
+  }
+
+
+  // Variants
+  &.text {
+    &:disabled {
+      @apply relative cursor-not-allowed text-gray1;
+    }
+  }
+
+  &.contained {
+    &:disabled {
+      @apply relative cursor-not-allowed bg-gray1 text-white;
+    }
+  }
+
+  &.outline {
+    &:disabled {
+      @apply relative cursor-not-allowed text-gray1 border-gray1;
+    }
+  }
+
+  .loading {
+    @apply absolute flex left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2;
+    .lds-ripple div {
+      border-color: currentColor;
+    }
+  }
+
+  // Color: primary
+  &.btn-primary {
+    &-contained {
+      @apply bg-primary text-white;
+
+      &:hover {
+        @apply opacity-95;
+      }
+    }
+
+    &-outline {
+      @apply text-primary border border-primary;
+    }
+  }
+
+  // Color: basic
+  &.btn-basic {
+    @apply text-white;
+
+    &-contained {
+      @apply bg-primary text-black;
+
+      &:hover {
+        @apply opacity-95;
+      }
+    }
+
+    &-outline {
+      @apply border border-gray1;
+    }
+  }
+
+  &.btn-danger {
+    @apply text-danger;
+
+    &-contained {
+      @apply bg-danger text-white;
+    }
+
+    &-outline {
+      @apply text-danger border border-danger;
+    }
+  }
+
+  // Size (default: md)
+  &.btn-md {
+    @apply py-3 px-5;
+    min-height: 1.75rem;
+    min-width: 6.75rem;
+  }
+
+  &.btn-sm {
+    min-height: 1.25rem;
+    min-width: 6.25rem;
+  }
+}

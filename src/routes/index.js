@@ -1,13 +1,17 @@
 import { lazy, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import ScrollToTop from './ScrollToTop';
+import AuthRoute from './AuthRoute';
 
-const Home = lazy(() => import('pages/Home'));
+const AuthRoutes = lazy(() => import('pages/auth/auth.routes'));
 
 const Routes = () => {
   return (
     <Suspense fallback={null}>
+      <ScrollToTop />
       <Switch>
-        <Route exact path='/' component={Home} />
+        <AuthRoute path='/auth' component={AuthRoutes} />
+        {/* <Route exact path='/' component={Home} /> */}
       </Switch>
     </Suspense>
   );

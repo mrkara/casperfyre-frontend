@@ -1,0 +1,39 @@
+.inputText,
+input {
+  @apply text-sm bg-gray1 py-3 px-5 w-full text-black1 outline-none border border-gray2 transition-all duration-200 ease-in-out;
+
+  &::placeholder {
+    opacity: 0.21;
+  }
+
+  &:focus {
+    // @apply border-primary;
+  }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px theme("colors.black") inset !important;
+  }
+
+  &:-webkit-autofill {
+    -webkit-text-fill-color: white !important;
+  }
+}
+
+.showPassword {
+  @apply absolute right-5 cursor-pointer top-1/2 transform -translate-y-1/2 text-2xl;
+}
+
+.errorInput {
+  // @apply border-danger;
+
+  &:focus {
+    // @apply border-danger;
+  }
+}
+
+.error {
+  // @apply text-danger;
+}

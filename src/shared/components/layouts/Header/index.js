@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as HeartFillIcon } from "assets/icons/heart-fill.svg";
 
 const Header = () => {
   return (
@@ -11,7 +10,6 @@ const Header = () => {
         </Link>
       </div>
       <Link to="/favorite" className='flex gap-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-        <HeartFillIcon/> Favorite
       </Link>
     </header>
   );

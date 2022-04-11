@@ -19,11 +19,7 @@ function createURL(uri, query) {
 
 const apiService = new ApiService();
 
-export function* get(
-  uri,
-  params = {},
-  moreConfig = { timeout: 60000 }
-) {
+export function* get(uri, params = {}, moreConfig = { timeout: 60000 }) {
   const url = createURL(uri, params);
   try {
     const res = yield apiService.makeRequest('GET', url, moreConfig);
@@ -37,12 +33,17 @@ export function* post(
   uri,
   body = {},
   params = {},
-  moreConfig = {}
+  moreConfig = {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE, PUT',
+    },
+  }
 ) {
   const url = createURL(uri, params);
   const config = {
     ...body,
-    ...moreConfig
+    ...moreConfig,
   };
   try {
     const res = yield apiService.makeRequest('POST', url, config);

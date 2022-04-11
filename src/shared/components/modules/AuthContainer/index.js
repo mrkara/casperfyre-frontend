@@ -12,7 +12,7 @@ export const AuthContainer = (props) => {
         </div>
       </Card>
       {props.showInstruction && (
-        <ul class="flex space-x-6 pt-5">
+        <ul className="flex space-x-6 pt-5">
           <li><Link className="text-primary" to="#">Privacy Policy</Link></li>
           <li>|</li>
           <li><Link className="text-primary" to="#">Terms & Conditions</Link></li>

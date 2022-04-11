@@ -1,1 +1,9 @@
-export const GET_LIST = 'GET_LIST';
+export const types = {
+  // Auth
+  SIGN_UP: 'SIGN_UP',
+  LOGIN: 'LOGIN',
+  SET_USER: 'SET_USER',
+  SEND_LOGIN_MAIL: 'SEND_LOGIN_MAIL',
+  RESET_PASSWORD: 'RESET_PASSWORD',
+  FORGOT_PASSWORD: 'FORGOT_PASSWORD'
+};

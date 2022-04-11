@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_DOMAIN = process.env.REACT_APP_BASE_URL;
+const API_DOMAIN = 'http://api.casperfyre.com';
 const STATUS_CODE = {
   NO_INTERNET: 0,
   REQUEST_TIMEOUT: 1,
@@ -13,7 +13,7 @@ export class ErrorHandler {
 
   constructor(e) {
     // Error request timeout
-    if ((e.code && e.code === 'ECONNABORTED') || e?.response?.status === 408 ) {
+    if ((e.code && e.code === 'ECONNABORTED') || e?.response?.status === 408) {
       this.status = STATUS_CODE.REQUEST_TIMEOUT;
       this.data = {
         errors: [
@@ -29,7 +29,7 @@ export class ErrorHandler {
         errors: [
           {
             code: '',
-            message: `${STATUS_CODE.NO_INTERNET}`
+            message: `${STATUS_CODE.NO_INTERNET}`,
           },
         ],
       };
@@ -37,7 +37,7 @@ export class ErrorHandler {
       // handle error message sent from API
       this.status = e?.response?.status;
       this.data = {
-        errors: e?.response?.data?.errors?.map(x => {
+        errors: e?.response?.data?.errors?.map((x) => {
           let message = e?.response?.status;
           // For special cases
           if (
@@ -84,6 +84,8 @@ export class ApiService {
       timeout: 600000,
       headers: {
         'Content-Type': 'application/json',
+        // 'Access-Control-Allow-Origin': '*',
+        // 'Access-Control-Allow-Credentials': true
       },
     });
     this.axiosInstance.interceptors.request.use((_config) => {

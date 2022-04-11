@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { createElement, useState } from 'react';
 import { ReactComponent as Hide } from 'assets/icons/password-hide.svg';
 import { ReactComponent as Show } from 'assets/icons/password-show.svg';
 import style from './style.module.scss';
 
-export const Input = React.forwardRef((
-  { type, error, ...rest }, ref
-) => {
+export const Input = React.forwardRef(({ type, error, rows, ...rest }, ref) => {
   const [isShow, setIsShow] = useState(false);
 
   const renderTogglePassword = type === 'password' && (
@@ -17,13 +15,24 @@ export const Input = React.forwardRef((
   const inputProps = {
     ref,
     type: isShow ? 'text' : type,
-    className: `${style.inputText} ${error && style.errorInput}`
+    className: `${style.inputText}`,
+  };
+
+  const renderElement = (element, props, otherProps) => {
+    return createElement(element, {
+      ...props,
+      ...otherProps,
+      rows: rows,
+    });
   };
 
   return (
-    <div className='relative'>
-      <input {...inputProps} {...rest} />
-      { renderTogglePassword }
+    <div className='form-control'>
+      <div className='relative'>
+        {renderElement(rows ? 'textarea' : 'input', inputProps, rest)}
+        {renderTogglePassword}
+      </div>
+      {error && <p className='mt-1 text-sm text-danger'>* {error}</p>}
     </div>
   );
 });

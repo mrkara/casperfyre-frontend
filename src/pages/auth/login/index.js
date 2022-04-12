@@ -2,20 +2,23 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { PATTERN } from 'shared/common/pattern';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
+import { setToken } from 'shared/core/services/auth';
 import { login, sendLoginMail } from 'stores/auth/actions';
 import * as yup from 'yup';
 
-function Login() {
+const Login = () => {
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
   });
   const { setLoading } = useLoading();
+  const history = useHistory();
 
   const schema = yup
     .object()
@@ -82,7 +85,8 @@ function Login() {
         { email, password },
         (res) => {
           setLoading(false);
-          console.log('res: ', res);
+          setToken(res.detail);
+          history.push('/app');
         },
         (err) => {
           setLoading(false);
@@ -133,12 +137,21 @@ function Login() {
             Back
           </button>
         )}
-        <p className='ml-auto'>
-          Don’t have an account?{' '}
-          <Link className='text-primary' to='/auth/signup'>
-            Sign Up
-          </Link>
-        </p>
+        {step === 1 && (
+          <p className='ml-auto'>
+            Don’t have an account?{' '}
+            <Link className='text-primary' to='/auth/signup'>
+              Sign Up
+            </Link>
+          </p>
+        )}
+        {step === 2 && (
+          <p className='ml-auto'>
+            <Link className='text-primary' to='/auth/forgot-password'>
+              Forgot Password?
+            </Link>
+          </p>
+        )}
       </div>
     </AuthContainer>
   );

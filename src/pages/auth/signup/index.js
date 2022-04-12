@@ -76,7 +76,7 @@ const SignUpForm = (props) => {
   return (
     <AuthContainer className='signup-page' showInstruction>
       <div className='h-full flex flex-col'>
-        <div className='pb-6'>
+        <div className='pb-3'>
           <h3 className='font-semibold'>Sign Up</h3>
         </div>
         <div className='-mx-12 flex-1 min-h-0 overflow-y-scroll'>
@@ -139,7 +139,7 @@ const SignUpForm = (props) => {
                 {...register('cspr_expectation')}
                 error={errors && errors?.cspr_expectation?.message}
               />
-              <Button type="submit" className='w-full' disabled={!isValid}>Verify</Button>
+              <Button type="submit" className='w-full' disabled={!isValid}>Submit</Button>
             </form>
             <div className='flex pt-4'>
               <p className='ml-auto'>

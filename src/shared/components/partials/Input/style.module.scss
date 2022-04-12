@@ -3,6 +3,7 @@ input {
   @apply text-sm bg-gray1 py-3 px-5 w-full text-black1 outline-none border border-gray2 transition-all duration-200 ease-in-out;
 
   &::placeholder {
+    @apply text-black1;
     opacity: 0.21;
   }
 

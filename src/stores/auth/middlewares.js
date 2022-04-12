@@ -9,7 +9,7 @@ function* login({ payload, resolve, reject }) {
     // setToken(res.data?.access_token);
     // setRefreshToken(res.data?.refresh_token);
     yield put(setUser(res));
-    resolve(res.data);
+    resolve(res);
   } catch (error) {
     reject(error);
   }

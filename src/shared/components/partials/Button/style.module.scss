@@ -43,6 +43,11 @@
     }
   }
 
+  &.btn-text {
+    padding: 0 !important;
+    @apply text-primary font-normal;
+  }
+
   // Color: primary
   &.btn-primary {
     &-contained {

@@ -6,10 +6,11 @@
   .ripple-element {
     position: absolute;
     border-radius: 50%;
-    background-color: rgba($color: gray, $alpha: 0.2);
+    background-color: rgba($color: white, $alpha: 0.2);
     animation: ripple 1s;
-    opacity: 0;
-    transition: opacity,transform 0ms cubic-bezier(0,0,.2,1);
+    height: 0;
+    width: 0;
+    transition: all 225ms cubic-bezier(0,0,.2,1);
   }
 
 
@@ -22,7 +23,10 @@
 
   &.contained {
     &:disabled {
-      @apply relative cursor-not-allowed bg-gray1 text-white;
+      @apply relative cursor-not-allowed opacity-50 text-white;
+      &:hover {
+        @apply opacity-50;
+      }
     }
   }
 

@@ -44,7 +44,7 @@ function* forgotPassword({ payload, resolve, reject }) {
 
 function* register({ payload, resolve, reject }) {
   try {
-    const res = yield post(['user', 'register'], payload);
+    const res = yield post(['user', 'register'], { data: payload });
     resolve(res);
   } catch (error) {
     reject(error);

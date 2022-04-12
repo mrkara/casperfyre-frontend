@@ -9,17 +9,6 @@ input {
   &:focus {
     // @apply border-primary;
   }
-
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus,
-  &:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px theme("colors.black") inset !important;
-  }
-
-  &:-webkit-autofill {
-    -webkit-text-fill-color: white !important;
-  }
 }
 
 .showPassword {

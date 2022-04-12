@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { PATTERN } from 'shared/common/pattern';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
+import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
 import { login, sendLoginMail } from 'stores/auth/actions';
 import * as yup from 'yup';
@@ -14,6 +15,7 @@ function Login() {
     firstName: '',
     lastName: '',
   });
+  const { setLoading } = useLoading();
 
   const schema = yup
     .object()
@@ -24,10 +26,6 @@ function Login() {
         is: (st) => st === 2,
         then: yup
           .string()
-          .matches(
-            PATTERN.PASSWORD,
-            'Please use a password with at least 8 characters including at least one number, one letter and one symbol'
-          )
           .required(),
         otherwise: yup.string().notRequired(),
       }),
@@ -40,7 +38,7 @@ function Login() {
     watch,
     setError,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -55,10 +53,12 @@ function Login() {
 
   const onSubmitEmail = (data) => {
     const { email } = data;
+    setLoading(true);
     dispatch(
       sendLoginMail(
         email,
         (res) => {
+          setLoading(false);
           setUser({
             ...user,
             firstName: res.first_name,
@@ -67,6 +67,7 @@ function Login() {
           setValue('step', 2);
         },
         () => {
+          setLoading(false);
           setError('email', { type: 'custom', message: 'Email is not found' });
         }
       )
@@ -75,13 +76,16 @@ function Login() {
 
   const onSubmitLogin = (data) => {
     const { email, password } = data;
+    setLoading(true);
     dispatch(
       login(
         { email, password },
         (res) => {
+          setLoading(false);
           console.log('res: ', res);
         },
         (err) => {
+          setLoading(false);
           console.log('error :', err);
         }
       )
@@ -99,7 +103,7 @@ function Login() {
           <h3 className='pb-6 font-semibold'>Login</h3>
           <form onSubmit={handleSubmit(onSubmitEmail)} className='flex flex-col space-y-5'>
             <Input placeholder='Email Address' {...register('email')} error={errors && errors?.email?.message} />
-            <Button type='submit' className='w-full'>
+            <Button type='submit' className='w-full' disabled={!isValid}>
               Next
             </Button>
           </form>
@@ -107,8 +111,8 @@ function Login() {
       )}
       {step === 2 && (
         <>
-          <h3 className='pb-6 font-semibold'>
-            Hello, [{user.firstName} {user.lastName}]
+          <h3 className='capitalize pb-6 font-semibold'>
+            Hello, {user.firstName} {user.lastName}
           </h3>
           <form onSubmit={handleSubmit(onSubmitLogin)} className='flex flex-col space-y-5'>
             <Input
@@ -117,7 +121,7 @@ function Login() {
               {...register('password')}
               error={errors && errors?.password?.message}
             />
-            <Button type='submit' className='w-full'>
+            <Button type='submit' className='w-full' disabled={!isValid}>
               Next
             </Button>
           </form>

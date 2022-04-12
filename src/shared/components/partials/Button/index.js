@@ -17,7 +17,7 @@ export const Button = (props) => {
   } = props;
   const rippleRef = useRef(null);
 
-  const handleClick = (e: any) => {
+  const handleClick = (e) => {
     e.stopPropagation();
     if (rippleRef?.current) {
       const ripple = document.createElement('span');
@@ -32,7 +32,6 @@ export const Button = (props) => {
       const top = e.clientY - rect.top - diameter / 2;
       ripple.style.left = `${left}px`;
       ripple.style.top = `${top}px`;
-      ripple.style.transitionDuration = '225ms';
       setTimeout(() => {
         ripple.remove();
       }, 300);

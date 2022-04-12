@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 export const AuthContainer = (props) => {
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center">
-      <Card className="max-w-xl w-5/6 px-12 pb-12 pt-6">
+    <div className={`${props.className || ''} h-full w-full flex flex-col items-center justify-center`}>
+      <Card className="max-w-xl max-h-[80vh] w-5/6 px-12 pb-12 pt-6">
         <Logo className="mx-auto"/>
-        <div className="pt-10">
+        <div className="pt-6 h-full">
           {props.children}
         </div>
       </Card>

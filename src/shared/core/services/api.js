@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_DOMAIN = 'http://api.casperfyre.com';
+const API_DOMAIN = process.env.REACT_APP_BASE_URL;
 const STATUS_CODE = {
   NO_INTERNET: 0,
   REQUEST_TIMEOUT: 1,

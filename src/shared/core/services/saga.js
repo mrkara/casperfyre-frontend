@@ -33,12 +33,7 @@ export function* post(
   uri,
   body = {},
   params = {},
-  moreConfig = {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE, PUT',
-    },
-  }
+  moreConfig = {}
 ) {
   const url = createURL(uri, params);
   const config = {

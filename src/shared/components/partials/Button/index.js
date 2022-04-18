@@ -62,7 +62,7 @@ export const Button = (props) => {
       className: classNames('btn', className, {
         [`btn-${color} btn-${color}-${variant}`]: variant !== 'text',
         [`btn-${size}`]: size,
-        [variant]: variant,
+        // [variant]: variant,
         'cursor-not-allowed': isLoading
       }),
       onClick: handleClick,

@@ -3,7 +3,7 @@ import { getToken } from 'shared/core/services/auth';
 
 const AuthRoute = ({ component: Component, ...rest }) => {
   const token = getToken();
-  console.log(token);
+
   return !token ? (
     <Route {...rest} render={(matchProps) => <Component {...matchProps} />} />
   ) : (

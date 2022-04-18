@@ -27,9 +27,7 @@ const Login = () => {
       email: yup.string().matches(PATTERN.EMAIL, 'Email address is invalid').required(),
       password: yup.string().when('step', {
         is: (st) => st === 2,
-        then: yup
-          .string()
-          .required(),
+        then: yup.string().required(),
         otherwise: yup.string().notRequired(),
       }),
     })
@@ -85,11 +83,20 @@ const Login = () => {
         { email, password },
         (res) => {
           setLoading(false);
-          setToken(res.detail);
-          history.push('/app');
+
+          const { detail } = res;
+          if (detail.twofa) {
+            history.push({
+              pathname: `/auth/2fa/${detail.guid}`,
+            });
+          } else if (detail) {
+            setToken(res.detail?.bearer);
+            history.push('/app');
+          }
         },
         (err) => {
           setLoading(false);
+          setError('password', { type: 'custom', message: 'Password is not correct' });
           console.log('error :', err);
         }
       )
@@ -155,6 +162,6 @@ const Login = () => {
       </div>
     </AuthContainer>
   );
-}
+};
 
 export default Login;

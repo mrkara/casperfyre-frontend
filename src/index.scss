@@ -7,6 +7,14 @@
 span, p, h1, h2, h3, h4, h5, h6 {
   @apply text-black1;
 }
-span, a, p, button {
+span,
+a,
+p,
+button {
   @apply text-sm;
+}
+
+.content-wrapper {
+  height: calc(100vh - 51px);
+  overflow: hidden;
 }

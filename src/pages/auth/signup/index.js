@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { PATTERN } from 'shared/common/pattern';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
@@ -37,19 +37,7 @@ const schema = yup
   })
   .required();
 
-const Thanks = (props) => {
-  return (
-    <AuthContainer className="login-page" showInstruction>
-      <div className="pb-6">
-        <h3 className="capitalize font-semibold">Thanks {props.user?.first_name} {props.user?.last_name}!</h3>
-        <p>Your application for the Casper Fyre will be reviewed by one of our admins! If accepted, you will receive an email explaining next steps.</p>
-      </div>
-      <Button className="w-full" as={Link} to="/auth/login">Go to Login</Button>
-    </AuthContainer>
-  );
-}
-
-const SignUpForm = (props) => {
+const SignUp = (props) => {
   const {
     handleSubmit,
     register,
@@ -59,15 +47,18 @@ const SignUpForm = (props) => {
     resolver: yupResolver(schema),
   });
   const { setLoading } = useLoading();
-
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
     setLoading(true);
-    dispatch(signUp(data, () => {
+    dispatch(signUp(data, (res) => {
       setLoading(false);
-      if (props.setUser) props.setUser(data);
+      const { detail } = res;
+      history.push({
+        pathname: `/auth/verify-email/${detail.guid}`,
+      });
     }, () => {
       setLoading(false);
     }));
@@ -155,12 +146,5 @@ const SignUpForm = (props) => {
     </AuthContainer>
   );
 }
-
-const SignUp = () => {
-  const [user, setUser] = useState(null);
-  return (
-    !user ? <SignUpForm setUser={setUser} /> : <Thanks user={user} />
-  )
-};
 
 export default SignUp;

@@ -11,6 +11,9 @@ input {
     // @apply border-primary;
   }
 }
+.inputError {
+  @apply border-danger;
+}
 
 .showPassword {
   @apply absolute right-5 cursor-pointer top-1/2 transform -translate-y-1/2 text-2xl;

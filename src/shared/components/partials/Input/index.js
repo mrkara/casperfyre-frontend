@@ -15,7 +15,7 @@ export const Input = React.forwardRef(({ type, error, rows, ...rest }, ref) => {
   const inputProps = {
     ref,
     type: isShow ? 'text' : type,
-    className: `${style.inputText}`,
+    className: `${style.inputText} ${error && style.inputError}`,
   };
 
   const renderElement = (element, props, otherProps) => {
@@ -32,7 +32,7 @@ export const Input = React.forwardRef(({ type, error, rows, ...rest }, ref) => {
         {renderElement(rows ? 'textarea' : 'input', inputProps, rest)}
         {renderTogglePassword}
       </div>
-      {error && <p className='mt-1 text-sm text-danger'>* {error}</p>}
+      {error && <p className='mt-1 text-[10px] text-danger capitalize-first'>{error}</p>}
     </div>
   );
 });

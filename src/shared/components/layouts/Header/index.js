@@ -1,17 +1,25 @@
+import { ReactComponent as UserProfile } from 'assets/icons/user-circle.svg';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import style from './style.module.scss';
 
-const Header = () => {
+export const Header = () => {
   return (
-    <header className="bg-white h-[60px] fixed z-10 w-full h-14 flex justify-between items-center py-4 px-6 shadow-lg">
-      <div className="flex gap-6">
-        <Link to='/' >
-          <img className="h-[50px]" src="/images/logo.jpg" alt="logo" />
-        </Link>
-      </div>
-      <Link to="/favorite" className='flex gap-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-      </Link>
-    </header>
+    <div>
+      <nav className='px-4 py-2.5 border-b'>
+        <div className='flex flex-wrap justify-between items-center mx-auto'>
+          <Link to='/' className='flex items-center'>
+            <img className={style.logo} src="/images/logo.png" alt="logo" />
+          </Link>
+          <div className='w-full w-auto'>
+            <div className='flex items-center gap-x-2'>
+              <UserProfile width={20} height={20} />
+              <p>Mickey+1@gmail.com</p>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
   );
 };
 

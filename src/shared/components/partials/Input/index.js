@@ -1,6 +1,6 @@
 import React, { createElement, useState } from 'react';
-import { ReactComponent as Hide } from 'assets/icons/password-hide.svg';
-import { ReactComponent as Show } from 'assets/icons/password-show.svg';
+import { ReactComponent as Hide } from 'assets/icons/eye-slash.svg';
+import { ReactComponent as Show } from 'assets/icons/eye.svg';
 import style from './style.module.scss';
 
 export const Input = React.forwardRef(({ type, error, rows, ...rest }, ref) => {

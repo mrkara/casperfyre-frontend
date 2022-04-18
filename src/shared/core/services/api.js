@@ -20,9 +20,11 @@ export class ErrorHandler {
     } else if (e?.response?.status === 401) {
       this.status = e?.response?.status;
       this.message = e?.response?.status;
-      removeToken();
+      if (getToken()) {
+        window.location.href = '/auth/login';
+        removeToken();
+      }
       removeGuid();
-      window.location.href = '/auth/login';
     } else {
       this.status = STATUS_CODE.UNEXPECTED;
       this.message = STATUS_CODE.UNEXPECTED;

@@ -4,7 +4,7 @@ import { types } from 'stores/types';
 
 function* getApplications({ payload, resolve, reject }) {
   try {
-    const res = yield get(['admin', 'get-applications'], { data: payload });
+    const res = yield get(['admin', 'get-applications'], payload);
     resolve(res);
   } catch (error) {
     reject(error);
@@ -13,7 +13,7 @@ function* getApplications({ payload, resolve, reject }) {
 
 function* getAPIKeys({ payload, resolve, reject }) {
   try {
-    const res = yield get(['admin', 'get-apikeys'], { data: payload });
+    const res = yield get(['admin', 'get-apikeys'], payload);
     resolve(res);
   } catch (error) {
     reject(error);
@@ -22,7 +22,7 @@ function* getAPIKeys({ payload, resolve, reject }) {
 
 function* getWallets({ payload, resolve, reject }) {
   try {
-    const res = yield get(['admin', 'get-wallets'], { data: payload });
+    const res = yield get(['admin', 'get-wallets'], payload);
     resolve(res);
   } catch (error) {
     reject(error);
@@ -31,7 +31,7 @@ function* getWallets({ payload, resolve, reject }) {
 
 function* getHistories({ payload, resolve, reject }) {
   try {
-    const res = yield get(['admin', 'history'], { data: payload });
+    const res = yield get(['admin', 'history'], payload);
     resolve(res);
   } catch (error) {
     reject(error);

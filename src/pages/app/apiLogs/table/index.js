@@ -41,33 +41,15 @@ const ApiLogsTable = React.forwardRef(({ outParams }, ref) => {
       // onSort={handleSort}
     >
       <Table.Header>
-        <Table.HeaderCell>
-          <p>User ID</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Request ID</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Timestamp</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Amount</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Status</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>IP</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Recipient</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>TXID</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Action</p>
-        </Table.HeaderCell>
+        <Table.HeaderCell>User ID</Table.HeaderCell>
+        <Table.HeaderCell>Request ID</Table.HeaderCell>
+        <Table.HeaderCell>Timestamp</Table.HeaderCell>
+        <Table.HeaderCell>Amount</Table.HeaderCell>
+        <Table.HeaderCell>Status</Table.HeaderCell>
+        <Table.HeaderCell>IP</Table.HeaderCell>
+        <Table.HeaderCell>Recipient</Table.HeaderCell>
+        <Table.HeaderCell>TXID</Table.HeaderCell>
+        <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
       <Table.Body>
         {data.map((data, idx) => (
@@ -81,12 +63,12 @@ const ApiLogsTable = React.forwardRef(({ outParams }, ref) => {
             <Table.BodyCell>{data.recipient}</Table.BodyCell>
             <Table.BodyCell>{data.txId}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <button type='button' className='text-white bg-primary rounded-full text-xs px-7 py-1 text-center'>
+              <button type='button' className='text-white bg-primary rounded-full text-[10px] px-6 text-center'>
                 Approve
               </button>
               <button
                 type='button'
-                className='rounded-full text-xs px-7 py-1 text-center bg-white border border-primary text-primary'
+                className='rounded-full text-[10px] px-6 text-center bg-white border border-primary text-primary'
               >
                 Deny
               </button>

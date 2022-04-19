@@ -36,22 +36,16 @@ export const Button = (props) => {
         ripple.remove();
       }, 300);
     }
-    if(onClick) {
+    if (onClick) {
       onClick(e);
     }
   };
 
   const renderChildren = (
     <>
-      <span className="ripple-box" ref={rippleRef} />
+      <span className='ripple-box' ref={rippleRef} />
       <div className='relative flex justify-center items-center text-center w-full h-full'>
-        {isLoading ? (
-          <div className='loading'>
-            {/* <Loading className='w-6 h-6 text-gray2' /> */}
-          </div>
-        ) : (
-          children
-        )}
+        {isLoading ? <div className='loading'>{/* <Loading className='w-6 h-6 text-gray2' /> */}</div> : children}
       </div>
     </>
   );
@@ -59,12 +53,16 @@ export const Button = (props) => {
   return createElement(
     as,
     {
-      className: classNames('btn', className, {
-        [`btn-${color} btn-${color}-${variant}`]: variant !== 'text',
-        [`btn-${size}`]: size,
-        // [variant]: variant,
-        'cursor-not-allowed': isLoading
-      }),
+      className: classNames(
+        'btn',
+        {
+          [`btn-${color} btn-${color}-${variant}`]: variant !== 'text',
+          [`btn-${size}`]: size,
+          // [variant]: variant,
+          'cursor-not-allowed': isLoading,
+        },
+        className
+      ),
       onClick: handleClick,
       ...otherProps,
     },

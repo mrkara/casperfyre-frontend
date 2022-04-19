@@ -1,20 +1,26 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { getGuid } from 'shared/core/services/auth';
 import { getApplications } from 'stores/app/actions';
+import ApproveModal from '../modal/approve';
+import DenyModal from '../modal/deny';
+import ViewModal from '../modal/view';
 import styles from './style.module.scss';
 
 const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
   const guid = getGuid();
+
+  const { appendDialog } = useDialog();
 
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchApplications();
+    resetData();
+    fetchApplications(1, params);
   }, []);
 
   const handleSort = async (key, direction) => {
@@ -27,17 +33,43 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
     // fetchData(1, newParams);
   };
 
-  const fetchApplications = () => {
+  const fetchApplications = (pageValue = page, paramsValue = params) => {
     dispatch(
       getApplications(
         {
+          ...paramsValue,
           guid,
+          offset: pageValue,
         },
         (res) => {
-          appendData(res.detail);
+          setHasMore(res.hasMore);
+          appendData(res.detail || []);
+          setPage((prev) => +prev + 1);
         }
       )
     );
+  };
+
+  const handleApprove = () => {
+    appendDialog(<ApproveModal />);
+    // dispatch(
+    //   approveUser({ guid }, (res) => {
+    //     console.log('res : ', res);
+    //   })
+    // );
+  };
+
+  const handleDeny = () => {
+    appendDialog(<DenyModal />);
+    // dispatch(
+    //   denyUser({ guid }, (res) => {
+    //     console.log('oke: ', res);
+    //   })
+    // );
+  };
+
+  const handleView = () => {
+    appendDialog(<ViewModal />);
   };
 
   return (
@@ -52,27 +84,13 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
       onSort={handleSort}
     >
       <Table.Header>
-        <Table.HeaderCell sortKey='applicationDate'>
-          <p>Application Date</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Email</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Company</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>IP</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Expected Monthly CSPR</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Reason</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Action</p>
-        </Table.HeaderCell>
+        <Table.HeaderCell sortKey='applicationDate'>Application Date</Table.HeaderCell>
+        <Table.HeaderCell>Email</Table.HeaderCell>
+        <Table.HeaderCell>Company</Table.HeaderCell>
+        <Table.HeaderCell>IP</Table.HeaderCell>
+        <Table.HeaderCell>Expected Monthly CSPR</Table.HeaderCell>
+        <Table.HeaderCell>Reason</Table.HeaderCell>
+        <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
       <Table.Body>
         {data.map((data, idx) => (
@@ -83,17 +101,22 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
             <Table.BodyCell>{data.last_ip}</Table.BodyCell>
             <Table.BodyCell>{data.cspr_expectation}</Table.BodyCell>
             <Table.BodyCell>
-              <Link to={'/'} className='text-primary text-xs underline decoration-1'>
+              <button to={'/'} className='text-primary text-[10px] underline decoration-1' onClick={handleView}>
                 View
-              </Link>
+              </button>
             </Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <button type='button' className='text-white bg-primary rounded-full text-xs px-7 py-1 text-center'>
+              <button
+                type='button'
+                className='text-white bg-primary rounded-full text-[10px] px-6 text-center'
+                onClick={handleApprove}
+              >
                 Approve
               </button>
               <button
                 type='button'
-                className='rounded-full text-xs px-7 py-1 text-center bg-white border border-primary text-primary'
+                className='rounded-full text-[10px] px-6 text-center bg-white border border-primary text-primary'
+                onClick={handleDeny}
               >
                 Deny
               </button>

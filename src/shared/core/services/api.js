@@ -40,10 +40,13 @@ export class ApiService {
       timeout: 600000,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${getToken()}`,
       },
     });
     this.axiosInstance.interceptors.request.use((_config) => {
+      const token = getToken();
+      if (token) {
+        _config.headers.Authorization = `Bearer ${token}`;
+      }
       return _config;
     });
     this.axiosInstance.interceptors.response.use(

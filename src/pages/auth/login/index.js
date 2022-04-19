@@ -9,11 +9,11 @@ import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
 import { setToken } from 'shared/core/services/auth';
-import { login, sendLoginMail } from 'stores/auth/actions';
+import { login, sendLoginMail, setUser } from 'stores/auth/actions';
 import * as yup from 'yup';
 
 const Login = () => {
-  const [user, setUser] = useState({
+  const [userLogin, setUserLogin] = useState({
     firstName: '',
     lastName: '',
   });
@@ -60,8 +60,8 @@ const Login = () => {
         email,
         (res) => {
           setLoading(false);
-          setUser({
-            ...user,
+          setUserLogin({
+            ...userLogin,
             firstName: res.first_name,
             lastName: res.last_name,
           });
@@ -85,13 +85,23 @@ const Login = () => {
           setLoading(false);
 
           const { detail } = res;
-          if (detail.twofa) {
+          if (detail.user[0]?.verified === '0') {
+            history.push({
+              pathname: `/auth/verify-email/${detail.guid}`,
+            });
+            return;
+          }
+          if (detail.user[0]?.twofa === '1') {
             history.push({
               pathname: `/auth/2fa/${detail.guid}`,
             });
-          } else if (detail) {
-            setToken(res.detail?.bearer);
+            return;
+          }
+          if (detail?.bearer) {
+            setToken(detail.bearer);
+            dispatch(setUser(detail.user[0]));
             history.push('/app');
+            return;
           }
         },
         (err) => {
@@ -123,7 +133,7 @@ const Login = () => {
       {step === 2 && (
         <>
           <h3 className='capitalize pb-6 font-semibold'>
-            Hello, {user.firstName} {user.lastName}
+            Hello, {userLogin.firstName} {userLogin.lastName}
           </h3>
           <form onSubmit={handleSubmit(onSubmitLogin)} className='flex flex-col space-y-5'>
             <Input

@@ -1,0 +1,17 @@
+.dialogWrapper {
+  @apply fixed inset-0;
+}
+.flexCenter {
+  @apply flex justify-center items-center;
+}
+.dialogBackdrop {
+  @apply fixed inset-0;
+  background: rgba(21, 21, 21, 0.5);
+}
+.dialogContainer {
+  @apply fixed z-50;
+  max-width: 37.5rem;
+  width: 100%;
+  min-height: 18rem;
+  background: white;
+}

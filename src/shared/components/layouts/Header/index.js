@@ -1,9 +1,12 @@
 import { ReactComponent as UserProfile } from 'assets/icons/user-circle.svg';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import style from './style.module.scss';
 
 export const Header = () => {
+  const user = useSelector((state) => state.authReducer?.user);
+
   return (
     <div>
       <nav className='px-4 py-2.5 border-b'>
@@ -14,7 +17,7 @@ export const Header = () => {
           <div className='w-full w-auto'>
             <div className='flex items-center gap-x-2'>
               <UserProfile width={20} height={20} />
-              <p>Mickey+1@gmail.com</p>
+              <p>{user?.email}</p>
             </div>
           </div>
         </div>

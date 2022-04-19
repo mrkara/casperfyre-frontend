@@ -5,7 +5,8 @@ import { Link, useLocation, useParams, useHistory } from 'react-router-dom';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
-import { verifyCode } from 'stores/auth/actions';
+import { setToken } from 'shared/core/services/auth';
+import { confirmRegistration, verifyCode } from 'stores/auth/actions';
 
 function VerifyCode() {
   const { setLoading } = useLoading();
@@ -38,26 +39,42 @@ function VerifyCode() {
   const onSubmit = (data) => {
     const { guid } = params;
     setLoading(true);
-    dispatch(
-      verifyCode(
-        {
-          mfa_code: data.code,
-          guid,
-        },
-        () => {
-          setLoading(false);
-          if (screen === 1) {
+    if (screen === 1) {
+      dispatch(
+        verifyCode(
+          {
+            mfa_code: data.code,
+            guid,
+          },
+          (res) => {
+            setLoading(false);
+            setToken(res?.detail?.bearer);
             history.push('/app');
-          } else if (screen === 2) {
-            history.push(`/auth/thanks?email=`);
+          },
+          () => {
+            setLoading(false);
+            setError('code', { type: 'custom', message: 'Verification code is not correct' });
           }
-        },
-        () => {
-          setLoading(false);
-          setError('code', { type: 'custom', message: 'Verification code is not correct' });
-        }
-      )
-    );
+        )
+      );
+    } else if (screen === 2) {
+      dispatch(
+        confirmRegistration(
+          {
+            confirmation_code: data.code,
+            guid,
+          },
+          () => {
+            setLoading(false);
+            history.push(`/auth/thanks?email=`);
+          },
+          () => {
+            setLoading(false);
+            setError('code', { type: 'custom', message: 'Verification code is not correct' });
+          }
+        )
+      );
+    }
   };
 
   return (

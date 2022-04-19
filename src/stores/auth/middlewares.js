@@ -1,7 +1,8 @@
-import { all, takeLatest } from 'redux-saga/effects';
-import { setGuid } from 'shared/core/services/auth';
+import { all, put, takeLatest } from 'redux-saga/effects';
+import { getGuid, setGuid } from 'shared/core/services/auth';
 import { get, post } from 'shared/core/services/saga';
 import { types } from 'stores/types';
+import { setUser } from './actions';
 
 function* login({ payload, resolve, reject }) {
   try {
@@ -49,9 +50,30 @@ function* register({ payload, resolve, reject }) {
   }
 }
 
+function* confirmRegistration({ payload, resolve, reject }) {
+  try {
+    const res = yield post(['user', 'confirm-registration'], { data: payload });
+    resolve(res);
+  } catch (error) {
+    reject(error);
+  }
+}
+
 function* verifyCode({ payload, resolve, reject }) {
   try {
     const res = yield post(['user', 'submit-mfa'], { data: payload });
+    resolve(res);
+  } catch (error) {
+    reject(error);
+  }
+}
+
+function* fetchUserInfo({ resolve, reject }) {
+  try {
+    const guid = getGuid();
+    const res = yield get(['user', 'me'], { guid });
+
+    yield put(setUser(res.detail));
     resolve(res);
   } catch (error) {
     reject(error);
@@ -66,5 +88,7 @@ export function* watchAuth() {
     takeLatest(types.RESET_PASSWORD, resetPassword),
     takeLatest(types.FORGOT_PASSWORD, forgotPassword),
     takeLatest(types.VERIFY_CODE, verifyCode),
+    takeLatest(types.CONFIRM_REGISTRATION, confirmRegistration),
+    takeLatest(types.FETCH_USER_INFO, fetchUserInfo),
   ]);
 }

@@ -41,24 +41,12 @@ const WalletsTable = React.forwardRef(({ outParams }, ref) => {
       // onSort={handleSort}
     >
       <Table.Header>
-        <Table.HeaderCell>
-          <p>User ID</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Active/Old</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Date Created</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Inactive Date</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Deposit Address</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>CSPR Balance</p>
-        </Table.HeaderCell>
+        <Table.HeaderCell>User ID</Table.HeaderCell>
+        <Table.HeaderCell>Active/Old</Table.HeaderCell>
+        <Table.HeaderCell>Date Created</Table.HeaderCell>
+        <Table.HeaderCell>Inactive Date</Table.HeaderCell>
+        <Table.HeaderCell>Deposit Address</Table.HeaderCell>
+        <Table.HeaderCell>CSPR Balance</Table.HeaderCell>
       </Table.Header>
       <Table.Body>
         {data.map((data, idx) => (

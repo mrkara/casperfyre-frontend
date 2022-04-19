@@ -13,18 +13,22 @@ const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchApiKeys();
+    resetData();
+    fetchApiKeys(1, params);
   }, []);
 
-  const fetchApiKeys = () => {
+  const fetchApiKeys = (pageValue = page, paramsValue = params) => {
     dispatch(
       getAPIKeys(
         {
+          ...paramsValue,
           guid,
+          offset: pageValue,
         },
         (res) => {
+          setHasMore(true);
           appendData(res.detail || []);
-          setHasMore(false);
+          setPage((prev) => +prev + 1);
         }
       )
     );
@@ -42,30 +46,14 @@ const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
       // onSort={handleSort}
     >
       <Table.Header>
-        <Table.HeaderCell>
-          <p>User ID</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Status</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Activation Date</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Email</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Company</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Total API Calls</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Total CSPR Sent</p>
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          <p>Action</p>
-        </Table.HeaderCell>
+        <Table.HeaderCell>User ID</Table.HeaderCell>
+        <Table.HeaderCell>Status</Table.HeaderCell>
+        <Table.HeaderCell>Activation Date</Table.HeaderCell>
+        <Table.HeaderCell>Email</Table.HeaderCell>
+        <Table.HeaderCell>Company</Table.HeaderCell>
+        <Table.HeaderCell>Total API Calls</Table.HeaderCell>
+        <Table.HeaderCell>Total CSPR Sent</Table.HeaderCell>
+        <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
       <Table.Body>
         {data.map((data, idx) => (
@@ -78,12 +66,12 @@ const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
             <Table.BodyCell>{data.totalApiCalls}</Table.BodyCell>
             <Table.BodyCell>{data.totalCSPRSent}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <button type='button' className='text-white bg-primary rounded-full text-xs px-7 py-1 text-center'>
+              <button type='button' className='text-white bg-primary rounded-full text-[10px] px-6 text-center'>
                 Approve
               </button>
               <button
                 type='button'
-                className='rounded-full text-xs px-7 py-1 text-center bg-white border border-primary text-primary'
+                className='rounded-full text-[10px] px-6 text-center bg-white border border-primary text-primary'
               >
                 Deny
               </button>

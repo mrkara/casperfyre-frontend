@@ -1,7 +1,9 @@
 import Header from 'shared/components/layouts/Header';
 import Sidebar from 'shared/components/layouts/Sidebar';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchUserInfo } from 'stores/auth/actions';
 
 const ApplicationsRoutes = lazy(() => import('./applications'));
 const ApiKeysRoutes = lazy(() => import('./apiKeys'));
@@ -10,6 +12,12 @@ const WalletsRoutes = lazy(() => import('./wallets'));
 
 const AppRoutes = () => {
   const { path } = useRouteMatch();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUserInfo());
+  }, []);
+  
 
   return (
     <>

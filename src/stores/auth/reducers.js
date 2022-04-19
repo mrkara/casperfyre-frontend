@@ -1,3 +1,4 @@
+import { combineReducers } from "redux";
 import { createReducer } from "shared/core/services/redux";
 
 const userInitialState = null;
@@ -20,4 +21,8 @@ const userStrategies = {
   __default__: (state) => state,
 };
 
-export const authReducer = createReducer(userStrategies, userInitialState);
+export const user = createReducer(userStrategies, userInitialState);
+
+export const authReducer = combineReducers({
+  user,
+});

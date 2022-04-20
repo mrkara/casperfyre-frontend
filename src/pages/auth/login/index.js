@@ -98,7 +98,7 @@ const Login = () => {
             });
             return;
           }
-          if (detail.user[0].admin_approved === '0') {
+          if (detail.user[0].role !== 'admin' && detail.user[0].admin_approved === '0') {
             history.push({
               pathname: `/auth/reviewing`,
             });

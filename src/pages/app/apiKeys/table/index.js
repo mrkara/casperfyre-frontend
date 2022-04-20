@@ -36,10 +36,10 @@ const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
 
   return (
     <Table
+      className='h-full overflow-x-auto'
       {...register}
       styles={styles}
       maxHeight={480}
-      className='w-400'
       onLoadMore={fetchApiKeys}
       hasMore={hasMore}
       dataLength={data.length}
@@ -66,12 +66,12 @@ const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
             <Table.BodyCell>{data.totalApiCalls}</Table.BodyCell>
             <Table.BodyCell>{data.totalCSPRSent}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <button type='button' className='text-white bg-primary rounded-full text-[10px] px-6 text-center'>
+              <button type='button' className='text-white bg-primary rounded-full text-[10px] px-3 text-center'>
                 Approve
               </button>
               <button
                 type='button'
-                className='rounded-full text-[10px] px-6 text-center bg-white border border-primary text-primary'
+                className='rounded-full text-[10px] px-3 text-center bg-white border border-primary text-primary'
               >
                 Deny
               </button>

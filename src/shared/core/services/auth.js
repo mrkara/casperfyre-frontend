@@ -14,6 +14,16 @@ export const setRefreshToken = (token) => {
   localStorage.setItem('REFRESH-TOKEN', token);
 };
 
+export const getTempToken = () => localStorage.getItem('TEMP-TOKEN');
+
+export const setTempToken = (token) => {
+  localStorage.setItem('TEMP-TOKEN', token);
+};
+
+export const removeTempToken = () => {
+  localStorage.removeItem('TEMP-TOKEN');
+};
+
 export const setGuid = (id) => {
   localStorage.setItem('GUID', id);
 };

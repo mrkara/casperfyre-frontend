@@ -1,8 +1,26 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useLoading } from 'shared/components/modules/Loading';
+import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
+import { approveUser } from 'stores/app/actions';
 
 const ApproveModal = (props) => {
-  const { close } = props;
+  const { close, guid } = props;
+  const { setLoading } = useLoading();
+  const dispatch = useDispatch();
+
+  const handleApprove = () => {
+    setLoading(true);
+    dispatch(
+      approveUser({ guid }, () => {
+        setLoading(false);
+        close();
+      }, () => {
+        setLoading(false);
+      })
+    );
+  };
 
   const handleCancel = () => {
     close();
@@ -15,10 +33,12 @@ const ApproveModal = (props) => {
       </Dialog.Header>
       <Dialog.Body></Dialog.Body>
       <Dialog.Footer className=''>
-        <button className='w-full bg-success mt-6 py-3 text-sm font-semibold text-white'>Approve API Key</button>
-        <button className='w-full mt-2 bg-danger py-3 text-sm font-semibold text-white' onClick={handleCancel}>
+        <Button className='w-full mt-6' color="success" onClick={handleApprove}>
+          Approve API Key
+        </Button>
+        <Button className='w-full mt-2' color="danger" onClick={handleCancel}>
           Cancel
-        </button>
+        </Button>
       </Dialog.Footer>
     </Dialog>
   );

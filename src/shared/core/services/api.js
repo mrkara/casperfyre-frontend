@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken, removeToken, removeGuid } from './auth';
+import { getToken, removeToken, removeGuid, getTempToken } from './auth';
 
 const API_DOMAIN = process.env.REACT_APP_BASE_URL;
 const STATUS_CODE = {
@@ -43,7 +43,7 @@ export class ApiService {
       },
     });
     this.axiosInstance.interceptors.request.use((_config) => {
-      const token = getToken();
+      const token = getToken() || getTempToken();
       if (token) {
         _config.headers.Authorization = `Bearer ${token}`;
       }

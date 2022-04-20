@@ -25,10 +25,10 @@ const LoadingProvider = ({ children }) => {
       loading,
       setLoading
     }}>
+      { children }
       { loading && <div className='loading-wrapper'>
         <Loading className='global' />
       </div> }
-      { children }
     </LoadingContext.Provider>
   );
 };

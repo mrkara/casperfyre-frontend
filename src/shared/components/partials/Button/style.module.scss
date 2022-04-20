@@ -92,6 +92,18 @@
     }
   }
 
+  &.btn-success {
+    @apply text-success;
+
+    &-contained {
+      @apply bg-success text-white;
+    }
+
+    &-outline {
+      @apply text-success border border-success;
+    }
+  }
+
   // Size (default: md)
   &.btn-md {
     @apply py-3 px-5;

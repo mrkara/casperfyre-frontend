@@ -1,8 +1,8 @@
 import { all, put, takeLatest } from 'redux-saga/effects';
-import { getGuid, setGuid } from 'shared/core/services/auth';
+import { getGuid, removeToken, setGuid } from 'shared/core/services/auth';
 import { get, post } from 'shared/core/services/saga';
 import { types } from 'stores/types';
-import { setUser } from './actions';
+import { clearUser, setUser } from './actions';
 
 function* login({ payload, resolve, reject }) {
   try {
@@ -59,6 +59,12 @@ function* confirmRegistration({ payload, resolve, reject }) {
   }
 }
 
+function* doLogout({ resolve }) {
+  removeToken();
+  yield put(clearUser());
+  resolve();
+}
+
 function* verifyCode({ payload, resolve, reject }) {
   try {
     const res = yield post(['user', 'submit-mfa'], { data: payload });
@@ -83,6 +89,7 @@ function* fetchUserInfo({ resolve, reject }) {
 export function* watchAuth() {
   yield all([
     takeLatest(types.LOGIN, login),
+    takeLatest(types.LOGOUT, doLogout),
     takeLatest(types.SIGN_UP, register),
     takeLatest(types.SEND_LOGIN_MAIL, sendLoginMail),
     takeLatest(types.RESET_PASSWORD, resetPassword),

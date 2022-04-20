@@ -5,7 +5,7 @@ import { Link, useLocation, useParams, useHistory } from 'react-router-dom';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
-import { setToken } from 'shared/core/services/auth';
+import { removeTempToken, setToken } from 'shared/core/services/auth';
 import { confirmRegistration, verifyCode } from 'stores/auth/actions';
 
 function VerifyCode() {
@@ -49,6 +49,7 @@ function VerifyCode() {
           (res) => {
             setLoading(false);
             setToken(res?.detail?.bearer);
+            removeTempToken();
             history.push('/app');
           },
           () => {
@@ -66,7 +67,11 @@ function VerifyCode() {
           },
           () => {
             setLoading(false);
-            history.push(`/auth/thanks?email=`);
+            removeTempToken();
+            history.push({
+              pathname: `/auth/thanks`,
+              search: location.search
+            });
           },
           () => {
             setLoading(false);

@@ -85,6 +85,7 @@ const Login = () => {
           setLoading(false);
 
           const { detail } = res;
+         
           if (detail.user[0]?.verified === '0') {
             history.push({
               pathname: `/auth/verify-email/${detail.guid}`,
@@ -94,6 +95,12 @@ const Login = () => {
           if (detail.user[0]?.twofa === '1') {
             history.push({
               pathname: `/auth/2fa/${detail.guid}`,
+            });
+            return;
+          }
+          if (detail.user[0].admin_approved === '0') {
+            history.push({
+              pathname: `/auth/reviewing`,
             });
             return;
           }

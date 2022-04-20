@@ -4,10 +4,8 @@ import { types } from 'stores/types';
 
 function* getApplications({ payload, resolve, reject }) {
   try {
-    const { offset } = payload;
     const res = yield get(['admin', 'get-applications'], payload);
-    const hasMore = res.detail.length + 1 - offset * 2 === 0 ? false : true;
-    resolve({ ...res, detail: res.detail.splice((offset - 1) * 2, 2), hasMore });
+    resolve({ ...res, detail: res.detail, hasMore: false });
   } catch (error) {
     reject(error);
   }

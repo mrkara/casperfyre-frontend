@@ -5,11 +5,11 @@ import { DialogProvider } from 'shared/components/partials/Dialog/Provider';
 function App() {
   return (
     <main className='app h-screen'>
-      <DialogProvider>
-        <LoadingProvider>
+      <LoadingProvider>
+        <DialogProvider>
           <Routes />
-        </LoadingProvider>
-      </DialogProvider>
+        </DialogProvider>
+      </LoadingProvider>
     </main>
   );
 }

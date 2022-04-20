@@ -3,6 +3,7 @@ import { types } from 'stores/types';
 
 export const signUp = generateAPIAction(types.SIGN_UP);
 export const login = generateAPIAction(types.LOGIN);
+export const logout = generateAPIAction(types.LOGOUT);
 export const sendLoginMail = generateAPIAction(types.SEND_LOGIN_MAIL);
 export const resetPassword = generateAPIAction(types.RESET_PASSWORD);
 export const forgotPassword = generateAPIAction(types.FORGOT_PASSWORD);
@@ -13,4 +14,14 @@ export const fetchUserInfo = generateAPIAction(types.FETCH_USER_INFO);
 export const setUser = (payload) => ({
   type: types.SET_USER,
   payload,
+});
+
+
+export const updateUser = (payload) => ({
+  type: types.UPDATE_USER,
+  payload,
+});
+
+export const clearUser = () => ({
+  type: types.CLEAR_USER,
 });

@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -7,8 +7,10 @@ import { PATTERN } from 'shared/common/pattern';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
+import { setTempToken } from 'shared/core/services/auth';
 import { signUp } from 'stores/auth/actions';
 import * as yup from 'yup';
+import qs from 'qs';
 
 const schema = yup
   .object()
@@ -56,8 +58,10 @@ const SignUp = (props) => {
     dispatch(signUp(data, (res) => {
       setLoading(false);
       const { detail } = res;
+      setTempToken(detail?.bearer);
       history.push({
         pathname: `/auth/verify-email/${detail.guid}`,
+        search: qs.stringify({ email: data.email })
       });
     }, () => {
       setLoading(false);

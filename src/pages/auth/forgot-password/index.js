@@ -44,7 +44,7 @@ const ForgotPasswordForm = (props) => {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    mode: 'onChange',
+    mode: 'onBlur',
     resolver: yupResolver(schema),
   });
 

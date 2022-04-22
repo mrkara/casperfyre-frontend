@@ -14,13 +14,7 @@ import style from './style.module.scss';
 const schema = yup
   .object()
   .shape({
-    password: yup
-      .string()
-      .matches(
-        PATTERN.PASSWORD,
-        ''
-      )
-      .required(),
+    password: yup.string().matches(PATTERN.PASSWORD, '').required(),
     new_password: yup
       .string()
       .oneOf([yup.ref('password'), null], 'Confirm password must match')
@@ -35,12 +29,12 @@ function ResetPassword() {
     watch,
     formState: { isValid },
   } = useForm({
-    mode: 'onChange',
+    mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
       password: '',
-      new_password: ''
-    }
+      new_password: '',
+    },
   });
 
   const watchPassword = watch('password');
@@ -65,7 +59,7 @@ function ResetPassword() {
     return PATTERN.PASSWORD_LETTER.test(watchPassword);
   };
 
-  const checkValidNumber= () => {
+  const checkValidNumber = () => {
     return PATTERN.PASSWORD_NUMBER.test(watchPassword);
   };
 

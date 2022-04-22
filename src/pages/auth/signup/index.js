@@ -45,7 +45,7 @@ const SignUp = (props) => {
     register,
     formState: { errors, isValid },
   } = useForm({
-    mode: 'onChange',
+    mode: 'onBlur',
     resolver: yupResolver(schema),
   });
   const { setLoading } = useLoading();
@@ -55,17 +55,23 @@ const SignUp = (props) => {
 
   const onSubmit = (data) => {
     setLoading(true);
-    dispatch(signUp(data, (res) => {
-      setLoading(false);
-      const { detail } = res;
-      setTempToken(detail?.bearer);
-      history.push({
-        pathname: `/auth/verify-email/${detail.guid}`,
-        search: qs.stringify({ email: data.email })
-      });
-    }, () => {
-      setLoading(false);
-    }));
+    dispatch(
+      signUp(
+        data,
+        (res) => {
+          setLoading(false);
+          const { detail } = res;
+          setTempToken(detail?.bearer);
+          history.push({
+            pathname: `/auth/verify-email/${detail.guid}`,
+            search: qs.stringify({ email: data.email }),
+          });
+        },
+        () => {
+          setLoading(false);
+        }
+      )
+    );
   };
 
   return (
@@ -134,7 +140,9 @@ const SignUp = (props) => {
                 {...register('cspr_expectation')}
                 error={errors && errors?.cspr_expectation?.message}
               />
-              <Button type="submit" className='w-full' disabled={!isValid}>Submit</Button>
+              <Button type='submit' className='w-full' disabled={!isValid}>
+                Submit
+              </Button>
             </form>
             <div className='flex pt-4'>
               <p className='ml-auto'>
@@ -149,6 +157,6 @@ const SignUp = (props) => {
       </div>
     </AuthContainer>
   );
-}
+};
 
 export default SignUp;

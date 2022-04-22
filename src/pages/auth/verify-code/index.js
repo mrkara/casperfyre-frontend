@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { Link, useLocation, useParams, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
@@ -17,13 +17,13 @@ function VerifyCode() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const { 
+  const {
     register,
     setError,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    mode: 'onChange',
+    mode: 'onBlur',
   });
 
   useEffect(() => {
@@ -70,7 +70,7 @@ function VerifyCode() {
             removeTempToken();
             history.push({
               pathname: `/auth/thanks`,
-              search: location.search
+              search: location.search,
             });
           },
           () => {
@@ -94,16 +94,13 @@ function VerifyCode() {
         )}
         {screen === 2 && (
           <p>
-            To make sure your account is secure, we have to verify your identity. We sent a 2fa verification code to your inbox.
+            To make sure your account is secure, we have to verify your identity. We sent a 2fa verification code to
+            your inbox.
           </p>
         )}
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col space-y-5'>
-        <Input
-          placeholder='Enter Verification Code'
-          {...register('code')}
-          error={errors && errors?.code?.message}
-        />
+        <Input placeholder='Enter Verification Code' {...register('code')} error={errors && errors?.code?.message} />
         <Button type='submit' className='w-full' disabled={!isValid}>
           Verify
         </Button>

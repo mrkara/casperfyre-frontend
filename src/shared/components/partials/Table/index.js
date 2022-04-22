@@ -50,7 +50,7 @@ const Table = (props) => {
         styles,
       }}
     >
-      <div className={`${props.className} flex flex-col min-w-250 text-sm`}>
+      <div className={`${props.className || ''} table-container flex flex-col min-w-250 h-full text-sm`}>
         {props.children[0]}
         {cloneElement(props.children[1], {
           onLoadMore: props.onLoadMore,

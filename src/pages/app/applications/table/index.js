@@ -14,7 +14,8 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
 
   const { appendDialog } = useDialog();
 
-  const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
+  const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData, setData } =
+    useTable();
 
   const dispatch = useDispatch();
 
@@ -50,17 +51,20 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
     );
   };
 
-  const handleApprove = () => {
-    appendDialog(<ApproveModal guid={guid} />);
+  const handleRemove = (guid) => {
+    const applicationIdx = data.findIndex((application) => application.guid === guid);
+    if (applicationIdx !== -1) {
+      data.splice(applicationIdx, 1);
+      setData([...data]);
+    }
   };
 
-  const handleDeny = () => {
-    appendDialog(<DenyModal />);
-    // dispatch(
-    //   denyUser({ guid }, (res) => {
-    //     console.log('oke: ', res);
-    //   })
-    // );
+  const handleApprove = (guid) => {
+    appendDialog(<ApproveModal guid={guid} onApprove={handleRemove} />);
+  };
+
+  const handleDeny = (guid) => {
+    appendDialog(<DenyModal guid={guid} onDeny={handleRemove} />);
   };
 
   const handleView = () => {
@@ -68,58 +72,56 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
   };
 
   return (
-    <div className='h-full overflow-x-auto'>
-      <Table
-        {...register}
-        styles={styles}
-        onLoadMore={fetchApplications}
-        hasMore={hasMore}
-        dataLength={data.length}
-        onSort={handleSort}
-      >
-        <Table.Header>
-          <Table.HeaderCell sortKey='applicationDate'>Application Date</Table.HeaderCell>
-          <Table.HeaderCell>Email</Table.HeaderCell>
-          <Table.HeaderCell>Company</Table.HeaderCell>
-          <Table.HeaderCell>IP</Table.HeaderCell>
-          <Table.HeaderCell>Expected Monthly CSPR</Table.HeaderCell>
-          <Table.HeaderCell>Reason</Table.HeaderCell>
-          <Table.HeaderCell>Action</Table.HeaderCell>
-        </Table.Header>
-        <Table.Body>
-          {data.map((data, idx) => (
-            <Table.BodyRow key={idx} className='py-4'>
-              <Table.BodyCell>{data.date}</Table.BodyCell>
-              <Table.BodyCell>{data.email}</Table.BodyCell>
-              <Table.BodyCell>{data.company}</Table.BodyCell>
-              <Table.BodyCell>{data.last_ip}</Table.BodyCell>
-              <Table.BodyCell>{data.cspr_expectation}</Table.BodyCell>
-              <Table.BodyCell>
-                <button to={'/'} className='text-primary text-[10px] underline decoration-1' onClick={handleView}>
-                  View
-                </button>
-              </Table.BodyCell>
-              <Table.BodyCell className='flex gap-x-2'>
-                <button
-                  type='button'
-                  className='text-white bg-primary rounded-full text-[10px] px-3 text-center'
-                  onClick={handleApprove}
-                >
-                  Approve
-                </button>
-                <button
-                  type='button'
-                  className='rounded-full text-[10px] px-3 text-center bg-white border border-primary text-primary'
-                  onClick={handleDeny}
-                >
-                  Deny
-                </button>
-              </Table.BodyCell>
-            </Table.BodyRow>
-          ))}
-        </Table.Body>
-      </Table>
-    </div>
+    <Table
+      {...register}
+      styles={styles}
+      onLoadMore={fetchApplications}
+      hasMore={hasMore}
+      dataLength={data.length}
+      onSort={handleSort}
+    >
+      <Table.Header>
+        <Table.HeaderCell sortKey='applicationDate'>Application Date</Table.HeaderCell>
+        <Table.HeaderCell>Email</Table.HeaderCell>
+        <Table.HeaderCell>Company</Table.HeaderCell>
+        <Table.HeaderCell>IP</Table.HeaderCell>
+        <Table.HeaderCell>Expected Monthly CSPR</Table.HeaderCell>
+        <Table.HeaderCell>Reason</Table.HeaderCell>
+        <Table.HeaderCell>Action</Table.HeaderCell>
+      </Table.Header>
+      <Table.Body>
+        {data.map((data, idx) => (
+          <Table.BodyRow key={idx} className='py-4'>
+            <Table.BodyCell>{data.date}</Table.BodyCell>
+            <Table.BodyCell>{data.email}</Table.BodyCell>
+            <Table.BodyCell>{data.company}</Table.BodyCell>
+            <Table.BodyCell>{data.last_ip}</Table.BodyCell>
+            <Table.BodyCell>{data.cspr_expectation}</Table.BodyCell>
+            <Table.BodyCell>
+              <button to={'/'} className='text-primary text-[10px] underline decoration-1' onClick={handleView}>
+                View
+              </button>
+            </Table.BodyCell>
+            <Table.BodyCell className='flex gap-x-2'>
+              <button
+                type='button'
+                className='text-white bg-primary rounded-full text-[10px] px-3 text-center'
+                onClick={() => handleApprove(data.guid)}
+              >
+                Approve
+              </button>
+              <button
+                type='button'
+                className='rounded-full text-[10px] px-3 text-center bg-white border border-primary text-primary'
+                onClick={() => handleDeny(data.guid)}
+              >
+                Deny
+              </button>
+            </Table.BodyCell>
+          </Table.BodyRow>
+        ))}
+      </Table.Body>
+    </Table>
   );
 });
 

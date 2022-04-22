@@ -56,9 +56,9 @@ export const Button = (props) => {
       className: classNames(
         'btn',
         {
-          [`btn-${color} btn-${color}-${variant}`]: variant !== 'text',
+          [`btn-${color}`]: variant,
+          [`btn-${color}-${variant}`]: variant,
           [`btn-${size}`]: size,
-          // [variant]: variant,
           'cursor-not-allowed': isLoading,
         },
         className

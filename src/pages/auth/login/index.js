@@ -41,7 +41,7 @@ const Login = () => {
     setValue,
     formState: { errors, isValid },
   } = useForm({
-    mode: 'onChange',
+    mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
       step: 1,
@@ -85,7 +85,7 @@ const Login = () => {
           setLoading(false);
 
           const { detail } = res;
-         
+
           if (detail.user[0]?.verified === '0') {
             history.push({
               pathname: `/auth/verify-email/${detail.guid}`,

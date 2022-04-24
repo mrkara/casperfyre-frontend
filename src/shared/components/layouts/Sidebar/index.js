@@ -33,7 +33,7 @@ const menuData = [
     {
       component: <Settings />,
       text: 'Settings',
-      href: '/app/setting',
+      href: '/app/settings',
     },
   ],
 ];

@@ -32,7 +32,7 @@ export const Header = () => {
                 <UserProfile width={20} height={20} />
                 <p>{user?.email}</p>
               </MenuButton>
-              <MenuList>
+              <MenuList className={style.userDropList}>
                 <MenuItem onClick={doLogout}>Log Out</MenuItem>
               </MenuList>
             </Menu>

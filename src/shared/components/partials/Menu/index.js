@@ -28,7 +28,9 @@ const MenuButton = (props) => {
 const MenuList = (props) => {
   const { open } = useContext(MenuContext);
 
-  return <ul className={classNames(style.menuList, !open ? style.menuHidden : '')}>{props.children}</ul>;
+  return (
+    <ul className={classNames(style.menuList, !open ? style.menuHidden : '', props.className)}>{props.children}</ul>
+  );
 };
 
 const MenuItem = (props) => {

@@ -1,12 +1,12 @@
+import { ReactComponent as ListCheck } from 'assets/icons/list-check.svg';
 import React from 'react';
-import { ReactComponent as Key } from 'assets/icons/key.svg';
 import { Card, CardBody, CardHeader, Input } from 'shared/components/partials';
-import ApiKeysTable from './table';
+import WhiteListedIPTable from './table';
 
-const ApiKeys = (props) => {
+const WhiteListedIP = (props) => {
   return (
-    <Card className="h-full">
-      <CardHeader icon={<Key />} title='API KeyHolders' />
+    <Card>
+      <CardHeader icon={<ListCheck />} title='Whitelisted IPs' />
       <CardBody>
         <div className='flex flex-col h-full'>
           <div className='flex justify-between w-full pb-7'>
@@ -22,13 +22,11 @@ const ApiKeys = (props) => {
               <Input className='bg-white w-40 py-0 px-1 text-[10px]' placeholder='Search' />
             </div>
           </div>
-          <div className='flex-1 min-h-0'>
-            <ApiKeysTable />
-          </div>
+          <WhiteListedIPTable />
         </div>
       </CardBody>
     </Card>
   );
 };
 
-export default ApiKeys;
+export default WhiteListedIP;

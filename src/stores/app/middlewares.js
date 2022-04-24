@@ -1,20 +1,16 @@
 import { all, takeLatest } from 'redux-saga/effects';
 import { get, post } from 'shared/core/services/saga';
+import { fakeFilterListApi, removeEmptyField } from 'shared/core/utils';
 import { types } from 'stores/types';
 
 function* getApplications({ payload, resolve, reject }) {
   try {
-    const res = yield get(['admin', 'get-applications'], payload);
-    resolve({ ...res, detail: res.detail, hasMore: false });
-  } catch (error) {
-    reject(error);
-  }
-}
-
-function* getAPIKeys({ payload, resolve, reject }) {
-  try {
-    const res = yield get(['admin', 'get-apikeys'], payload);
-    resolve(res);
+    const newPayload = removeEmptyField(payload);
+    const res = yield get(['admin', 'get-applications'], newPayload);
+    /* this code will be remove in the future */
+    const result = fakeFilterListApi(res.detail, payload);
+    /* end */
+    resolve(result);
   } catch (error) {
     reject(error);
   }
@@ -22,8 +18,26 @@ function* getAPIKeys({ payload, resolve, reject }) {
 
 function* getWallets({ payload, resolve, reject }) {
   try {
-    const res = yield get(['admin', 'get-wallets'], payload);
-    resolve(res);
+    const newPayload = removeEmptyField(payload);
+    const res = yield get(['admin', 'get-wallets'], newPayload);
+    /* this code will be remove in the future */
+    const result = fakeFilterListApi(res.detail, payload);
+    /* end */
+    resolve(result);
+  } catch (error) {
+    reject(error);
+  }
+}
+
+
+function* getAPIKeys({ payload, resolve, reject }) {
+  try {
+    const newPayload = removeEmptyField(payload);
+    const res = yield get(['admin', 'get-apikeys'], newPayload);
+    /* this code will be remove in the future */
+    const result = fakeFilterListApi(res.detail, payload);
+    /* end */
+    resolve(result);
   } catch (error) {
     reject(error);
   }
@@ -56,12 +70,22 @@ function* denyUser({ payload, resolve, reject }) {
   }
 }
 
+function* getIps({ payload, resolve, reject }) {
+  try {
+    const res = yield get(['admin', 'get-ips'], payload);
+    resolve({ ...res, detail: res.detail, hasMore: false });
+  } catch (error) {
+    reject(error);
+  }
+}
+
 export function* watchApp() {
   yield all([
     takeLatest(types.GET_APPLICATIONS, getApplications),
     takeLatest(types.GET_API_KEYS, getAPIKeys),
     takeLatest(types.GET_WALLETS, getWallets),
     takeLatest(types.GET_HISTORIES, getHistories),
+    takeLatest(types.GET_WHITE_LISTED_IPS, getIps),
     takeLatest(types.APPROVE_USER, approveUser),
     takeLatest(types.DENY_USER, denyUser),
   ]);

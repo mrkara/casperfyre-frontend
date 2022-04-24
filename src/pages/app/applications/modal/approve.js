@@ -5,9 +5,13 @@ import { useLoading } from 'shared/components/modules/Loading';
 import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
 import { approveUser } from 'stores/app/actions';
+import { toast } from 'react-toastify';
 
 const ApproveModal = (props) => {
-  const { close, guid, onApprove } = props;
+  const { close, application, onApprove } = props;
+
+  const { guid, email } = application;
+
   const { setLoading } = useLoading();
   const dispatch = useDispatch();
 
@@ -20,6 +24,7 @@ const ApproveModal = (props) => {
           setLoading(false);
           onApprove && onApprove(guid);
           close();
+          toast.success(`You approved ${email}`);
         },
         () => {
           setLoading(false);

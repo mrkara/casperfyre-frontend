@@ -5,7 +5,7 @@ import { getGuid } from 'shared/core/services/auth';
 import { getAPIKeys } from 'stores/app/actions';
 import styles from './style.module.scss';
 
-const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
+const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
   const guid = getGuid();
 
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
@@ -13,21 +13,24 @@ const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    resetData();
-    fetchApiKeys(1, params);
-  }, []);
+    if (externalParams) {
+      resetData();
+      setParams(
+        { ...params, ...externalParams, guid },
+        (s) => {
+          fetchApiKeys(s, 1);
+        }
+      );
+    }
+  }, [externalParams]);
 
-  const fetchApiKeys = (pageValue = page, paramsValue = params) => {
+  const fetchApiKeys = (paramsValue = params, pageValue = page) => {
     dispatch(
       getAPIKeys(
-        {
-          ...paramsValue,
-          guid,
-          offset: pageValue,
-        },
+        { ...paramsValue, page: pageValue },
         (res) => {
-          setHasMore(true);
-          appendData(res.detail || []);
+          setHasMore(res.hasMore);
+          appendData(res.items || []);
           setPage((prev) => +prev + 1);
         }
       )
@@ -36,10 +39,8 @@ const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
 
   return (
     <Table
-      className='h-full overflow-x-auto'
       {...register}
       styles={styles}
-      maxHeight={480}
       onLoadMore={fetchApiKeys}
       hasMore={hasMore}
       dataLength={data.length}
@@ -55,7 +56,7 @@ const ApiKeysTable = React.forwardRef(({ outParams }, ref) => {
         <Table.HeaderCell>Total CSPR Sent</Table.HeaderCell>
         <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
-      <Table.Body>
+      <Table.Body className="table-body-card">
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell>{data.userId}</Table.BodyCell>

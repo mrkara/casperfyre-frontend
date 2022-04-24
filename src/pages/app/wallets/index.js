@@ -1,28 +1,24 @@
-import React from 'react';
 import { ReactComponent as Wallet } from 'assets/icons/wallet.svg';
-import { Card, CardBody, CardHeader, Input } from 'shared/components/partials';
-import ApiKeysTable from './table';
+import React, { useState } from 'react';
+import Toolbar from 'shared/components/modules/Toolbar';
+import { Card, CardBody, CardHeader } from 'shared/components/partials';
+import WalletsTable from './table';
 
-const Wallets = (props) => {
+const Wallets = () => {
+  const [params, setParams] = useState();
+  const handleToolbarChange = (params) => {
+    setParams(params);
+  };
+
   return (
     <Card>
-      <CardHeader icon={<Wallet />} title='Wallets' />
+      <CardHeader icon={<Wallet />} title='Wallet History' />
       <CardBody>
-        <div className='flex justify-between w-full pb-7'>
-          <div className='flex items-center gap-x-1'>
-            <p className='font-semibold text-[10px]'>Show</p>
-            <select className='outline outline-1 px-1 font-semibold text-[10px]'>
-              <option value={1}>10</option>
-              <option value={2}>2</option>
-            </select>
-            <p className='font-semibold text-[10px]'>entries</p>
-          </div>
-          <div>
-            <Input className='bg-white w-40 py-0 px-1 text-[10px]' placeholder='Search' />
-          </div>
-        </div>
         <div>
-          <ApiKeysTable />
+          <Toolbar onChange={handleToolbarChange}/>
+          <div className='flex-1 min-h-0'>
+            <WalletsTable externalParams={params} />
+          </div>
         </div>
       </CardBody>
     </Card>

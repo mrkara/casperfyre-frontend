@@ -15,7 +15,11 @@ Card.Header = ({ icon, title }) => {
 };
 
 Card.Body = ({ children }) => {
-  return <div className='flex-1 min-h-0 px-6 py-4'>{children}</div>;
+  return (
+    <div className='flex-1 min-h-0 px-6 py-4'>
+      {children}
+    </div>
+  );
 };
 
 const CardHeader = Card.Header;

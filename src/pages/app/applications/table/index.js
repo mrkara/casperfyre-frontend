@@ -9,7 +9,7 @@ import DenyModal from '../modal/deny';
 import ViewModal from '../modal/view';
 import styles from './style.module.scss';
 
-const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
+const ApplicationsTable = React.forwardRef(({ externalParams }, ref) => {
   const guid = getGuid();
 
   const { appendDialog } = useDialog();
@@ -20,31 +20,38 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    resetData();
-    fetchApplications(1, params);
-  }, []);
+    if (externalParams) {
+      resetData();
+      setParams(
+        { ...params, ...externalParams, guid },
+        (s) => {
+          fetchApplications(s, 1);
+        }
+      );
+    }
+  }, [externalParams]);
 
   const handleSort = async (key, direction) => {
-    const newParams = {
-      sort_key: key,
-      sort_direction: direction,
-    };
-    setParams(newParams);
-    resetData();
-    // fetchData(1, newParams);
+    setParams(
+      { 
+        ...params,
+        sort_key: key,
+        sort_direction: direction,
+      },
+      (s) => {
+        resetData();
+        fetchApplications(s, 1);
+      }
+    );
   };
 
-  const fetchApplications = (pageValue = page, paramsValue = params) => {
+  const fetchApplications = (paramsValue = params, pageValue = page) => {
     dispatch(
       getApplications(
-        {
-          ...paramsValue,
-          guid,
-          offset: pageValue,
-        },
+        { ...paramsValue, page: pageValue },
         (res) => {
           setHasMore(res.hasMore);
-          appendData(res.detail || []);
+          appendData(res.items || []);
           setPage((prev) => +prev + 1);
         }
       )
@@ -59,16 +66,18 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
     }
   };
 
-  const handleApprove = (guid) => {
-    appendDialog(<ApproveModal guid={guid} onApprove={handleRemove} />);
-  };
-
-  const handleDeny = (guid) => {
-    appendDialog(<DenyModal guid={guid} onDeny={handleRemove} />);
-  };
-
-  const handleView = () => {
-    appendDialog(<ViewModal />);
+  const handleShowModal = (name, application) => {
+    switch (name) {
+      case 'approve':
+        appendDialog(<ApproveModal application={application} onApprove={handleRemove} />);
+        break;
+      case 'deny':
+        appendDialog(<DenyModal application={application} onDeny={handleRemove} />);
+        break;
+      default:
+        appendDialog(<ViewModal application={application} />);
+        break;
+    }
   };
 
   return (
@@ -81,15 +90,15 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
       onSort={handleSort}
     >
       <Table.Header>
-        <Table.HeaderCell sortKey='applicationDate'>Application Date</Table.HeaderCell>
-        <Table.HeaderCell>Email</Table.HeaderCell>
-        <Table.HeaderCell>Company</Table.HeaderCell>
+        <Table.HeaderCell sortKey='application_date'>Application Date</Table.HeaderCell>
+        <Table.HeaderCell sortKey='email'>Email</Table.HeaderCell>
+        <Table.HeaderCell sortKey='company'>Company</Table.HeaderCell>
         <Table.HeaderCell>IP</Table.HeaderCell>
-        <Table.HeaderCell>Expected Monthly CSPR</Table.HeaderCell>
+        <Table.HeaderCell sortKey='cspr'>Expected Monthly CSPR</Table.HeaderCell>
         <Table.HeaderCell>Reason</Table.HeaderCell>
         <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
-      <Table.Body>
+      <Table.Body className="table-body-card">
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell>{data.date}</Table.BodyCell>
@@ -98,7 +107,11 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
             <Table.BodyCell>{data.last_ip}</Table.BodyCell>
             <Table.BodyCell>{data.cspr_expectation}</Table.BodyCell>
             <Table.BodyCell>
-              <button to={'/'} className='text-primary text-[10px] underline decoration-1' onClick={handleView}>
+              <button
+                to={'/'}
+                className='text-primary text-[10px] underline decoration-1'
+                onClick={() => handleShowModal('view', data)}
+              >
                 View
               </button>
             </Table.BodyCell>
@@ -106,14 +119,14 @@ const ApplicationsTable = React.forwardRef(({ outParams }, ref) => {
               <button
                 type='button'
                 className='text-white bg-primary rounded-full text-[10px] px-3 text-center'
-                onClick={() => handleApprove(data.guid)}
+                onClick={() => handleShowModal('approve', data)}
               >
                 Approve
               </button>
               <button
                 type='button'
                 className='rounded-full text-[10px] px-3 text-center bg-white border border-primary text-primary'
-                onClick={() => handleDeny(data.guid)}
+                onClick={() => handleShowModal('deny', data)}
               >
                 Deny
               </button>

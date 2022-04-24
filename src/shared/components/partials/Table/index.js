@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Loading } from 'shared/components/modules/Loading';
 import style from './style.module.scss';
 import * as Icon from 'react-feather';
+import { useStateCallback } from 'shared/hooks/useStateCallback';
 
 const DIRECTION = {
   0: 'asc',
@@ -61,6 +62,10 @@ const Table = (props) => {
       </div>
     </TableContext.Provider>
   );
+};
+
+Table.Wrapper = (props) => {
+  return <div className={classNames('overflow-auto', props.className)}>{props.children}</div>;
 };
 
 Table.Header = (props) => {
@@ -125,7 +130,6 @@ Table.Body = (props) => {
     >
       <InfiniteScroll
         className='flex flex-col w-full'
-        style={{ marginRight: '-7px' }}
         dataLength={props.dataLength || 0}
         next={props.onLoadMore}
         hasMore={props.hasMore}
@@ -203,11 +207,13 @@ Table.Body.Cell = Table.BodyCell;
 Table.Body.Row = Table.BodyRow;
 Table.Body.ExpandRow = Table.BodyExpandRow;
 
+const DEFAULT_LIMIT = 10;
+
 const useTable = () => {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const [params, setParams] = useState({});
+  const [params, setParams] = useStateCallback({ limit: DEFAULT_LIMIT });
   const [tableId, setTableId] = useState();
 
   const appendData = (res, reverse = false) => {

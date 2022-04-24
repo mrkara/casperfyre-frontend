@@ -8,6 +8,7 @@ import { PATTERN } from 'shared/common/pattern';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
+import { ErrorHandler, STATUS_CODE } from 'shared/core/services/api';
 import { setToken } from 'shared/core/services/auth';
 import { login, sendLoginMail, setUser } from 'stores/auth/actions';
 import * as yup from 'yup';
@@ -83,38 +84,39 @@ const Login = () => {
         { email, password },
         (res) => {
           setLoading(false);
-
           const { detail } = res;
 
-          if (detail.user[0]?.verified === '0') {
+          if (detail.user?.verified === '0') {
             history.push({
               pathname: `/auth/verify-email/${detail.guid}`,
             });
             return;
           }
-          if (detail.user[0]?.twofa === '1') {
+          if (detail.user?.twofa === '1') {
             history.push({
               pathname: `/auth/2fa/${detail.guid}`,
             });
             return;
           }
-          if (detail.user[0].role !== 'admin' && detail.user[0].admin_approved === '0') {
+          if (detail.user?.role !== 'admin' && detail.user?.admin_approved === '0') {
             history.push({
               pathname: `/auth/reviewing`,
             });
             return;
           }
+          if (!detail.user) {
+            throw new ErrorHandler({ status: 'custom', message: STATUS_CODE.UNEXPECTED });
+          }
           if (detail?.bearer) {
             setToken(detail.bearer);
-            dispatch(setUser(detail.user[0]));
+            dispatch(setUser(detail.user));
             history.push('/app');
             return;
           }
         },
         (err) => {
           setLoading(false);
-          setError('password', { type: 'custom', message: 'Password is not correct' });
-          console.log('error :', err);
+          setError('password', { type: 'custom', message: err.message });
         }
       )
     );

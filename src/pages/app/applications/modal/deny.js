@@ -1,13 +1,16 @@
 import { ReactComponent as Close } from 'assets/icons/close.svg';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
 import { denyUser } from 'stores/app/actions';
 
 const DenyModal = (props) => {
-  const { close, guid, onDeny } = props;
+  const { close, application, onDeny } = props;
+
+  const { guid, email } = application;
 
   const { setLoading } = useLoading();
   const dispatch = useDispatch();
@@ -21,6 +24,7 @@ const DenyModal = (props) => {
           setLoading(false);
           onDeny && onDeny(guid);
           close();
+          toast(`You denied ${email}`);
         },
         () => {
           setLoading(false);
@@ -47,7 +51,9 @@ const DenyModal = (props) => {
         <Button className='w-full' onClick={handleDeny}>
           Deny this user
         </Button>
-        <Button variant="text" color="primary" className='text-sm mt-4 text-primary cursor-pointer' onClick={close}>Back</Button>
+        <Button variant='text' color='primary' className='text-sm mt-4 text-primary cursor-pointer' onClick={close}>
+          Back
+        </Button>
       </Dialog.Footer>
     </Dialog>
   );

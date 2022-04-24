@@ -18,11 +18,17 @@ module.exports = {
       },
       spacing: {
         1.25: '0.313rem',
+        6.25: '1.563rem',
+        7.5: '1.875rem',
+        12.5: '3.125rem',
         400: '90rem',
         500: '110rem',
       },
       maxHeight: {
         120: '30rem',
+      },
+      minWidth: {
+        250: '62.5rem',
       },
       maxWidth: {
         400: '100rem',

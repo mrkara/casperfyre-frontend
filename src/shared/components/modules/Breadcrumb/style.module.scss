@@ -1,0 +1,7 @@
+.breadcrumb {
+  @apply flex gap-x-1;
+
+  .active {
+    @apply text-primary;
+  }
+}

@@ -1,29 +1,38 @@
+import classNames from 'classnames';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { getGuid } from 'shared/core/services/auth';
+import { formatDate } from 'shared/core/utils';
 import { getWallets } from 'stores/app/actions';
 import styles from './style.module.scss';
 
-const WalletsTable = React.forwardRef(({ outParams }, ref) => {
+const WalletsTable = React.forwardRef(({ externalParams }, ref) => {
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
   const dispatch = useDispatch();
 
   const guid = getGuid();
 
   useEffect(() => {
-    fetchApplications();
-  }, []);
+    if (externalParams) {
+      resetData();
+      setParams(
+        { ...params, ...externalParams, guid },
+        (s) => {
+          fetchWallets(s, 1);
+        }
+      );
+    }
+  }, [externalParams]);
 
-  const fetchApplications = () => {
+  const fetchWallets = (paramsValue = params, pageValue = page) => {
     dispatch(
       getWallets(
-        {
-          guid,
-        },
+        { ...paramsValue, page: pageValue },
         (res) => {
-          appendData(res.detail || []);
-          setHasMore(false);
+          setHasMore(res.hasMore);
+          appendData(res.items || []);
+          setPage((prev) => +prev + 1);
         }
       )
     );
@@ -33,9 +42,7 @@ const WalletsTable = React.forwardRef(({ outParams }, ref) => {
     <Table
       {...register}
       styles={styles}
-      maxHeight={480}
-      className='w-400'
-      onLoadMore={fetchApplications}
+      onLoadMore={fetchWallets}
       hasMore={hasMore}
       dataLength={data.length}
       // onSort={handleSort}
@@ -43,18 +50,18 @@ const WalletsTable = React.forwardRef(({ outParams }, ref) => {
       <Table.Header>
         <Table.HeaderCell>User ID</Table.HeaderCell>
         <Table.HeaderCell>Active/Old</Table.HeaderCell>
-        <Table.HeaderCell>Date Created</Table.HeaderCell>
+        <Table.HeaderCell>Date created</Table.HeaderCell>
         <Table.HeaderCell>Inactive Date</Table.HeaderCell>
         <Table.HeaderCell>Deposit Address</Table.HeaderCell>
-        <Table.HeaderCell>CSPR Balance</Table.HeaderCell>
+        <Table.HeaderCell>CSPR balance</Table.HeaderCell>
       </Table.Header>
-      <Table.Body>
+      <Table.Body className="table-body-card">
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
-            <Table.BodyCell>{data.userId}</Table.BodyCell>
-            <Table.BodyCell>{data.active}</Table.BodyCell>
-            <Table.BodyCell>{data.created_at}</Table.BodyCell>
-            <Table.BodyCell>{data.inactive_at}</Table.BodyCell>
+            <Table.BodyCell></Table.BodyCell>
+            <Table.BodyCell className={classNames(!data.active && 'text-primary')}>{data.active ? 'Active' : 'Old'}</Table.BodyCell>
+            <Table.BodyCell>{formatDate(data.created_at)}</Table.BodyCell>
+            <Table.BodyCell>{formatDate(data.inactive_at)}</Table.BodyCell>
             <Table.BodyCell>{data.address}</Table.BodyCell>
             <Table.BodyCell>{data.balance}</Table.BodyCell>
           </Table.BodyRow>

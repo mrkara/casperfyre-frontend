@@ -1,7 +1,7 @@
+import { ReactComponent as Buffer } from 'assets/icons/buffer.svg';
 import React from 'react';
 import { Card, CardBody, CardHeader, Input } from 'shared/components/partials';
 import ApiLogsTable from './table';
-import { ReactComponent as Buffer } from 'assets/icons/buffer.svg';
 
 const ApiLogs = (props) => {
   return (
@@ -21,9 +21,7 @@ const ApiLogs = (props) => {
             <Input className='bg-white w-40 py-0 px-1 text-[10px]' placeholder='Search' />
           </div>
         </div>
-        <div>
-          <ApiLogsTable />
-        </div>
+        <ApiLogsTable />
       </CardBody>
     </Card>
   );

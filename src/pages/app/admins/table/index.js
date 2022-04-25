@@ -1,22 +1,29 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
+import { Button } from 'shared/components/partials';
+import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { getGuid } from 'shared/core/services/auth';
-import { getHistories } from 'stores/app/actions';
+import { getAdmins } from 'stores/app/actions';
+import VerifyAdminModal from '../modal/verify';
 import styles from './style.module.scss';
 
-const ApiLogsTable = React.forwardRef(({ externalParams }, ref) => {
+const AdminsTable = React.forwardRef(({ externalParams }, ref) => {
   const guid = getGuid();
 
+  const { appendDialog } = useDialog();
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
 
   useEffect(() => {
     if (externalParams) {
       resetData();
       setParams({ ...params, ...externalParams, guid }, (s) => {
-        fetchApiLogs(s, 1);
+        fetchAdmins(s, 1);
       });
     }
   }, [externalParams]);
@@ -30,14 +37,15 @@ const ApiLogsTable = React.forwardRef(({ externalParams }, ref) => {
       },
       (s) => {
         resetData();
-        fetchApiLogs(s, 1);
+        fetchAdmins(s, 1);
       }
     );
   };
 
-  const fetchApiLogs = (paramsValue = params, pageValue = page) => {
+  const fetchAdmins = (paramsValue = params, pageValue = page) => {
+    //TODO: Update api
     dispatch(
-      getHistories(
+      getAdmins(
         { ...paramsValue, page: pageValue },
         (res) => {
           setHasMore(res.hasMore);
@@ -46,10 +54,13 @@ const ApiLogsTable = React.forwardRef(({ externalParams }, ref) => {
         },
         (error) => {
           setHasMore(false);
-          toast('Something went wrong. Please try again !');
         }
       )
     );
+  };
+
+  const handleAction = () => {
+    appendDialog(<VerifyAdminModal />);
   };
 
   return (
@@ -57,37 +68,29 @@ const ApiLogsTable = React.forwardRef(({ externalParams }, ref) => {
       <Table
         {...register}
         styles={styles}
-        className='w-500'
-        onLoadMore={fetchApiLogs}
+        onLoadMore={fetchAdmins}
         hasMore={hasMore}
         dataLength={data.length}
         onSort={handleSort}
       >
         <Table.Header>
-          <Table.HeaderCell sortKey='requestId'>Request ID</Table.HeaderCell>
-          <Table.HeaderCell>Timestamp</Table.HeaderCell>
-          <Table.HeaderCell>Amount</Table.HeaderCell>
+          <Table.HeaderCell sortKey='email'>Email</Table.HeaderCell>
           <Table.HeaderCell>Status</Table.HeaderCell>
-          <Table.HeaderCell>IP</Table.HeaderCell>
-          <Table.HeaderCell>Recipient</Table.HeaderCell>
-          <Table.HeaderCell>TXID</Table.HeaderCell>
+          <Table.HeaderCell sortKey='date'>Date Added</Table.HeaderCell>
+          <Table.HeaderCell sortKey='ip'>IP</Table.HeaderCell>
           <Table.HeaderCell>Action</Table.HeaderCell>
         </Table.Header>
         <Table.Body>
           {data.map((data, idx) => (
             <Table.BodyRow key={idx} className='py-4'>
-              <Table.BodyCell>{data.userId}</Table.BodyCell>
-              <Table.BodyCell>{data.requestId}</Table.BodyCell>
-              <Table.BodyCell>{data.timestamp}</Table.BodyCell>
-              <Table.BodyCell>{data.amount}</Table.BodyCell>
+              <Table.BodyCell>{data.email}</Table.BodyCell>
               <Table.BodyCell>{data.status}</Table.BodyCell>
+              <Table.BodyCell>{data.date}</Table.BodyCell>
               <Table.BodyCell>{data.ip}</Table.BodyCell>
-              <Table.BodyCell>{data.recipient}</Table.BodyCell>
-              <Table.BodyCell>{data.txId}</Table.BodyCell>
               <Table.BodyCell className='flex gap-x-2'>
-                <button type='button' className='text-white bg-primary rounded-full text-[10px] px-6 text-center'>
-                  View
-                </button>
+                <Button size='xs' className='rounded-full' onClick={handleAction}>
+                  Disable
+                </Button>
               </Table.BodyCell>
             </Table.BodyRow>
           ))}
@@ -97,4 +100,4 @@ const ApiLogsTable = React.forwardRef(({ externalParams }, ref) => {
   );
 });
 
-export default ApiLogsTable;
+export default AdminsTable;

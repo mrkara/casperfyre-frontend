@@ -5,18 +5,29 @@ const Card = (props) => {
   return <div className={classNames(props.className, styles.card)}>{props.children}</div>;
 };
 
-Card.Header = ({ icon, title }) => {
+Card.Header = ({ icon, title, children }) => {
   return (
-    <div className='border-b px-6 py-4 flex gap-x-2 items-center'>
-      <span>{icon}</span>
-      <p className='text-primary font-semibold'>{title}</p>
+    <div className='border-b px-6 py-4 flex justify-between'>
+      <div className='flex gap-x-2 items-center'>
+        <span>{icon}</span>
+        <p className='text-primary font-semibold'>{title}</p>
+      </div>
+      {children}
     </div>
   );
 };
 
-Card.Body = ({ children }) => {
+Card.Body = ({ children, noSpacing = false, className }) => {
   return (
-    <div className='flex-1 min-h-0 px-6 py-4'>
+    <div
+      className={classNames(
+        'flex-1 min-h-0 ',
+        {
+          'px-6 py-4': !noSpacing,
+        },
+        className
+      )}
+    >
       {children}
     </div>
   );

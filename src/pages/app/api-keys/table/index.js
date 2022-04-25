@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { getGuid } from 'shared/core/services/auth';
 import { getAPIKeys } from 'stores/app/actions';
@@ -15,14 +16,25 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
   useEffect(() => {
     if (externalParams) {
       resetData();
-      setParams(
-        { ...params, ...externalParams, guid },
-        (s) => {
-          fetchApiKeys(s, 1);
-        }
-      );
+      setParams({ ...params, ...externalParams, guid }, (s) => {
+        fetchApiKeys(s, 1);
+      });
     }
   }, [externalParams]);
+
+  const handleSort = async (key, direction) => {
+    setParams(
+      {
+        ...params,
+        sort_key: key,
+        sort_direction: direction,
+      },
+      (s) => {
+        resetData();
+        fetchApiKeys(s, 1);
+      }
+    );
+  };
 
   const fetchApiKeys = (paramsValue = params, pageValue = page) => {
     dispatch(
@@ -32,6 +44,10 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
           setHasMore(res.hasMore);
           appendData(res.items || []);
           setPage((prev) => +prev + 1);
+        },
+        (error) => {
+          setHasMore(false);
+          toast('Something went wrong. Please try again !');
         }
       )
     );
@@ -44,10 +60,10 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
       onLoadMore={fetchApiKeys}
       hasMore={hasMore}
       dataLength={data.length}
-      // onSort={handleSort}
+      onSort={handleSort}
     >
       <Table.Header>
-        <Table.HeaderCell>User ID</Table.HeaderCell>
+        <Table.HeaderCell sortKey='userId'>User ID</Table.HeaderCell>
         <Table.HeaderCell>Status</Table.HeaderCell>
         <Table.HeaderCell>Activation Date</Table.HeaderCell>
         <Table.HeaderCell>Email</Table.HeaderCell>
@@ -56,7 +72,7 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
         <Table.HeaderCell>Total CSPR Sent</Table.HeaderCell>
         <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
-      <Table.Body className="table-body-card">
+      <Table.Body className='table-body-card'>
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell>{data.userId}</Table.BodyCell>

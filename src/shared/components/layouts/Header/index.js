@@ -14,7 +14,7 @@ export const Header = () => {
   const doLogout = () => {
     dispatch(
       logout(null, () => {
-        history.push('/auth/login');
+        history.push('/auth/logout');
       })
     );
   };

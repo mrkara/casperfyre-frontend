@@ -25,7 +25,7 @@ const AppRoutes = () => {
       <Header />
       <div className='content-wrapper flex'>
         <Sidebar />
-        <div className='py-2.5 px-6 h-full w-full overflow-y-auto'>
+        <div className='py-2.5 px-6 h-full w-full overflow-y-auto overflow-x-auto'>
           <Suspense fallback={<div className='bg-white1 h-full w-full' />}>
             <Switch>
               <Route path={`${path}/applications`} component={ApplicationsRoutes} />

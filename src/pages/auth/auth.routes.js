@@ -8,6 +8,7 @@ const ResetPasswordRoutes = lazy(() => import('./reset-password'));
 const VerifyCodeRoutes = lazy(() => import('./verify-code'));
 const ThanksRoutes = lazy(() => import('./thanks'));
 const NotApproved = lazy(() => import('./review'));
+const LogoutRoutes = lazy(() => import('./logout'));
 
 const AuthRoutes = () => {
   const { path } = useRouteMatch();
@@ -22,6 +23,7 @@ const AuthRoutes = () => {
         <Route path={[`${path}/2fa/:guid`, `${path}/verify-email/:guid`]} component={VerifyCodeRoutes} exact />
         <Route path={`${path}/thanks`} component={ThanksRoutes} exact />
         <Route path={`${path}/reviewing`} component={NotApproved} exact />
+        <Route path={`${path}/logout`} component={LogoutRoutes} exact />
 
         <Redirect from='*' to={`${path}/login`} />
       </Switch>

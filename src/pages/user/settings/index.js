@@ -1,60 +1,53 @@
-import ApiLogs from 'pages/app/api-logs';
-// import WalletsHistory from 'pages/app/wallets';
+import { ReactComponent as SettingsIcon } from 'assets/icons/settings-ic.svg';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { Button } from 'shared/components/partials';
+import { Card, CardBody, CardHeader } from 'shared/components/partials';
+import ToggleSwitch from 'shared/components/partials/ToggleSwitch';
+import styles from './style.module.scss';
 import withPageSetting from 'shared/HOC/withPageSetting';
-import { getAPIKey } from 'stores/app/actions';
-// import ApiCalls from '../apiCalls';
-// import WalletsHistory from '../wallet';
-// import WhiteListedIP from '../whitelistedIP';
+
 const BREADCRUMB_DATA = [
   {
-    label: 'API Keys',
-    href: '/app/api-keys',
+    label: 'Admin Settings',
+    href: '/app/settings',
   },
   {
-    label: 'Detail View',
+    label: 'General',
   },
 ];
 
-const ApiKeysDetail = ({ config }) => {
-  const { id } = useParams();
-  const dispatch = useDispatch();
-
+const Settings = ({ config }) => {
   useEffect(() => {
     config.setBreadcrumb(BREADCRUMB_DATA);
   }, []);
 
-  useEffect(() => {
-    fetchAPIKey(id);
-  }, [id]);
-
-  const fetchAPIKey = (id) => {
-    //TODO: Update api
-    dispatch(
-      getAPIKey(
-        {
-          id,
-        },
-        (res) => {},
-        (err) => {}
-      )
-    );
-  };
-
   return (
-    <section className='section-api-keys-detail'>
-      <div className='section-body pt-6'>
-        <p className='section-title text-sm font-semibold'>General Actions</p>
-        <div className='button-actions flex gap-x-5 pt-7.5'>
-          {['Reset Portal Password', 'Disable Key', 'Replace Key', 'Change Wallet'].map((text, index) => (
-            <Button key={index} size='sm' className='rounded-full w-48'>
-              {text}
-            </Button>
-          ))}
-        </div>
+    <section className='section-settings'>
+      <div className='section-body pt-4 max-w-4xl'>
+        <Card>
+          <CardHeader icon={<SettingsIcon />} title='Settings' />
+          <CardBody isPadding={false} className='flex'>
+            <div className={styles.blockItem}>
+              <p>Email</p>
+              <p className='font-semibold'>useremail@gmail.com</p>
+              <div>
+                <button className='text-xs bg-primary text-white rounded-full px-5 py-1'>Update</button>
+              </div>
+            </div>
+            <div className={styles.blockItem}>
+              <p>Password</p>
+              <p className='font-semibold'>******************</p>
+              <div>
+                <button className='text-xs bg-primary text-white rounded-full px-5 py-1'>Update</button>
+              </div>
+              <div></div>
+            </div>
+            <div className={styles.blockItem}>
+              <p>2fa Protection</p>
+              <ToggleSwitch />
+              <p className='text-primary font-semibold'>On</p>
+            </div>
+          </CardBody>
+        </Card>
         <div className='section-content pt-12.5 flex flex-col gap-y-6'>
           <p className='text-sm font-semibold'>User Details</p>
           <div className='flex gap-y-3 flex-col'>
@@ -98,20 +91,17 @@ const ApiKeysDetail = ({ config }) => {
                 <p className='text-sm'>{user.title}: </p>
                 <p className='text-sm font-semibold'>{user.value}</p>
                 {user.onUpdate && (
-                  <Button size='xs' className='rounded-full' onClick={user.onUpdate}>
+                  <button className='text-xs bg-primary text-white rounded-full px-2 py' onClick={user.onUpdate}>
                     Update
-                  </Button>
+                  </button>
                 )}
               </div>
             ))}
           </div>
-          {/* <WhiteListedIP /> */}
-          <ApiLogs />
-          {/* <WalletsHistory /> */}
         </div>
       </div>
     </section>
   );
 };
 
-export default withPageSetting(ApiKeysDetail);
+export default withPageSetting(Settings);

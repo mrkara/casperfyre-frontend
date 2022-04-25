@@ -9,9 +9,7 @@ const Breadcrumb = (props) => {
       {props.data?.map((child, index) => {
         return (
           <Fragment key={index}>
-            <Link
-              className={classNames(index === props.data?.length - 1 && 'text-primary')}
-              to={child.href}>
+            <Link className={classNames(index === props.data?.length - 1 && 'text-primary')} to={child.href}>
               {child.label}
             </Link>
             {index === props.data?.length - 1 ? '' : <span>/</span>}

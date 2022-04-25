@@ -41,7 +41,7 @@
     }
 
     &-outline {
-      @apply text-primary border border-primary;
+      @apply text-primary border border-primary bg-white;
     }
 
     &-text {
@@ -96,13 +96,12 @@
   }
 
   &.btn-sm {
-    @apply text-xs font-normal;
-    min-height: 1.5rem;
-    min-width: 6.25rem;
+    @apply text-xs font-normal py-1;
+    // min-height: 1.5rem;
+    min-width: 5.625rem;
   }
   &.btn-xs {
-    @apply font-normal;
-    font-size: 9px;
+    @apply font-normal text-2.5;
     min-height: 1.2rem;
     min-width: 5.25rem;
   }

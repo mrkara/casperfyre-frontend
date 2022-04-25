@@ -12,6 +12,7 @@ export const Button = (props) => {
     className,
     isLoading,
     as = 'button',
+    rounded = false,
     onClick,
     ...otherProps
   } = props;
@@ -60,6 +61,7 @@ export const Button = (props) => {
           [`btn-${color}-${variant}`]: variant,
           [`btn-${size}`]: size,
           'cursor-not-allowed': isLoading,
+          'rounded-full': rounded,
         },
         className
       ),

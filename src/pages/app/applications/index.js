@@ -12,13 +12,13 @@ const Applications = () => {
 
   return (
     <>
-      <Card className="h-full">
+      <Card className='h-full'>
         <CardHeader icon={<Clipboard />} title='New Applications' />
         <CardBody>
           <div className='flex flex-col h-full'>
-            <Toolbar onChange={handleToolbarChange}/>
+            <Toolbar onChange={handleToolbarChange} />
             <div className='flex-1 min-h-0'>
-              <ApplicationsTable externalParams={params}/>
+              <ApplicationsTable externalParams={params} />
             </div>
           </div>
         </CardBody>

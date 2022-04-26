@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { all, put, takeLatest } from 'redux-saga/effects';
 import { getGuid, removeToken, setGuid } from 'shared/core/services/auth';
 import { get, post } from 'shared/core/services/saga';
@@ -10,6 +11,7 @@ function* login({ payload, resolve, reject }) {
     setGuid(res.detail?.guid);
     resolve(res);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -19,6 +21,7 @@ function* sendLoginMail({ payload, resolve, reject }) {
     const res = yield get(['user', 'name-by-email'], { email: payload });
     resolve(res.detail);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -28,6 +31,7 @@ function* resetPassword({ payload, resolve, reject }) {
     const res = yield post(['user', 'reset-password'], { data: payload });
     resolve(res.data);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -37,6 +41,7 @@ function* forgotPassword({ payload, resolve, reject }) {
     const res = yield post(['user', 'forgot-password'], { data: payload });
     resolve(res.data);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -46,6 +51,7 @@ function* register({ payload, resolve, reject }) {
     const res = yield post(['user', 'register'], { data: payload });
     resolve(res);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -55,6 +61,7 @@ function* confirmRegistration({ payload, resolve, reject }) {
     const res = yield post(['user', 'confirm-registration'], { data: payload });
     resolve(res);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -70,6 +77,7 @@ function* verifyCode({ payload, resolve, reject }) {
     const res = yield post(['user', 'submit-mfa'], { data: payload });
     resolve(res);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -82,6 +90,7 @@ function* fetchUserInfo({ resolve, reject }) {
     yield put(setUser(res.detail));
     resolve(res);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }

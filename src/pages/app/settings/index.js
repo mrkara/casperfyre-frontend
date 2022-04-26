@@ -1,9 +1,12 @@
 import { ReactComponent as SettingsIcon } from 'assets/icons/settings-ic.svg';
 import React, { useEffect } from 'react';
 import { Button, Card, CardBody, CardHeader } from 'shared/components/partials';
+import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import ToggleSwitch from 'shared/components/partials/ToggleSwitch';
 import withPageSetting from 'shared/HOC/withPageSetting';
-import Admins from '../admins';
+import UpdateEmailAdminModal from 'shared/components/modules/Modals/UpdateEmail';
+import UpdatePasswordAdminModal from 'shared/components/modules/Modals/UpdatePasword';
+import AdminsCard from 'shared/components/modules/CardTables/Admins';
 import styles from './style.module.scss';
 
 const BREADCRUMB_DATA = [
@@ -17,9 +20,26 @@ const BREADCRUMB_DATA = [
 ];
 
 const Settings = ({ config }) => {
+  const { appendDialog } = useDialog();
+
   useEffect(() => {
     config.setBreadcrumb(BREADCRUMB_DATA);
   }, []);
+
+  const handleShowModal = (type) => {
+    switch (type) {
+      case 'updateEmail':
+        appendDialog(<UpdateEmailAdminModal />);
+        break;
+
+      case 'updatePassword':
+        appendDialog(<UpdatePasswordAdminModal />);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <section className='section-settings'>
@@ -30,14 +50,14 @@ const Settings = ({ config }) => {
             <div className={styles.blockItem}>
               <p>Email</p>
               <p className='font-semibold'>useremail@gmail.com</p>
-              <Button size='xs' className='rounded-full'>
+              <Button size='xs' className='rounded-full' onClick={() => handleShowModal('updateEmail')}>
                 Update
               </Button>
             </div>
             <div className={styles.blockItem}>
               <p>Password</p>
               <p className='font-semibold'>******************</p>
-              <Button size='xs' className='rounded-full'>
+              <Button size='xs' className='rounded-full' onClick={() => handleShowModal('updatePassword')}>
                 Update
               </Button>
             </div>
@@ -49,7 +69,7 @@ const Settings = ({ config }) => {
           </CardBody>
         </Card>
         <div className='section-content pt-12.5'>
-          <Admins />
+          <AdminsCard />
         </div>
       </div>
     </section>

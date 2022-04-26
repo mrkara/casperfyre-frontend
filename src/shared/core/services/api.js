@@ -32,7 +32,7 @@ export class ErrorHandler {
       removeGuid();
     } else {
       this.status = e?.response?.status || STATUS_CODE.UNEXPECTED;
-      this.message = e?.response?.data?.detail || STATUS_CODE.UNEXPECTED;
+      this.message = e?.response?.data?.detail || 'Something wrong. Please try again !';
     }
   }
 }

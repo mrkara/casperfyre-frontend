@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { all, takeLatest } from 'redux-saga/effects';
 import { get, post } from 'shared/core/services/saga';
 import { fakeFilterListApi, removeEmptyField } from 'shared/core/utils';
@@ -44,12 +45,9 @@ function* getAPIKeys({ payload, resolve, reject }) {
 
 function* getAPIKey({ payload, resolve, reject }) {
   try {
-    const { id } = payload;
-    const res = yield get(['admin', 'get-apikey', id]);
-    /* this code will be remove in the future */
-    const result = fakeFilterListApi(res.detail, payload);
-    /* end */
-    resolve(result);
+    const { api_key_id, guid } = payload;
+    const res = yield get(['admin', 'get-apikey'], { api_key_id, guid });
+    resolve(res);
   } catch (error) {
     reject(error);
   }
@@ -101,6 +99,37 @@ function* getAdmins({ payload, resolve, reject }) {
   }
 }
 
+function* resetUserPassword({ payload, resolve, reject }) {
+  try {
+    const res = yield post(['admin', 'reset-user-password'], { data: payload });
+    resolve(res);
+  } catch (error) {
+    toast(error.message);
+    reject(error);
+  }
+}
+
+function* disableAPIKey({ payload, resolve, reject }) {
+  try {
+    const res = yield post(['admin', 'disable-apikey'], { data: payload });
+    resolve(res);
+  } catch (error) {
+    toast(error.message);
+    reject(error);
+  }
+}
+
+function* enableAPIKey({ payload, resolve, reject }) {
+  try {
+    const res = yield post(['admin', 'enable-apikey'], { data: payload });
+    resolve(res);
+  } catch (error) {
+    console.log('error', error);
+    toast(error.message);
+    reject(error);
+  }
+}
+
 export function* watchApp() {
   yield all([
     takeLatest(types.GET_APPLICATIONS, getApplications),
@@ -112,5 +141,8 @@ export function* watchApp() {
     takeLatest(types.GET_ADMINS, getAdmins),
     takeLatest(types.APPROVE_USER, approveUser),
     takeLatest(types.DENY_USER, denyUser),
+    takeLatest(types.RESET_USER_PASSWORD, resetUserPassword),
+    takeLatest(types.DISABLE_API_KEY, disableAPIKey),
+    takeLatest(types.ENABLE_API_KEY, enableAPIKey),
   ]);
 }

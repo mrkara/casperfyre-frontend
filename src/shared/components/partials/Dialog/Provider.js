@@ -92,7 +92,13 @@ const Dialog = (props) => {
   );
 };
 
-Dialog.Header = (props) => <div className={classNames(styles.dialogHeader, props.className)}>{props.children}</div>;
+Dialog.Header = ({ className, children, title, subTitle }) => (
+  <div className={classNames(styles.dialogHeader, className)}>
+    {title && <p className='text-base font-semibold text-black1'>{title}</p>}
+    {subTitle && <p className='text-sm font-normal mt-1'>{subTitle}</p>}
+    {children}
+  </div>
+);
 
 Dialog.Body = (props) => <div className={classNames(styles.dialogBody, props.className)}>{props.children}</div>;
 

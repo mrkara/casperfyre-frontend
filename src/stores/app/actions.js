@@ -8,6 +8,9 @@ export const getWallets = generateAPIAction(types.GET_WALLETS);
 export const getHistories = generateAPIAction(types.GET_HISTORIES);
 export const getIps = generateAPIAction(types.GET_WHITE_LISTED_IPS);
 export const getAdmins = generateAPIAction(types.GET_ADMINS);
+export const resetUserPassword = generateAPIAction(types.RESET_USER_PASSWORD);
+export const disableAPIKey = generateAPIAction(types.DISABLE_API_KEY);
+export const enableAPIKey = generateAPIAction(types.ENABLE_API_KEY);
 
 export const approveUser = generateAPIAction(types.APPROVE_USER);
 export const denyUser = generateAPIAction(types.DENY_USER);

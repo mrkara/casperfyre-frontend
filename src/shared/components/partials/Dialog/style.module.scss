@@ -1,6 +1,9 @@
 .dialogWrapper {
   @apply fixed inset-0;
 }
+.dialogHeader {
+  @apply relative;
+}
 .flexCenter {
   @apply flex justify-center items-center;
 }

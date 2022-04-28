@@ -3,7 +3,6 @@ import { ReactComponent as Checkmark } from 'assets/icons/checkmark.svg';
 import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { PATTERN } from 'shared/common/pattern';
 import { Button, Input } from 'shared/components/partials';
@@ -101,9 +100,9 @@ const ResetPasswordModal = (props) => {
           Set New Password
         </Button>
         <div className='mt-2.5 text-center'>
-          <Link className=' text-primary underline' onClick={handleCancel}>
+          <Button variant='text' className='underline' onClick={handleCancel}>
             Cancel
-          </Link>
+          </Button>
         </div>
       </Dialog.Footer>
     </Dialog>

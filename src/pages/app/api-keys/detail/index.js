@@ -1,19 +1,23 @@
-import WalletsHistory from 'shared/components/modules/CardTables/WalletsHistory';
-import WhiteListedIP from 'shared/components/modules/CardTables/WhiteListedIPs';
-import ApiCalls from 'shared/components/modules/CardTables/ApiCalls';
+import Logo from 'assets/images/casper-logo.png';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button } from 'shared/components/partials';
-import { useDialog } from 'shared/components/partials/Dialog/Provider';
-import withPageSetting from 'shared/HOC/withPageSetting';
-import { useQuery } from 'shared/hooks/useQuery';
-import { disableAPIKey, enableAPIKey, getAPIKey } from 'stores/app/actions';
+import { useParams } from 'react-router-dom';
+import { STATUS } from 'shared/common/enum';
+import ApiCalls from 'shared/components/modules/CardTables/ApiCalls';
+import WalletsHistory from 'shared/components/modules/CardTables/WalletsHistory';
+import WhiteListedIP from 'shared/components/modules/CardTables/WhiteListedIPs';
+import { useLoading } from 'shared/components/modules/Loading';
 import ChangeWalletModal from 'shared/components/modules/Modals/ChangeWallet';
 import ReplaceKeyModal from 'shared/components/modules/Modals/ReplaceKey';
 import ResetPasswordModal from 'shared/components/modules/Modals/ResetPassword';
 import StatusKeyModal from 'shared/components/modules/Modals/StatusKey';
 import UpdateDailyCSPRLimitModal from 'shared/components/modules/Modals/UpdateDailyLimit';
 import UpdateTXLimitModal from 'shared/components/modules/Modals/UpdateTxLimit';
+import { Button } from 'shared/components/partials';
+import { useDialog } from 'shared/components/partials/Dialog/Provider';
+import withPageSetting from 'shared/HOC/withPageSetting';
+import { useQuery } from 'shared/hooks/useQuery';
+import { disableAPIKey, enableAPIKey, getAPIKey } from 'stores/app/actions';
 
 const BREADCRUMB_DATA = [
   {
@@ -26,10 +30,10 @@ const BREADCRUMB_DATA = [
 ];
 
 const ApiKeysDetail = ({ config }) => {
+  const { setLoading } = useLoading();
   const query = useQuery();
-
+  const { id } = useParams();
   const [apiKey, setApiKey] = useState();
-
   const dispatch = useDispatch();
   const { appendDialog } = useDialog();
 
@@ -38,47 +42,30 @@ const ApiKeysDetail = ({ config }) => {
   }, []);
 
   useEffect(() => {
-    fetchAPIKey(query.get('api_key_id'), query.get('guid'));
+    fetchAPIKey(query.get('guid'));
   }, []);
 
-  const fetchAPIKey = (api_key_id, guid) => {
+  const fetchAPIKey = (guid) => {
+    setLoading(true);
     dispatch(
       getAPIKey(
         {
-          api_key_id,
+          api_key_id: id,
           guid,
         },
         (res) => {
           setApiKey(res.detail || {});
+          setLoading(false);
         },
         (err) => {}
       )
     );
   };
 
-  const generalActions = [
-    {
-      type: 'resetPassword',
-      text: 'Reset Portal Password',
-    },
-    {
-      type: 'keyStatus',
-      text: 'Disable Key',
-    },
-    {
-      type: 'replaceKey',
-      text: 'Replace Key',
-    },
-    {
-      type: 'changeWallet',
-      text: 'Change Wallet',
-    },
-  ];
-
   const user = [
     {
       title: 'User ID',
-      key: 'user_id',
+      key: 'guid',
     },
     {
       title: 'Email',
@@ -112,25 +99,43 @@ const ApiKeysDetail = ({ config }) => {
     },
   ];
 
-  const handleDisableAPIKey = (enable) => {
-    enable
+  const updateApiKeyStatus = () => {
+    apiKey.active = apiKey.active === STATUS.ACTIVE ? STATUS.INACTIVE : STATUS.ACTIVE;
+    setApiKey({...apiKey});
+  }
+
+  const handleChangeAPIKeyStatus = (disable) => {
+    disable
       ? dispatch(
-          disableAPIKey(
+          enableAPIKey(
             {
-              api_key_id: query.get('api_key_id'),
+              api_key_id: id,
             },
             (res) => {
-              appendDialog(<StatusKeyModal disabled />);
+              appendDialog(
+                <StatusKeyModal
+                  apiKey={apiKey} 
+                  afterClosed={(e) => e ==='undo' && updateApiKeyStatus()} 
+                />
+              );
+              updateApiKeyStatus();
             }
           )
         )
       : dispatch(
-          enableAPIKey(
+          disableAPIKey(
             {
-              api_key_id: query.get('api_key_id'),
+              api_key_id: id,
             },
             (res) => {
-              appendDialog(<StatusKeyModal />);
+              appendDialog(
+                <StatusKeyModal
+                  disabled
+                  apiKey={apiKey} 
+                  afterClosed={(e) => e ==='undo' && updateApiKeyStatus()} 
+                />
+              );
+              updateApiKeyStatus();
             }
           )
         );
@@ -142,21 +147,19 @@ const ApiKeysDetail = ({ config }) => {
         appendDialog(<ResetPasswordModal />);
         break;
       case 'keyStatus':
-        const enable = false; // TODO: must update
-        handleDisableAPIKey(enable);
-
+        handleChangeAPIKeyStatus(apiKey.active === STATUS.INACTIVE);
         break;
       case 'replaceKey':
-        appendDialog(<ReplaceKeyModal />);
+        appendDialog(<ReplaceKeyModal guid={apiKey.guid} />);
         break;
       case 'updateDailyCSPRLimit':
-        appendDialog(<UpdateDailyCSPRLimitModal />);
+        appendDialog(<UpdateDailyCSPRLimitModal guid={apiKey.guid} />);
         break;
       case 'updatePerTXCSPRLimit':
-        appendDialog(<UpdateTXLimitModal />);
+        appendDialog(<UpdateTXLimitModal guid={apiKey.guid} />);
         break;
       case 'changeWallet':
-        appendDialog(<ChangeWalletModal />);
+        appendDialog(<ChangeWalletModal guid={apiKey.guid} />);
         break;
       default:
         break;
@@ -168,11 +171,37 @@ const ApiKeysDetail = ({ config }) => {
       <div className='section-body pt-6'>
         <p className='section-title text-sm font-semibold'>General Actions</p>
         <div className='button-actions flex gap-x-5 pt-7.5'>
-          {generalActions.map((action, index) => (
-            <Button key={index} size='sm' rounded className='w-48 h-8' onClick={() => handleActions(action.type)}>
-              {action.text}
-            </Button>
-          ))}
+          {apiKey &&
+            [
+              {
+                type: 'resetPassword',
+                text: 'Reset Portal Password',
+              },
+              {
+                type: 'keyStatus',
+                text: apiKey.active === STATUS.INACTIVE ? 'Enable Key' : 'Disable Key',
+                color: apiKey.active === STATUS.INACTIVE ? 'success' : 'primary',
+              },
+              {
+                type: 'replaceKey',
+                text: 'Replace Key',
+              },
+              {
+                type: 'changeWallet',
+                text: 'Change Wallet',
+              },
+            ].map((action, index) => (
+              <Button
+                key={index}
+                size='sm'
+                color={action.color}
+                rounded
+                className='w-48 h-8'
+                onClick={() => handleActions(action.type)}
+              >
+                {action.text}
+              </Button>
+            ))}
         </div>
         <div className='section-content pt-12.5 flex flex-col gap-y-6'>
           <p className='text-sm font-semibold'>User Details</p>
@@ -180,7 +209,10 @@ const ApiKeysDetail = ({ config }) => {
             {user.map((user, index) => (
               <div key={index} className='flex gap-x-3'>
                 <p className='text-sm'>{user.title}: </p>
-                <p className='text-sm font-semibold'>{apiKey && apiKey[user.key]}</p>
+                <p className='text-sm font-semibold flex'>
+                  {user.key === 'total_cspr_sent' && <img className='ml-2 mr-1' src={Logo} alt='logo' />}
+                  {apiKey && apiKey[user.key]}
+                </p>
                 {user.onUpdate && (
                   <Button size='xs' className='rounded-full' onClick={user.onUpdate}>
                     Update
@@ -189,9 +221,9 @@ const ApiKeysDetail = ({ config }) => {
               </div>
             ))}
           </div>
-          <WhiteListedIP />
-          <ApiCalls />
-          <WalletsHistory />
+          <WhiteListedIP className="max-h-120"/>
+          <ApiCalls className="max-h-120"/>
+          <WalletsHistory guid={query.get('guid')} className="max-h-120" />
         </div>
       </div>
     </section>

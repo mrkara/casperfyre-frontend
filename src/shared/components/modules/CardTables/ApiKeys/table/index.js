@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { STATUS } from 'shared/common/enum';
 import { Button } from 'shared/components/partials';
@@ -16,7 +16,6 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
 
   const dispatch = useDispatch();
-  const history = useHistory();
 
   useEffect(() => {
     if (externalParams) {
@@ -58,10 +57,6 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
     );
   };
 
-  const handleKeySelect = (api_key_id, guid) => {
-    history.push(`/app/api-keys/detail?api_key_id=${api_key_id}&guid=${guid}`);
-  };
-
   return (
     <Table
       {...register}
@@ -83,12 +78,8 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
       </Table.Header>
       <Table.Body className='table-body-card'>
         {data.map((data, idx) => (
-          <Table.BodyRow
-            key={idx}
-            className='py-4'
-            selectRowHandler={() => handleKeySelect(data.api_key_id, data.guid)}
-          >
-            <Table.BodyCell>{data.userId}</Table.BodyCell>
+          <Table.BodyRow key={idx} className='py-4'>
+            <Table.BodyCell>{data.guid}</Table.BodyCell>
             <Table.BodyCell className={classNames({ 'text-primary': data.active === STATUS.INACTIVE })}>
               {data.active === STATUS.ACTIVE ? 'Active' : 'Inactive'}
             </Table.BodyCell>
@@ -98,11 +89,13 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
             <Table.BodyCell>{data.total_calls}</Table.BodyCell>
             <Table.BodyCell>{data.total_cspr_sent}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <Button size='sm' rounded>
-                Approve
-              </Button>
-              <Button size='sm' variant='outline' rounded>
-                Deny
+              <Button
+                as={Link}
+                to={`/app/api-keys/detail/${data.api_key_id}?guid=${data.guid}`}
+                size='sm'
+                rounded
+              >
+                Details
               </Button>
             </Table.BodyCell>
           </Table.BodyRow>

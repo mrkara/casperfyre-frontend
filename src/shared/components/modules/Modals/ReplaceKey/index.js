@@ -1,13 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
+import { replaceKey } from 'stores/app/actions';
 
 const ReplaceKeyModal = (props) => {
-  const { close } = props;
+  const { close, guid } = props;
+
+  const dispatch = useDispatch();
 
   const handleCancel = () => {
     close();
+  };
+
+  const handleReplaceKey = () => {
+    dispatch(
+      replaceKey({ guid }, (res) => {
+        console.log(res);
+        close();
+      })
+    );
   };
 
   return (
@@ -18,13 +30,13 @@ const ReplaceKeyModal = (props) => {
               action can not be undone.'
       />
       <Dialog.Footer>
-        <Button className='w-full mt-6' color='primary' onClick={handleCancel}>
+        <Button className='w-full mt-6' color='primary' onClick={handleReplaceKey}>
           Replace Key
         </Button>
         <div className='mt-2.5 text-center'>
-          <Link className=' text-primary underline' onClick={handleCancel}>
+          <Button variant='text' className='underline' onClick={handleCancel}>
             Cancel
-          </Link>
+          </Button>
         </div>
       </Dialog.Footer>
     </Dialog>

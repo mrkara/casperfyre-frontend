@@ -29,9 +29,9 @@ const WhiteListedIP = (props) => {
         </div>
       </CardHeader>
       <CardBody>
-        <div>
+        <div className='flex flex-col flex-1 min-h-0'>
           <Toolbar onChange={handleToolbarChange} />
-          <div className='flex-1 min-h-0'>
+          <div className='flex flex-col flex-1 min-h-0'>
             <WhiteListedIPTable externalParams={params} />
           </div>
         </div>

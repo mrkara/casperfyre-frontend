@@ -29,12 +29,7 @@ export function* get(uri, params = {}, moreConfig = { timeout: 60000 }) {
   }
 }
 
-export function* post(
-  uri,
-  body = {},
-  params = {},
-  moreConfig = {}
-) {
+export function* post(uri, body = {}, params = {}, moreConfig = {}) {
   const url = createURL(uri, params);
   const config = {
     ...body,
@@ -42,6 +37,20 @@ export function* post(
   };
   try {
     const res = yield apiService.makeRequest('POST', url, config);
+    return res.data;
+  } catch (e) {
+    throw new ErrorHandler(e);
+  }
+}
+
+export function* put(uri, body = {}, params = {}, moreConfig = {}) {
+  const url = createURL(uri, params);
+  const config = {
+    ...body,
+    ...moreConfig,
+  };
+  try {
+    const res = yield apiService.makeRequest('PUT', url, config);
     return res.data;
   } catch (e) {
     throw new ErrorHandler(e);

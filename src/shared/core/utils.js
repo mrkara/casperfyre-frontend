@@ -16,6 +16,7 @@ export const formatDate = (time, formatType = 'yyyy-MM-dd hh:mm:ss') => {
 
 
 export const fakeFilterListApi = (data, payload) => {
+  if (!data) return { items: [], hasMore: false };
   let temp = data;
   // search
   if (payload.search) {

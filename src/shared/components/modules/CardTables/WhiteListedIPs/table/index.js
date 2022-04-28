@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { STATUS } from 'shared/common/enum';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { useQuery } from 'shared/hooks/useQuery';
-import { getIps } from 'stores/app/actions';
+import { disableIP, enableIP, getIps } from 'stores/app/actions';
 import styles from './style.module.scss';
 
 const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
@@ -53,6 +54,20 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
     );
   };
 
+  const handleIPStatus = (status, ip, id) => {
+    status === STATUS.ACTIVE
+      ? dispatch(
+          disableIP({ ip_id: `${ip}_${id}` }, (res) => {
+            console.log('res');
+          })
+        )
+      : dispatch(
+          enableIP({ ip_id: `${ip}_${id}` }, (res) => {
+            console.log('res');
+          })
+        );
+  };
+
   return (
     <Table
       {...register}
@@ -75,8 +90,13 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
             <Table.BodyCell>{data.active}</Table.BodyCell>
             <Table.BodyCell>{data.created_at}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <Button size='sm' rounded>
-                Disable
+              <Button
+                size='sm'
+                variant={data.active === STATUS.ACTIVE ? 'contained' : 'outline'}
+                rounded
+                onClick={() => handleIPStatus(data.active, data.ip, data.id)}
+              >
+                {data.active === STATUS.ACTIVE ? 'Disable' : 'Enable'}
               </Button>
             </Table.BodyCell>
           </Table.BodyRow>

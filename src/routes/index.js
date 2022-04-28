@@ -5,7 +5,7 @@ import AuthRoute from './AuthRoute';
 import ScrollToTop from './ScrollToTop';
 
 const AuthRoutes = lazy(() => import('pages/auth/auth.routes'));
-const AppRoutes = lazy(() => import('pages/app/app.routes'));
+const AppRoutes = lazy(() => import('pages/routes'));
 
 const Routes = () => {
   return (

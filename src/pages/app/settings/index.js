@@ -1,12 +1,12 @@
 import { ReactComponent as SettingsIcon } from 'assets/icons/settings-ic.svg';
 import React, { useEffect } from 'react';
+import AdminsCard from 'shared/components/modules/CardTables/Admins';
+import UpdateEmailAdminModal from 'shared/components/modules/Modals/UpdateEmail';
+import UpdatePasswordAdminModal from 'shared/components/modules/Modals/UpdatePasword';
 import { Button, Card, CardBody, CardHeader } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import ToggleSwitch from 'shared/components/partials/ToggleSwitch';
 import withPageSetting from 'shared/HOC/withPageSetting';
-import UpdateEmailAdminModal from 'shared/components/modules/Modals/UpdateEmail';
-import UpdatePasswordAdminModal from 'shared/components/modules/Modals/UpdatePasword';
-import AdminsCard from 'shared/components/modules/CardTables/Admins';
 import styles from './style.module.scss';
 
 const BREADCRUMB_DATA = [

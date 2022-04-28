@@ -1,15 +1,15 @@
-import React, { Fragment } from 'react';
-import { ReactComponent as Clipboard } from 'assets/icons/clipboard.svg';
-import { ReactComponent as Key } from 'assets/icons/key.svg';
 import { ReactComponent as Buffer } from 'assets/icons/buffer.svg';
-import { ReactComponent as Wallet } from 'assets/icons/wallet.svg';
+import { ReactComponent as Clipboard } from 'assets/icons/clipboard.svg';
+import { ReactComponent as Dashboard } from 'assets/icons/dashboard.svg';
+import { ReactComponent as Key } from 'assets/icons/key.svg';
 import { ReactComponent as Settings } from 'assets/icons/settings.svg';
-
+import { ReactComponent as Wallet } from 'assets/icons/wallet.svg';
+import React from 'react';
 import MenuItem from './components/MenuItem';
 import './style.module.scss';
 
-const menuData = [
-  [
+const menuData = {
+  admin: [
     {
       component: <Clipboard />,
       text: 'Applications',
@@ -36,20 +36,37 @@ const menuData = [
       href: '/app/settings',
     },
   ],
-];
+  user: [
+    {
+      component: <Dashboard />,
+      text: 'Dashboard',
+      href: '/app/dashboard',
+    },
+    {
+      component: <Buffer />,
+      text: 'My API Logs',
+      href: '/app/my-api-logs',
+    },
+    {
+      component: <Key />,
+      text: 'Keys & Wallets',
+      href: '/app/keys-wallets',
+    },
+    {
+      component: <Settings />,
+      text: 'Settings',
+      href: '/app/settings',
+    },
+  ],
+};
 
-const Sidebar = () => {
+const Sidebar = ({ isAdmin }) => {
   return (
     <>
       <div className='mt-2.5 sidebar w-20 sm:w-60 transition-all duration-200 ease-in-out'>
         <ul className='pt-3 menu'>
-          {menuData.map((group, index) => (
-            <Fragment key={index}>
-              {group.map((item, id) => (
-                <MenuItem key={id} item={item} />
-              ))}
-              <div className={'divide'} />
-            </Fragment>
+          {menuData[isAdmin ? 'admin' : 'user'].map((item, index) => (
+            <MenuItem key={index} item={item} />
           ))}
         </ul>
       </div>

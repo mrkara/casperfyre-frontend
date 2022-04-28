@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { formatDate } from 'shared/core/utils';
-import { useQuery } from 'shared/hooks/useQuery';
 import { getWallets } from 'stores/app/actions';
 import styles from './style.module.scss';
 
@@ -11,12 +10,11 @@ const WalletsHistoryTable = React.forwardRef(({ externalParams }, ref) => {
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
 
   const dispatch = useDispatch();
-  const query = useQuery();
 
   useEffect(() => {
     if (externalParams) {
       resetData();
-      setParams({ ...params, ...externalParams, guid: query.get('guid') }, (s) => {
+      setParams({ ...params, ...externalParams }, (s) => {
         fetchWalletsHistory(s, 1);
       });
     }

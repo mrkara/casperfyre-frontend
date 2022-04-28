@@ -96,7 +96,7 @@ const ApplicationsTable = React.forwardRef(({ externalParams }, ref) => {
       <Table.Body className='table-body-card'>
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
-            <Table.BodyCell>{data.date}</Table.BodyCell>
+            <Table.BodyCell>{data.created_at}</Table.BodyCell>
             <Table.BodyCell>{data.email}</Table.BodyCell>
             <Table.BodyCell>{data.company}</Table.BodyCell>
             <Table.BodyCell>{data.last_ip}</Table.BodyCell>

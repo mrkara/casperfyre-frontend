@@ -1,22 +1,29 @@
 import { ReactComponent as Wallet } from 'assets/icons/wallet.svg';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Toolbar from 'shared/components/modules/Toolbar';
 import { Card, CardBody, CardHeader } from 'shared/components/partials';
 import WalletsHistoryTable from './table';
 
-const WalletsHistory = () => {
+const WalletsHistory = (props) => {
   const [params, setParams] = useState();
-  const handleToolbarChange = (params) => {
-    setParams(params);
+
+  const handleToolbarChange = (value) => {
+    setParams({ ...params, ...value });
   };
 
+  useEffect(() => {
+    if (props.guid) {
+      setParams({ ...params, guid: props.guid });
+    }
+  }, [props.guid])
+
   return (
-    <Card>
+    <Card className={props.className || ''}>
       <CardHeader icon={<Wallet />} title='Wallet History' />
       <CardBody>
-        <div>
+        <div className='flex flex-col flex-1 min-h-0'>
           <Toolbar onChange={handleToolbarChange} />
-          <div className='flex-1 min-h-0'>
+          <div className='flex flex-col flex-1 min-h-0'>
             <WalletsHistoryTable externalParams={params} />
           </div>
         </div>

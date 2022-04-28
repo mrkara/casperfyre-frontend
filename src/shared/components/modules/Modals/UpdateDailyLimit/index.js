@@ -1,13 +1,38 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import Logo from 'assets/images/casper-logo.png';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
+import { updateLimits } from 'stores/app/actions';
 
 const UpdateDailyCSPRLimitModal = (props) => {
-  const { close } = props;
+  const { close, guid } = props;
+
+  const [limit, setLimit] = useState('');
+
+  const dispatch = useDispatch();
+
+  const handleUpdateDailyLimit = () => {
+    dispatch(
+      updateLimits(
+        { guid, day_limit: limit },
+        (res) => {
+          console.log(res);
+          handleCancel();
+        },
+        (err) => {
+          handleCancel();
+        }
+      )
+    );
+  };
 
   const handleCancel = () => {
     close();
+  };
+
+  const handleDailyLimitChange = (e) => {
+    setLimit(e.target.value);
   };
 
   return (
@@ -17,19 +42,20 @@ const UpdateDailyCSPRLimitModal = (props) => {
         subTitle='This action will update the max CSPR that can be sent each day.'
       />
       <Dialog.Body className='pt-6.25'>
-        <Input placeholder='Daily Limit' />
-        <p className='mt-2.5'>
-          Current Daily Limit: <b>5000</b>
+        <Input type='number' value={limit} placeholder='Daily Limit' onChange={handleDailyLimitChange} />
+        <p className='mt-2.5 flex'>
+          Current Daily Limit: <img className='ml-2 mr-1' src={Logo} alt='logo' />
+          <b>5000</b>
         </p>
       </Dialog.Body>
-      <Dialog.Footer className=''>
-        <Button className='w-full mt-6' color='primary'>
+      <Dialog.Footer>
+        <Button className='w-full mt-6' color='primary' onClick={handleUpdateDailyLimit} disabled={!limit}>
           Update Daily Limit
         </Button>
         <div className='mt-2.5 text-center'>
-          <Link className=' text-primary underline' onClick={handleCancel}>
+          <Button variant='text' className='underline' onClick={handleCancel}>
             Cancel
-          </Link>
+          </Button>
         </div>
       </Dialog.Footer>
     </Dialog>

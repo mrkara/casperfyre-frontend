@@ -159,7 +159,7 @@ const ApiKeysDetail = ({ config }) => {
         appendDialog(<UpdateTXLimitModal guid={apiKey.guid} />);
         break;
       case 'changeWallet':
-        appendDialog(<ChangeWalletModal guid={apiKey.guid} />);
+        appendDialog(<ChangeWalletModal guid={apiKey.guid} data={apiKey}/>);
         break;
       default:
         break;
@@ -210,7 +210,7 @@ const ApiKeysDetail = ({ config }) => {
               <div key={index} className='flex gap-x-3'>
                 <p className='text-sm'>{user.title}: </p>
                 <p className='text-sm font-semibold flex'>
-                  {user.key === 'total_cspr_sent' && <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' />}
+                  {user.key === 'total_cspr_sent' && <img className='mr-1 w-4' src={Logo} alt='logo' />}
                   {apiKey && apiKey[user.key]}
                 </p>
                 {user.onUpdate && (

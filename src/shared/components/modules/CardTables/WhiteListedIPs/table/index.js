@@ -83,11 +83,11 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
         <Table.HeaderCell>Date Added</Table.HeaderCell>
         <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
-      <Table.Body>
+      <Table.Body className='table-body-card'>
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell>{data.ip}</Table.BodyCell>
-            <Table.BodyCell>{data.active}</Table.BodyCell>
+            <Table.BodyCell className={data.active && 'text-primary'}>{data.active ? 'Allowed' : 'Disabled'}</Table.BodyCell>
             <Table.BodyCell>{data.created_at}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
               <Button

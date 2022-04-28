@@ -210,7 +210,7 @@ const ApiKeysDetail = ({ config }) => {
               <div key={index} className='flex gap-x-3'>
                 <p className='text-sm'>{user.title}: </p>
                 <p className='text-sm font-semibold flex'>
-                  {user.key === 'total_cspr_sent' && <img className='ml-2 mr-1' src={Logo} alt='logo' />}
+                  {user.key === 'total_cspr_sent' && <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' />}
                   {apiKey && apiKey[user.key]}
                 </p>
                 {user.onUpdate && (

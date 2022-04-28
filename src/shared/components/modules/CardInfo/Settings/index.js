@@ -27,7 +27,6 @@ const SettingsInfo = (props) => {
         <div className={styles.blockItem}>
           <p>2fa Protection</p>
           <ToggleSwitch />
-          <p className='text-primary font-semibold'>On</p>
         </div>
       </CardBody>
     </Card>

@@ -46,25 +46,26 @@ const Settings = ({ config }) => {
       <div className='section-body pt-4'>
         <Card className='max-w-4xl'>
           <CardHeader icon={<SettingsIcon />} title='Admin Settings' />
-          <CardBody className='flex' noSpacing>
-            <div className={styles.blockItem}>
-              <p>Email</p>
-              <p className='font-semibold'>useremail@gmail.com</p>
-              <Button size='xs' className='rounded-full' onClick={() => handleShowModal('updateEmail')}>
-                Update
-              </Button>
-            </div>
-            <div className={styles.blockItem}>
-              <p>Password</p>
-              <p className='font-semibold'>******************</p>
-              <Button size='xs' className='rounded-full' onClick={() => handleShowModal('updatePassword')}>
-                Update
-              </Button>
-            </div>
-            <div className={styles.blockItem}>
-              <p>2fa Protection</p>
-              <ToggleSwitch />
-              <p className='text-primary font-semibold'>On</p>
+          <CardBody noSpacing>
+            <div className='flex'>
+              <div className={styles.blockItem}>
+                <p>Email</p>
+                <p className='font-semibold'>useremail@gmail.com</p>
+                <Button size='xs' className='rounded-full' onClick={() => handleShowModal('updateEmail')}>
+                  Update
+                </Button>
+              </div>
+              <div className={styles.blockItem}>
+                <p>Password</p>
+                <p className='font-semibold'>******************</p>
+                <Button size='xs' className='rounded-full' onClick={() => handleShowModal('updatePassword')}>
+                  Update
+                </Button>
+              </div>
+              <div className={styles.blockItem}>
+                <p>2fa Protection</p>
+                <ToggleSwitch />
+              </div>
             </div>
           </CardBody>
         </Card>

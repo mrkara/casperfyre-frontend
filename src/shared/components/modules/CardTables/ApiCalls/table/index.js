@@ -55,7 +55,6 @@ const ApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
     <Table
       {...register}
       styles={styles}
-      className='w-400'
       onLoadMore={fetchApiCalls}
       hasMore={hasMore}
       dataLength={data.length}
@@ -71,7 +70,7 @@ const ApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
         <Table.HeaderCell>TXID</Table.HeaderCell>
         <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
-      <Table.Body>
+      <Table.Body className='table-body-card'>
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell>{data.userId}</Table.BodyCell>

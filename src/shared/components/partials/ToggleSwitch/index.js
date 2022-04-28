@@ -8,15 +8,18 @@ const ToggleSwitch = ({ checked = false }) => {
     setChecked(!isChecked);
   };
   return (
-    <label className={styles.btnSwitch} for='toggle-wrapper'>
-      <input type='checkbox' id='toggle-wrapper' className='sr-only' checked={isChecked} />
-      <div
-        className={classNames(styles.toggle, {
-          [styles.active]: isChecked,
-        })}
-        onClick={handleChecked}
-      ></div>
-    </label>
+    <div>
+      <label className={styles.btnSwitch} for='toggle-wrapper'>
+        <input type='checkbox' id='toggle-wrapper' className='sr-only' checked={isChecked} />
+        <div
+          className={classNames(styles.toggle, {
+            [styles.active]: isChecked,
+          })}
+          onClick={handleChecked}
+        ></div>
+      </label>
+      <p className='mt-3 text-primary font-semibold'>{isChecked ? 'On' : 'Off'}</p>
+    </div>
   );
 };
 

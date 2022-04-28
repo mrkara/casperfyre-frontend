@@ -36,7 +36,7 @@ const ChangeWalletModal = (props) => {
           Current Wallet: <b>0x24232fdq32435gw23ef42de532e67</b>
         </p>
         <p className='flex'>
-          CSPR Balance: <img className='ml-2 mr-1' src={Logo} alt='logo' /> <b>250,699</b>
+          CSPR Balance: <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' /> <b>250,699</b>
         </p>
       </Dialog.Body>
       <Dialog.Footer>

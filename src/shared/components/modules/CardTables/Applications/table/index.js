@@ -85,7 +85,7 @@ const ApplicationsTable = React.forwardRef(({ externalParams }, ref) => {
       onSort={handleSort}
     >
       <Table.Header>
-        <Table.HeaderCell sortKey='application_date'>Application Date</Table.HeaderCell>
+        <Table.HeaderCell sortKey='created_at'>Application Date</Table.HeaderCell>
         <Table.HeaderCell sortKey='email'>Email</Table.HeaderCell>
         <Table.HeaderCell sortKey='company'>Company</Table.HeaderCell>
         <Table.HeaderCell>IP</Table.HeaderCell>

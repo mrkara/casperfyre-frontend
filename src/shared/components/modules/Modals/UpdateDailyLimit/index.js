@@ -44,7 +44,7 @@ const UpdateDailyCSPRLimitModal = (props) => {
       <Dialog.Body className='pt-6.25'>
         <Input type='number' value={limit} placeholder='Daily Limit' onChange={handleDailyLimitChange} />
         <p className='mt-2.5 flex'>
-          Current Daily Limit: <img className='ml-2 mr-1' src={Logo} alt='logo' />
+          Current Daily Limit: <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' />
           <b>5000</b>
         </p>
       </Dialog.Body>

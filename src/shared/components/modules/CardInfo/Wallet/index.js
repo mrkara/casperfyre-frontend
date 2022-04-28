@@ -10,7 +10,7 @@ const WalletInfo = () => {
       <CardHeader icon={<Wallet />} title='Wallet'>
         <p className='flex'>
           Balance:
-          <img className='ml-3 mr-1' src={Logo} alt='logo' />
+          <img className='ml-3 mr-1 w-4' src={Logo} alt='logo' />
           <b className='text-primary'>30</b>
         </p>
       </CardHeader>

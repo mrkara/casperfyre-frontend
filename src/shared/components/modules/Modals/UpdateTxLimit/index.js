@@ -44,7 +44,7 @@ const UpdateTXLimitModal = (props) => {
       <Dialog.Body className='pt-6.25'>
         <Input type='number' value={limit} placeholder='Transaction Limit' onChange={handleTXLimitChange} />
         <p className='mt-2.5 flex'>
-          Current Transaction Limit: <img className='ml-2 mr-1' src={Logo} alt='logo' /> <b>5000</b>
+          Current Transaction Limit: <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' /> <b>5000</b>
         </p>
       </Dialog.Body>
       <Dialog.Footer>

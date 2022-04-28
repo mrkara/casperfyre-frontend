@@ -21,7 +21,7 @@ export const Header = () => {
 
   return (
     <div>
-      <nav className='px-4 py-2.5 border-b'>
+      <nav className='px-6 py-2.5 border-b'>
         <div className='flex flex-wrap justify-between items-center mx-auto'>
           <Link to='/' className='flex items-center'>
             <img className={style.logo} src='/images/logo.png' alt='logo' />

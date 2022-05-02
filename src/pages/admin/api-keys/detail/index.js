@@ -16,7 +16,7 @@ import UpdateTXLimitModal from 'shared/components/modules/Modals/UpdateTxLimit';
 import { Button } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import withPageSetting from 'shared/HOC/withPageSetting';
-import { disableAPIKey, enableAPIKey, getAPIKey, getLimits } from 'stores/api/admin/actions';
+import { disableAPIKey, enableAPIKey, getAPIKey, getLimits, getWallet } from 'stores/api/admin/actions';
 
 const BREADCRUMB_DATA = [
   {
@@ -43,6 +43,7 @@ const ApiKeysDetail = ({ config }) => {
     if (id) {
       fetchAPIKey();
       fetchLimit();
+      fetchWallet();
     }
   }, [id]);
 
@@ -71,6 +72,22 @@ const ApiKeysDetail = ({ config }) => {
         },
         (res) => {
           setApiKey((prev) => ({ ...prev, ...res.detail }));
+          setLoading(false);
+        },
+        (err) => {}
+      )
+    );
+  };
+
+  const fetchWallet = () => {
+    setLoading(true);
+    dispatch(
+      getWallet(
+        {
+          guid: id,
+        },
+        (res) => {
+          setApiKey((prev) => ({ ...prev, address: res.detail.address }));
           setLoading(false);
         },
         (err) => {}
@@ -157,6 +174,10 @@ const ApiKeysDetail = ({ config }) => {
     }));
   };
 
+  const handleAfterCreatedWallet = (cond) => {
+    if (cond) fetchWallet();
+  }
+
   const handleActions = (type) => {
     switch (type) {
       case 'resetPassword':
@@ -177,7 +198,7 @@ const ApiKeysDetail = ({ config }) => {
         appendDialog(<UpdateTXLimitModal guid={id} currentLimit={apiKey.per_limit} onUpdate={handleUpdate} />);
         break;
       case 'changeWallet':
-        appendDialog(<ChangeWalletModal guid={id} data={apiKey} />);
+        appendDialog(<ChangeWalletModal guid={id} data={apiKey} afterClosed={handleAfterCreatedWallet}/>);
         break;
       default:
         break;

@@ -240,7 +240,7 @@ const ApiKeysDetail = ({ config }) => {
             ))}
           </div>
           <WhiteListedIP className='max-h-120' />
-          <ApiCalls className='max-h-120' />
+          <ApiCalls guid={id} className='max-h-120' />
           <WalletsHistory guid={id} className='max-h-120' />
         </div>
       </div>

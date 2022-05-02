@@ -5,14 +5,12 @@ import APICallsDetailModal from 'shared/components/modules/Modals/APICallsDetail
 import { Button } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import { Table, useTable } from 'shared/components/partials/Table';
-import { useQuery } from 'shared/hooks/useQuery';
+import { HistoryStatus } from 'shared/core/directive';
 import { getHistories } from 'stores/api/admin/actions';
 import styles from './style.module.scss';
 
 const ApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
-
-  const query = useQuery();
   const { appendDialog } = useDialog();
 
   const dispatch = useDispatch();
@@ -20,7 +18,7 @@ const ApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
   useEffect(() => {
     if (externalParams) {
       resetData();
-      setParams({ ...params, ...externalParams, guid: query.get('guid') }, (s) => {
+      setParams({ ...params, ...externalParams }, (s) => {
         fetchApiCalls(s, 1);
       });
     }
@@ -56,32 +54,8 @@ const ApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
     );
   };
 
-  const handleViewAPIDetail = () => {
-    appendDialog(<APICallsDetailModal />);
-  };
-
-  const handleAPIStatus = (success, fulfilled) => {
-    const status = {
-      text: '',
-      isSuccess: false,
-    };
-    switch (fulfilled) {
-      case '1':
-        status.text = 'Delivered';
-        status.isSuccess = true;
-        break;
-      case '2':
-        status.text = 'Failed';
-        break;
-
-      default:
-        if (success === '1') {
-          status.text = 'Confirmed';
-          status.isSuccess = true;
-        }
-        break;
-    }
-    return status;
+  const handleViewAPIDetail = (data) => {
+    appendDialog(<APICallsDetailModal data={data}/>);
   };
 
   return (
@@ -104,30 +78,21 @@ const ApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
         <Table.HeaderCell>Action</Table.HeaderCell>
       </Table.Header>
       <Table.Body className='table-body-card'>
-        {data.map((data, idx) => (
+        {data.map((item, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
-            <Table.BodyCell>{data.id}</Table.BodyCell>
-            <Table.BodyCell>{data.created_at}</Table.BodyCell>
-            <Table.BodyCell>{data.amount}</Table.BodyCell>
-            <Table.BodyCell
-              className={classNames('text-primary', {
-                'text-success': handleAPIStatus(data.success, data.fulfilled).isSuccess,
-              })}
-            >
-              {handleAPIStatus(data.success, data.fulfilled).text}
-            </Table.BodyCell>
-            <Table.BodyCell>{data.ip}</Table.BodyCell>
-            <Table.BodyCell>{data.address}</Table.BodyCell>
+            <Table.BodyCell>{item.id}</Table.BodyCell>
+            <Table.BodyCell>{item.created_at}</Table.BodyCell>
+            <Table.BodyCell>{item.amount}</Table.BodyCell>
             <Table.BodyCell>
-              <div>
-                <div>
-                  {data.return_code} - IP {data.ip}
-                </div>
-                <div>{data.deploy_hash}</div>
-              </div>
+              <HistoryStatus data={item} /> 
+            </Table.BodyCell>
+            <Table.BodyCell>{item.ip}</Table.BodyCell>
+            <Table.BodyCell className="break-words">{item.address}</Table.BodyCell>
+            <Table.BodyCell>
+              {item.deploy_hash}
             </Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <Button size='sm' rounded onClick={handleViewAPIDetail}>
+              <Button size='sm' rounded onClick={() => handleViewAPIDetail(item)}>
                 View
               </Button>
             </Table.BodyCell>

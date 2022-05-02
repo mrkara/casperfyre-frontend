@@ -3,7 +3,7 @@ import ApiCalls from 'shared/components/modules/CardTables/ApiCalls';
 
 const ApiLogs = () => {
   return (
-    <ApiCalls />
+    <ApiCalls className="h-full" />
   );
 };
 

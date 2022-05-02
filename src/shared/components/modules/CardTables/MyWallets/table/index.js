@@ -1,23 +1,20 @@
 import classNames from 'classnames';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { formatDate } from 'shared/core/utils';
-import { useQuery } from 'shared/hooks/useQuery';
-import { getWallets } from 'stores/app/actions';
+import { getUserWallets } from 'stores/api/user/actions';
 import styles from './style.module.scss';
 
 const MyWalletsTable = React.forwardRef(({ externalParams }, ref) => {
-  const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
+  const { data, register, hasMore, setHasMore, setParams, appendData, setPage, page, params, resetData } = useTable();
 
   const dispatch = useDispatch();
-  const query = useQuery();
 
   useEffect(() => {
     if (externalParams) {
       resetData();
-      setParams({ ...params, ...externalParams, guid: query.get('guid') }, (s) => {
+      setParams({ ...params, ...externalParams }, (s) => {
         fetchWalletsHistory(s, 1);
       });
     }
@@ -39,19 +36,14 @@ const MyWalletsTable = React.forwardRef(({ externalParams }, ref) => {
 
   const fetchWalletsHistory = (paramsValue = params, pageValue = page) => {
     dispatch(
-      getWallets(
+      getUserWallets(
         { ...paramsValue, page: pageValue },
         (res) => {
-          // setHasMore(res.hasMore);
-          // appendData(res.items || []);
-          // setPage((prev) => +prev + 1);
-          setHasMore(false);
-          toast('Something went wrong. Please try again !');
+          setHasMore(res.hasMore);
+          appendData(res.items || []);
+          setPage((prev) => +prev + 1);
         },
-        () => {
-          setHasMore(false);
-          toast('Something went wrong. Please try again !');
-        }
+        () => {}
       )
     );
   };
@@ -67,10 +59,10 @@ const MyWalletsTable = React.forwardRef(({ externalParams }, ref) => {
     >
       <Table.Header>
         <Table.HeaderCell>Active/Old</Table.HeaderCell>
-        <Table.HeaderCell>Created Date</Table.HeaderCell>
+        <Table.HeaderCell>Date Created</Table.HeaderCell>
         <Table.HeaderCell>Inactive Date</Table.HeaderCell>
         <Table.HeaderCell>Deposit Address</Table.HeaderCell>
-        <Table.HeaderCell>Balance</Table.HeaderCell>
+        <Table.HeaderCell>CSPR Balance</Table.HeaderCell>
       </Table.Header>
       <Table.Body className='table-body-card'>
         {data.map((data, idx) => (
@@ -80,7 +72,9 @@ const MyWalletsTable = React.forwardRef(({ externalParams }, ref) => {
             </Table.BodyCell>
             <Table.BodyCell>{formatDate(data.created_at)}</Table.BodyCell>
             <Table.BodyCell>{formatDate(data.inactive_at)}</Table.BodyCell>
-            <Table.BodyCell>{data.address}</Table.BodyCell>
+            <Table.BodyCell className={classNames(!data.active && 'text-primary')}>
+              {data.address}
+            </Table.BodyCell>
             <Table.BodyCell>{data.balance}</Table.BodyCell>
           </Table.BodyRow>
         ))}

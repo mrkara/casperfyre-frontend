@@ -1,10 +1,21 @@
 import { ReactComponent as Copy } from 'assets/icons/copy.svg';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import MyApiKeys from 'shared/components/modules/CardTables/MyApiKeys';
 import MyWallets from 'shared/components/modules/CardTables/MyWallets';
-import { Button } from 'shared/components/partials';
+import { Button, CopyButton } from 'shared/components/partials';
+import { getUserWallet } from 'stores/api/user/actions';
 
 const KeysAndWalletsPage = (props) => {
+  const dispatch = useDispatch();
+  const [wallet, setWallet] = useState();
+
+  useEffect(() => {
+    dispatch(getUserWallet(null, (res) => {
+      setWallet(res.detail);
+    }));
+  }, []);
+
   return (
     <section className='section-keys-wallets'>
       <div className='section-body flex flex-col gap-y-6'>
@@ -30,10 +41,14 @@ const KeysAndWalletsPage = (props) => {
         <div>
           <div className='flex justify-between items-center'>
             <div className='flex gap-2 items-center py-5'>
-              <p>
-                <b>Active Wallet</b>: 0x3df1b5f8782b2410bc49dd63b8188a961c7c61e5
-              </p>
-              <Copy />
+              <b className='whitespace-nowrap'>Active Wallet:</b> 
+              <input 
+                value={wallet?.address} 
+                className='px-3 input-readonly-copy-text w-96 text-center'
+                id="active-wallet-id"
+                readOnly
+              />
+              <CopyButton from="active-wallet-id" />
             </div>
             <div className='flex gap-x-2'>
               <Button size='sm' rounded className='px-5 py-6'>
@@ -47,7 +62,5 @@ const KeysAndWalletsPage = (props) => {
     </section>
   );
 };
-
-KeysAndWalletsPage.propTypes = {};
 
 export default KeysAndWalletsPage;

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { useQuery } from 'shared/hooks/useQuery';
-import { getHistories } from 'stores/app/actions';
+import { getHistories } from 'stores/api/admin/actions';
 import styles from './style.module.scss';
 
 const AllApiCallsTable = React.forwardRef(({ externalParams }, ref) => {

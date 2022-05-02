@@ -4,6 +4,7 @@ import { types } from 'stores/types';
 export const getApplications = generateAPIAction(types.GET_APPLICATIONS);
 export const getAPIKeys = generateAPIAction(types.GET_API_KEYS);
 export const getAPIKey = generateAPIAction(types.GET_API_KEY);
+export const getAPIKeyHolders = generateAPIAction(types.GET_API_KEY_HOLDERS);
 export const createWallet = generateAPIAction(types.CREATE_WALLET);
 export const getWallet = generateAPIAction(types.GET_WALLET);
 export const getWallets = generateAPIAction(types.GET_WALLETS);
@@ -17,6 +18,8 @@ export const enableAPIKey = generateAPIAction(types.ENABLE_API_KEY);
 export const replaceKey = generateAPIAction(types.REPLACE_KEY);
 export const updateLimits = generateAPIAction(types.UPDATE_LIMITS);
 export const getLimits = generateAPIAction(types.GET_LIMITS);
+
+export const createIP = generateAPIAction(types.CREATE_IP);
 export const disableIP = generateAPIAction(types.DISABLE_IP);
 export const enableIP = generateAPIAction(types.ENABLE_IP);
 
@@ -28,7 +31,3 @@ export const getUsers = generateAPIAction(types.GET_USERS);
 export const approveUser = generateAPIAction(types.APPROVE_USER);
 export const denyUser = generateAPIAction(types.DENY_USER);
 
-export const updatePassword = generateAPIAction(types.UPDATE_PASSWORD);
-export const sendMFA = generateAPIAction(types.SEND_MFA);
-export const updateMFA = generateAPIAction(types.UPDATE_MFA);
-export const updateEmail = generateAPIAction(types.UPDATE_EMAIL);

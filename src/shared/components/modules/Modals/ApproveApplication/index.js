@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { approveUser } from 'stores/app/actions';
+import { approveUser } from 'stores/api/admin/actions';
 import { toast } from 'react-toastify';
 
 const ApproveModal = (props) => {

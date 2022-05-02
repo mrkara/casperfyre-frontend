@@ -5,7 +5,7 @@ import { Button, Card, CardBody, CardHeader } from 'shared/components/partials';
 
 const APIKeyInfo = () => {
   return (
-    <Card className='max-w-4xl'>
+    <Card className='w-1/2 max-w-lg h-60'>
       <CardHeader icon={<Key />} title='API Key'>
         <div className='flex gap-x-5'>
           <p>
@@ -16,7 +16,7 @@ const APIKeyInfo = () => {
           </p>
         </div>
       </CardHeader>
-      <CardBody className='flex flex-col justify-center items-center px-36 py-20'>
+      <CardBody className='flex flex-col justify-center items-center'>
         <div className='flex items-center gap-x-4 text-sm font-semibold'>
           <p>a1b2c33d4e5f6g7h8i9jakblc</p>
           <Copy />

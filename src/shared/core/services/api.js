@@ -8,6 +8,8 @@ export const STATUS_CODE = {
   UNEXPECTED: 2,
 };
 
+const exception401 = ['admin/confirm-mfa', 'admin/update-email', 'admin/update-mfa'];
+
 export class ErrorHandler {
   status;
   message;
@@ -22,14 +24,14 @@ export class ErrorHandler {
     if ((e.code && e.code === 'ECONNABORTED') || e?.response?.status === 408) {
       this.status = STATUS_CODE.REQUEST_TIMEOUT;
       this.message = STATUS_CODE.REQUEST_TIMEOUT;
-    } else if (e?.response?.status === 401) {
+    } else if (e?.response?.status === 401 && !exception401.includes(e?.response.config.url)) {
       this.status = e?.response?.status;
       this.message = e?.response?.data?.detail;
-      if (getToken()) {
-        window.location.href = '/auth/login';
-        removeToken();
-      }
-      removeGuid();
+      // if (getToken()) {
+      //   window.location.href = '/auth/login';
+      //   removeToken();
+      // }
+      // removeGuid();
     } else {
       this.status = e?.response?.status || STATUS_CODE.UNEXPECTED;
       this.message = e?.response?.data?.detail || 'Something wrong. Please try again !';

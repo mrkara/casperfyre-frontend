@@ -35,6 +35,7 @@ function* getWallet({ payload, resolve, reject }) {
     const result = yield get(['admin', 'get-wallet'], payload);
     resolve(result);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -48,6 +49,21 @@ function* getAPIKeys({ payload, resolve, reject }) {
     /* end */
     resolve(result);
   } catch (error) {
+    toast(error.message);
+    reject(error);
+  }
+}
+
+function* getAPIKeyHolders({ payload, resolve, reject }) {
+  try {
+    const newPayload = removeEmptyField(payload);
+    const res = yield get(['admin', 'get-apikey-holders'], newPayload);
+    /* this code will be remove in the future */
+    const result = fakeFilterListApi(res.detail, payload);
+    /* end */
+    resolve(result);
+  } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -64,8 +80,12 @@ function* getAPIKey({ payload, resolve, reject }) {
 
 function* getHistories({ payload, resolve, reject }) {
   try {
-    const res = yield get(['admin', 'history'], payload);
-    resolve(res);
+    const newPayload = removeEmptyField(payload);
+    const res = yield get(['admin', 'history'], newPayload);
+    /* this code will be remove in the future */
+    const result = fakeFilterListApi(res.detail, payload);
+    /* end */
+    resolve(result);
   } catch (error) {
     reject(error);
   }
@@ -92,8 +112,10 @@ function* denyUser({ payload, resolve, reject }) {
 function* enableUser({ payload, resolve, reject }) {
   try {
     const res = yield post(['admin', 'enable-user'], { data: payload });
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
+    toast.success(error.message);
     reject(error);
   }
 }
@@ -101,8 +123,10 @@ function* enableUser({ payload, resolve, reject }) {
 function* disableUser({ payload, resolve, reject }) {
   try {
     const res = yield post(['admin', 'disable-user'], { data: payload });
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
+    toast.success(error.message);
     reject(error);
   }
 }
@@ -118,18 +142,25 @@ function* getIps({ payload, resolve, reject }) {
 
 function* getAdmins({ payload, resolve, reject }) {
   try {
-    const res = yield get(['admin', 'get-admins'], payload);
-    resolve({ ...res, detail: res.detail, hasMore: false });
+    const newPayload = removeEmptyField(payload);
+    const res = yield get(['admin', 'get-admins'], newPayload);
+    /* this code will be remove in the future */
+    const result = fakeFilterListApi(res.detail, payload);
+    /* end */
+    resolve(result);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
 
 function* createAdmin({ payload, resolve, reject }) {
   try {
-    const res = yield post(['admin', 'create-admin'], payload);
+    const res = yield post(['admin', 'create-admin'], { data: payload });
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
+    toast(error.message);
     reject(error);
   }
 }
@@ -144,19 +175,10 @@ function* resetUserPassword({ payload, resolve, reject }) {
   }
 }
 
-function* updatePassword({ payload, resolve, reject }) {
-  try {
-    const res = yield put(['admin', 'update-password'], { data: payload });
-    resolve(res);
-  } catch (error) {
-    toast(error.message);
-    reject(error);
-  }
-}
-
 function* disableAPIKey({ payload, resolve, reject }) {
   try {
     const res = yield post(['admin', 'disable-apikey'], { data: payload });
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
     toast(error.message);
@@ -167,6 +189,7 @@ function* disableAPIKey({ payload, resolve, reject }) {
 function* enableAPIKey({ payload, resolve, reject }) {
   try {
     const res = yield post(['admin', 'enable-apikey'], { data: payload });
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
     console.log('error', error);
@@ -191,7 +214,6 @@ function* createWallet({ payload, resolve, reject }) {
     const res = yield post(['admin', 'create-wallet'], { data: payload });
     resolve(res);
   } catch (error) {
-    console.log('error', error);
     toast(error.message);
     reject(error);
   }
@@ -200,9 +222,9 @@ function* createWallet({ payload, resolve, reject }) {
 function* updateLimits({ payload, resolve, reject }) {
   try {
     const res = yield put(['admin', 'update-limits'], { data: payload });
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
-    console.log('error', error);
     toast(error.message);
     reject(error);
   }
@@ -210,11 +232,10 @@ function* updateLimits({ payload, resolve, reject }) {
 
 function* getLimits({ payload, resolve, reject }) {
   try {
-    // @param string guid
-    const res = yield get(['admin', 'get-limits'], { data: payload });
+    const res = yield get(['admin', 'get-limits'], payload);
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
-    console.log('error', error);
     toast(error.message);
     reject(error);
   }
@@ -223,9 +244,20 @@ function* getLimits({ payload, resolve, reject }) {
 function* disableIP({ payload, resolve, reject }) {
   try {
     const res = yield post(['admin', 'disable-ip'], { data: payload });
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
-    console.log('error', error);
+    toast(error.message);
+    reject(error);
+  }
+}
+
+function* createIP({ payload, resolve, reject }) {
+  try {
+    const res = yield post(['admin', 'create-ip'], { data: payload });
+    toast.success(res.detail);
+    resolve(res);
+  } catch (error) {
     toast(error.message);
     reject(error);
   }
@@ -260,44 +292,12 @@ function* getUsers({ payload, resolve, reject }) {
   }
 }
 
-function* sendMFA({ payload, resolve, reject }) {
-  try {
-    const res = yield post(['admin', 'send-mfa'], { data: payload });
-    resolve(res);
-  } catch (error) {
-    console.log('error', error);
-    toast(error.message);
-    reject(error);
-  }
-}
-
-function* updateMFA({ payload, resolve, reject }) {
-  try {
-    const res = yield put(['admin', 'update-mfa'], { data: payload });
-    resolve(res);
-  } catch (error) {
-    console.log('error', error);
-    toast(error.message);
-    reject(error);
-  }
-}
-
-function* updateEmail({ payload, resolve, reject }) {
-  try {
-    const res = yield put(['admin', 'update-email'], { data: payload });
-    resolve(res);
-  } catch (error) {
-    console.log('error', error);
-    toast(error.message);
-    reject(error);
-  }
-}
-
-export function* watchApp() {
+export function* watchAdmin() {
   yield all([
     takeLatest(types.GET_APPLICATIONS, getApplications),
     takeLatest(types.GET_API_KEYS, getAPIKeys),
     takeLatest(types.GET_API_KEY, getAPIKey),
+    takeLatest(types.GET_API_KEY_HOLDERS, getAPIKeyHolders),
     takeLatest(types.GET_WALLETS, getWallets),
     takeLatest(types.GET_WALLET, getWallet),
     takeLatest(types.GET_HISTORIES, getHistories),
@@ -313,15 +313,14 @@ export function* watchApp() {
     takeLatest(types.CREATE_WALLET, createWallet),
     takeLatest(types.UPDATE_LIMITS, updateLimits),
     takeLatest(types.GET_LIMITS, getLimits),
+
     takeLatest(types.DISABLE_IP, disableIP),
     takeLatest(types.ENABLE_IP, enableIP),
+    takeLatest(types.CREATE_IP, createIP),
+
     takeLatest(types.GET_USER, getUser),
     takeLatest(types.GET_USERS, getUsers),
     takeLatest(types.DISABLE_USER, disableUser),
     takeLatest(types.ENABLE_USER, enableUser),
-    takeLatest(types.UPDATE_PASSWORD, updatePassword),
-    takeLatest(types.SEND_MFA, sendMFA),
-    takeLatest(types.UPDATE_MFA, updateMFA),
-    takeLatest(types.UPDATE_EMAIL, updateEmail),
   ]);
 }

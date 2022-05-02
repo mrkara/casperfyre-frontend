@@ -5,6 +5,7 @@ import { ReactComponent as Key } from 'assets/icons/key.svg';
 import { ReactComponent as Settings } from 'assets/icons/settings.svg';
 import { ReactComponent as Wallet } from 'assets/icons/wallet.svg';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import MenuItem from './components/MenuItem';
 import './style.module.scss';
 
@@ -60,12 +61,14 @@ const menuData = {
   ],
 };
 
-const Sidebar = ({ isAdmin }) => {
+const Sidebar = () => {
+  const user = useSelector((state) => state.authReducer?.user);
+
   return (
     <>
       <div className='mt-2.5 sidebar w-20 sm:w-60 transition-all duration-200 ease-in-out'>
         <ul className='pt-3 menu'>
-          {menuData[isAdmin ? 'admin' : 'user'].map((item, index) => (
+          {user && menuData[user.role]?.map((item, index) => (
             <MenuItem key={index} item={item} />
           ))}
         </ul>

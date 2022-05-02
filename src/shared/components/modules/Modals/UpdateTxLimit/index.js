@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { updateLimits } from 'stores/app/actions';
+import { updateLimits } from 'stores/api/admin/actions';
 
-const UpdateTXLimitModal = (props) => {
-  const { close, guid } = props;
-
+const UpdateTXLimitModal = ({ close, guid, currentLimit, onUpdate }) => {
   const [limit, setLimit] = useState('');
 
   const dispatch = useDispatch();
@@ -15,9 +13,12 @@ const UpdateTXLimitModal = (props) => {
   const handleUpdateTXLimit = () => {
     dispatch(
       updateLimits(
-        { guid, per_limi: limit },
+        { guid, per_limit: limit },
         (res) => {
-          console.log(res);
+          onUpdate &&
+            onUpdate({
+              per_limit: limit,
+            });
           handleCancel();
         },
         (err) => {
@@ -44,7 +45,7 @@ const UpdateTXLimitModal = (props) => {
       <Dialog.Body className='pt-6.25'>
         <Input type='number' value={limit} placeholder='Transaction Limit' onChange={handleTXLimitChange} />
         <p className='mt-2.5 flex'>
-          Current Transaction Limit: <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' /> <b>5000</b>
+          Current Transaction Limit: <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' /> <b>{currentLimit}</b>
         </p>
       </Dialog.Body>
       <Dialog.Footer>

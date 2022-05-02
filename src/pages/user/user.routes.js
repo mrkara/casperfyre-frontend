@@ -2,8 +2,8 @@ import React, { lazy } from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 const DashboardRoutes = lazy(() => import('./dashboard'));
-const MyAPILogsRoutes = lazy(() => import('./myAPILogs'));
-const KeysAndWalletsRoutes = lazy(() => import('./keysAndWallets'));
+const MyAPILogsRoutes = lazy(() => import('./my-api-logs'));
+const KeysAndWalletsRoutes = lazy(() => import('./keys-wallets'));
 const SettingsRoutes = lazy(() => import('./settings'));
 
 const UserRoutes = (props) => {

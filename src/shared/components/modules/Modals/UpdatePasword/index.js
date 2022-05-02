@@ -1,20 +1,18 @@
 import React from 'react';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog, useDialog } from 'shared/components/partials/Dialog/Provider';
-import VerifyAdminModal from 'shared/components/modules/Modals/Verify';
 
 const UpdatePasswordAdminModal = (props) => {
   const { close } = props;
 
-  const { appendDialog, closeCurrentDialog } = useDialog();
+  const { appendDialog } = useDialog();
+
+  const handleSubmit = () => {
+    handleCancel();
+  };
 
   const handleCancel = () => {
     close();
-  };
-
-  const handleSubmit = () => {
-    closeCurrentDialog();
-    appendDialog(<VerifyAdminModal type='password' />);
   };
 
   return (

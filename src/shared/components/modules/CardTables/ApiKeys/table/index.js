@@ -7,7 +7,7 @@ import { STATUS } from 'shared/common/enum';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { getGuid } from 'shared/core/services/auth';
-import { getAPIKeys } from 'stores/app/actions';
+import { getAPIKeyHolders } from 'stores/api/admin/actions';
 import styles from './style.module.scss';
 
 const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
@@ -42,7 +42,7 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
 
   const fetchApiKeys = (paramsValue = params, pageValue = page) => {
     dispatch(
-      getAPIKeys(
+      getAPIKeyHolders(
         { ...paramsValue, page: pageValue },
         (res) => {
           setHasMore(res.hasMore);
@@ -89,12 +89,7 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
             <Table.BodyCell>{data.total_calls}</Table.BodyCell>
             <Table.BodyCell>{data.total_cspr_sent}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <Button
-                as={Link}
-                to={`/app/api-keys/detail/${data.api_key_id}?guid=${data.guid}`}
-                size='sm'
-                rounded
-              >
+              <Button as={Link} to={`/app/api-keys/${data.guid}`} size='sm' rounded>
                 Details
               </Button>
             </Table.BodyCell>

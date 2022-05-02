@@ -193,7 +193,11 @@ Table.BodyCell = (props) => {
   const { styles } = useContext(TableContext);
 
   return (
-    <div className={`${props.className || ''} col text-[10px] col-${props.index} pr-5 ${styles?.[`col-${props.index}`] || ''}`}>
+    <div
+      className={`${props.className || ''} col text-[10px] col-${props.index} pr-5 ${
+        styles?.[`col-${props.index}`] || ''
+      }`}
+    >
       {props.children}
     </div>
   );

@@ -63,3 +63,6 @@ button {
   height: calc(100vh - 51px);
   overflow: hidden;
 }
+.input-readonly-copy-text {
+  @apply bg-transparent border-none outline-none;
+}

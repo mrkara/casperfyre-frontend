@@ -10,12 +10,12 @@ export const forgotPassword = generateAPIAction(types.FORGOT_PASSWORD);
 export const verifyCode = generateAPIAction(types.VERIFY_CODE);
 export const confirmRegistration = generateAPIAction(types.CONFIRM_REGISTRATION);
 export const fetchUserInfo = generateAPIAction(types.FETCH_USER_INFO);
+export const confirmMFA = generateAPIAction(types.CONFIRM_MFA);
 
 export const setUser = (payload) => ({
   type: types.SET_USER,
   payload,
 });
-
 
 export const updateUser = (payload) => ({
   type: types.UPDATE_USER,

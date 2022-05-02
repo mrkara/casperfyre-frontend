@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { disableAPIKey, enableAPIKey } from 'stores/app/actions';
+import { disableAPIKey, enableAPIKey } from 'stores/api/admin/actions';
 
 const StatusKeyModal = (props) => {
   const { close, disabled = false, apiKey } = props;
@@ -10,28 +10,28 @@ const StatusKeyModal = (props) => {
 
   const undo = () => {
     disabled
-    ? dispatch(
-        enableAPIKey(
-          {
-            api_key_id: apiKey.id,
-          },
-          (res) => {
-            close('undo');
-          }
+      ? dispatch(
+          enableAPIKey(
+            {
+              api_key_id: apiKey.api_key_id,
+            },
+            (res) => {
+              close('undo');
+            }
+          )
         )
-      )
-    : dispatch(
-        disableAPIKey(
-          {
-            api_key_id: apiKey.id,
-          },
-          (res) => {
-            close('undo');
-          }
-        )
-      );
-      close();
-    };
+      : dispatch(
+          disableAPIKey(
+            {
+              api_key_id: apiKey.api_key_id,
+            },
+            (res) => {
+              close('undo');
+            }
+          )
+        );
+    close();
+  };
 
   return (
     <Dialog className='py-12 px-16' showCloseBtn={false} close={close}>

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
-import SettingsInfo from 'shared/components/modules/CardInfo/Settings';
+import { useDispatch, useSelector } from 'react-redux';
+import GeneralSettings from 'shared/components/modules/CardInfo/GeneralSettings';
 import withPageSetting from 'shared/HOC/withPageSetting';
+import { fetchUserInfo } from 'stores/auth/actions';
 
 const BREADCRUMB_DATA = [
   {
@@ -13,51 +15,55 @@ const BREADCRUMB_DATA = [
 ];
 
 const SettingsPage = ({ config }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.authReducer?.user);
+
   useEffect(() => {
     config.setBreadcrumb(BREADCRUMB_DATA);
+    dispatch(fetchUserInfo());
   }, []);
 
   return (
     <section className='section-settings'>
       <div className='section-body pt-4 max-w-4xl'>
-        <SettingsInfo />
+        <GeneralSettings />
         <div className='section-content pt-12.5 flex flex-col gap-y-6'>
           <p className='text-sm font-semibold'>User Details</p>
           <div className='flex gap-y-3 flex-col'>
             {[
               {
                 title: 'User ID',
-                value: '1',
+                value: user?.guid,
               },
               {
                 title: 'Email',
-                value: 'useremail@gmail.com',
+                value: user?.email,
               },
               {
                 title: 'Activation Date',
-                value: '2022-03-31 09:37:53',
+                value: user?.created_at,
               },
               {
                 title: 'Daily CSPR Limit',
-                value: '5000',
+                value: '',
                 onUpdate: () => console.log('update'),
               },
               {
                 title: 'Per TX CSPR Limit',
-                value: '500',
+                value: '',
                 onUpdate: () => console.log('update'),
               },
               {
                 title: 'Receiving Wallet Address',
-                value: '0x24232fdq32435gwefde',
+                value: '',
               },
               {
                 title: 'Total API calls',
-                value: '1568',
+                value: '',
               },
               {
                 title: 'Total CSPR Sent',
-                value: '206,915',
+                value: '',
               },
             ].map((user, index) => (
               <div key={index} className='flex gap-x-3'>

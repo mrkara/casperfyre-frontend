@@ -17,7 +17,7 @@ const AdminRoutes = () => {
       <Route path={`${path}/home`} component={HomeRoutes} />
       <Route path={`${path}/applications`} component={ApplicationsRoutes} />
       <Route path={`${path}/api-keys`} component={ApiKeysRoutes} exact />
-      <Route path={`${path}/api-keys/detail/:id`} component={ApiKeysDetailRoutes} />
+      <Route path={`${path}/api-keys/:id`} component={ApiKeysDetailRoutes} />
       <Route path={`${path}/api-logs`} component={ApiLogsRoutes} />
       <Route path={`${path}/wallets`} component={WalletsRoutes} />
       <Route path={`${path}/settings`} component={SettingsRoutes} />

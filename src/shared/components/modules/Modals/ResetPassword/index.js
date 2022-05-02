@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { PATTERN } from 'shared/common/pattern';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { resetUserPassword } from 'stores/app/actions';
+import { resetUserPassword } from 'stores/api/admin/actions';
 import * as yup from 'yup';
 import styles from './style.module.scss';
 

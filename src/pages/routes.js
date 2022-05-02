@@ -1,29 +1,46 @@
 import { Suspense, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from 'shared/components/layouts/Header';
 import Sidebar from 'shared/components/layouts/Sidebar';
 import { fetchUserInfo } from 'stores/auth/actions';
-import AdminRoutes from './app/admin.routes';
+import AdminRoutes from './admin/admin.routes';
 import UserRoutes from './user/user.routes';
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.authReducer?.user);
 
   useEffect(() => {
     dispatch(fetchUserInfo());
   }, []);
 
-  const isAdmin = true;
+  const renderRoute = () => {
+    if (user) {
+      if (user?.role === 'admin') {
+        return (
+          <Suspense fallback={<div className='bg-white1 h-full w-full' />}>
+            <AdminRoutes />
+          </Suspense>
+        )
+      } else {
+        return (
+          <Suspense fallback={<div className='bg-white1 h-full w-full' />}>
+            <UserRoutes />
+          </Suspense>
+        )
+      }
+    } else {
+      return null;
+    }
+  }
 
   return (
     <>
       <Header />
       <div className='content-wrapper flex'>
-        <Sidebar isAdmin={isAdmin} />
+        <Sidebar />
         <div className='py-2.5 px-6 h-full w-full overflow-y-auto overflow-x-auto'>
-          <Suspense fallback={<div className='bg-white1 h-full w-full' />}>
-            {isAdmin ? <AdminRoutes /> : <UserRoutes />}
-          </Suspense>
+          {renderRoute()}
         </div>
       </div>
     </>

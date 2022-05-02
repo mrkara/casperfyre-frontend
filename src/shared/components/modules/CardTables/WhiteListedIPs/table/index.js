@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { STATUS } from 'shared/common/enum';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { useQuery } from 'shared/hooks/useQuery';
-import { disableIP, enableIP, getIps } from 'stores/app/actions';
+import { disableIP, enableIP, getIps } from 'stores/api/admin/actions';
 import styles from './style.module.scss';
 
 const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
@@ -54,16 +53,18 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
     );
   };
 
-  const handleIPStatus = (status, ip, id) => {
-    status === STATUS.ACTIVE
+  const handleIPStatus = (idx, status, ip, id) => {
+    status === '1'
       ? dispatch(
-          disableIP({ ip_id: `${ip}_${id}` }, (res) => {
-            console.log('res');
+          disableIP({ ip_id: `${ip}_${id}` }, () => {
+            data[idx].active = '0';
+            setData([...data]);
           })
         )
       : dispatch(
-          enableIP({ ip_id: `${ip}_${id}` }, (res) => {
-            console.log('res');
+          enableIP({ ip_id: `${ip}_${id}` }, () => {
+            data[idx].active = '1';
+            setData([...data]);
           })
         );
   };
@@ -87,16 +88,18 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell>{data.ip}</Table.BodyCell>
-            <Table.BodyCell className={data.active && 'text-primary'}>{data.active ? 'Allowed' : 'Disabled'}</Table.BodyCell>
+            <Table.BodyCell className={data.active !== '1' && 'text-primary'}>
+              {data.active === '1' ? 'Allowed' : 'Disabled'}
+            </Table.BodyCell>
             <Table.BodyCell>{data.created_at}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
               <Button
                 size='sm'
-                variant={data.active === STATUS.ACTIVE ? 'contained' : 'outline'}
+                variant={data.active === '1' ? 'contained' : 'outline'}
                 rounded
-                onClick={() => handleIPStatus(data.active, data.ip, data.id)}
+                onClick={() => handleIPStatus(idx, data.active, data.ip, data.id)}
               >
-                {data.active === STATUS.ACTIVE ? 'Disable' : 'Enable'}
+                {data.active === '1' ? 'Disable' : 'Enable'}
               </Button>
             </Table.BodyCell>
           </Table.BodyRow>

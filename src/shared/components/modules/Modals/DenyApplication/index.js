@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { denyUser } from 'stores/app/actions';
+import { denyUser } from 'stores/api/admin/actions';
 
 const DenyModal = (props) => {
   const { close, application, onDeny } = props;

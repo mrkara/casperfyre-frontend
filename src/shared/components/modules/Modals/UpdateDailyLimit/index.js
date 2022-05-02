@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { updateLimits } from 'stores/app/actions';
+import { updateLimits } from 'stores/api/admin/actions';
 
-const UpdateDailyCSPRLimitModal = (props) => {
-  const { close, guid } = props;
-
+const UpdateDailyCSPRLimitModal = ({ close, guid, currentLimit, onUpdate }) => {
   const [limit, setLimit] = useState('');
 
   const dispatch = useDispatch();
@@ -17,7 +15,10 @@ const UpdateDailyCSPRLimitModal = (props) => {
       updateLimits(
         { guid, day_limit: limit },
         (res) => {
-          console.log(res);
+          onUpdate &&
+            onUpdate({
+              day_limit: limit,
+            });
           handleCancel();
         },
         (err) => {
@@ -45,7 +46,7 @@ const UpdateDailyCSPRLimitModal = (props) => {
         <Input type='number' value={limit} placeholder='Daily Limit' onChange={handleDailyLimitChange} />
         <p className='mt-2.5 flex'>
           Current Daily Limit: <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' />
-          <b>5000</b>
+          <b>{currentLimit}</b>
         </p>
       </Dialog.Body>
       <Dialog.Footer>

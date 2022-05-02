@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { replaceKey } from 'stores/app/actions';
+import { replaceKey } from 'stores/api/admin/actions';
 
 const ReplaceKeyModal = (props) => {
   const { close, guid } = props;

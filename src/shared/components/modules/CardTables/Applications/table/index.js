@@ -4,7 +4,7 @@ import { Button } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { getGuid } from 'shared/core/services/auth';
-import { getApplications } from 'stores/app/actions';
+import { getApplications } from 'stores/api/admin/actions';
 import ApproveModal from 'shared/components/modules/Modals/ApproveApplication';
 import DenyModal from 'shared/components/modules/Modals/DenyApplication';
 import ViewModal from 'shared/components/modules/Modals/ViewApplication';

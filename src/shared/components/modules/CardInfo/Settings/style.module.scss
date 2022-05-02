@@ -1,7 +1,0 @@
-.blockItem {
-  @apply border-r w-full text-center px-14 py-12 flex flex-col gap-y-2 justify-center items-center;
-
-  &:last-child {
-    @apply border-none;
-  }
-}

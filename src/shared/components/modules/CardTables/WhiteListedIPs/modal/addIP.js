@@ -1,10 +1,36 @@
 import { ReactComponent as Add } from 'assets/icons/add.svg';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
+import { createIP } from 'stores/api/admin/actions';
 
 const AddIPModal = (props) => {
   const { close } = props;
+
+  const user = useSelector((state) => state.authReducer?.user);
+
+  const [ip, setIP] = useState('');
+
+  const dispatch = useDispatch();
+
+  const handleChangeIP = (e) => {
+    setIP(e.target.value);
+  };
+
+  const handleAddIP = () => {
+    dispatch(
+      createIP(
+        {
+          ip,
+          guid: user.guid,
+        },
+        () => {
+          close();
+        }
+      )
+    );
+  };
 
   return (
     <Dialog className='py-12 px-16' showCloseBtn={false} close={close}>
@@ -17,10 +43,10 @@ const AddIPModal = (props) => {
         </div>
       </Dialog.Header>
       <Dialog.Body className='pt-6.25'>
-        <Input placeholder='IP address' />
+        <Input placeholder='IP address' onChange={handleChangeIP} />
       </Dialog.Body>
       <Dialog.Footer className='mt-6'>
-        <Button className='w-full' color='success'>
+        <Button className='w-full' color='success' disabled={!ip} onClick={handleAddIP}>
           <Add className='mr-2 text-xs' />
           Whitelist this IP
         </Button>

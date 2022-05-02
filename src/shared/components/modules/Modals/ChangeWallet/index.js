@@ -1,15 +1,34 @@
 import { ReactComponent as Add } from 'assets/icons/add.svg';
 import Logo from 'assets/images/casper-logo.png';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { createWallet } from 'stores/app/actions';
+import { useQuery } from 'shared/hooks/useQuery';
+import { createWallet, getWallet } from 'stores/api/admin/actions';
 
 const ChangeWalletModal = (props) => {
-  const { close, guid, data } = props;
+  const { close, guid } = props;
+
+  const [wallet, setWallet] = useState();
+
+  const query = useQuery();
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (query.get('guid')) {
+      fetchWalletDetail(query.get('guid'));
+    }
+  }, [query.get('guid')]);
+
+  const fetchWalletDetail = (guid) => {
+    dispatch(
+      getWallet({ guid }, (res) => {
+        setWallet(res.detail);
+      })
+    );
+  };
 
   const handleCancel = () => {
     close();
@@ -18,7 +37,6 @@ const ChangeWalletModal = (props) => {
   const handleCreateWallet = () => {
     dispatch(
       createWallet({ guid }, (res) => {
-        console.log(res);
         close();
       })
     );
@@ -33,10 +51,10 @@ const ChangeWalletModal = (props) => {
       />
       <Dialog.Body className='mt-7.5'>
         <p>
-          Current Wallet: <b>0x24232fdq32435gw23ef42de532e67</b>
+          Current Wallet: <b>{wallet?.address}</b>
         </p>
         <p className='flex'>
-          CSPR Balance: <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' /> <b>{data?.total_cspr_sent}</b>
+          CSPR Balance: <img className='ml-2 mr-1 w-4' src={Logo} alt='logo' /> <b>{wallet?.balance}</b>
         </p>
       </Dialog.Body>
       <Dialog.Footer>

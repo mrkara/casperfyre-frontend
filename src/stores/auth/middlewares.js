@@ -75,6 +75,18 @@ function* doLogout({ resolve }) {
 function* verifyCode({ payload, resolve, reject }) {
   try {
     const res = yield post(['user', 'submit-mfa'], { data: payload });
+    toast.success(res.detail);
+    resolve(res);
+  } catch (error) {
+    toast(error.message);
+    reject(error);
+  }
+}
+
+function* confirmMFA({ payload, resolve, reject }) {
+  try {
+    const res = yield post(['admin', 'confirm-mfa'], { data: payload });
+    toast.success(res.detail);
     resolve(res);
   } catch (error) {
     toast(error.message);
@@ -106,5 +118,6 @@ export function* watchAuth() {
     takeLatest(types.VERIFY_CODE, verifyCode),
     takeLatest(types.CONFIRM_REGISTRATION, confirmRegistration),
     takeLatest(types.FETCH_USER_INFO, fetchUserInfo),
+    takeLatest(types.CONFIRM_MFA, confirmMFA),
   ]);
 }

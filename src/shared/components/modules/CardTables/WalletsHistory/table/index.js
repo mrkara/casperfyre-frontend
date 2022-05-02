@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { formatDate } from 'shared/core/utils';
-import { getWallets } from 'stores/app/actions';
+import { getWallets } from 'stores/api/admin/actions';
 import styles from './style.module.scss';
 
 const WalletsHistoryTable = React.forwardRef(({ externalParams }, ref) => {

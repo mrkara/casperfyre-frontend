@@ -16,8 +16,7 @@ import UpdateTXLimitModal from 'shared/components/modules/Modals/UpdateTxLimit';
 import { Button } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import withPageSetting from 'shared/HOC/withPageSetting';
-import { useQuery } from 'shared/hooks/useQuery';
-import { disableAPIKey, enableAPIKey, getAPIKey } from 'stores/app/actions';
+import { disableAPIKey, enableAPIKey, getAPIKey, getLimits } from 'stores/api/admin/actions';
 
 const BREADCRUMB_DATA = [
   {
@@ -30,10 +29,9 @@ const BREADCRUMB_DATA = [
 ];
 
 const ApiKeysDetail = ({ config }) => {
+  const [apiKey, setApiKey] = useState({});
   const { setLoading } = useLoading();
-  const query = useQuery();
   const { id } = useParams();
-  const [apiKey, setApiKey] = useState();
   const dispatch = useDispatch();
   const { appendDialog } = useDialog();
 
@@ -42,19 +40,37 @@ const ApiKeysDetail = ({ config }) => {
   }, []);
 
   useEffect(() => {
-    fetchAPIKey(query.get('guid'));
-  }, []);
+    if (id) {
+      fetchAPIKey();
+      fetchLimit();
+    }
+  }, [id]);
 
-  const fetchAPIKey = (guid) => {
+  const fetchAPIKey = () => {
     setLoading(true);
     dispatch(
       getAPIKey(
         {
-          api_key_id: id,
-          guid,
+          guid: id,
         },
         (res) => {
-          setApiKey(res.detail || {});
+          setApiKey((prev) => ({ ...prev, ...res.detail }));
+          setLoading(false);
+        },
+        (err) => {}
+      )
+    );
+  };
+
+  const fetchLimit = () => {
+    setLoading(true);
+    dispatch(
+      getLimits(
+        {
+          guid: id,
+        },
+        (res) => {
+          setApiKey((prev) => ({ ...prev, ...res.detail }));
           setLoading(false);
         },
         (err) => {}
@@ -77,12 +93,12 @@ const ApiKeysDetail = ({ config }) => {
     },
     {
       title: 'Daily CSPR Limit',
-      key: 'daily_limit',
+      key: 'day_limit',
       onUpdate: () => handleActions('updateDailyCSPRLimit'),
     },
     {
       title: 'Per TX CSPR Limit',
-      key: 'tx_limit',
+      key: 'per_limit',
       onUpdate: () => handleActions('updatePerTXCSPRLimit'),
     },
     {
@@ -101,22 +117,19 @@ const ApiKeysDetail = ({ config }) => {
 
   const updateApiKeyStatus = () => {
     apiKey.active = apiKey.active === STATUS.ACTIVE ? STATUS.INACTIVE : STATUS.ACTIVE;
-    setApiKey({...apiKey});
-  }
+    setApiKey({ ...apiKey });
+  };
 
   const handleChangeAPIKeyStatus = (disable) => {
     disable
       ? dispatch(
           enableAPIKey(
             {
-              api_key_id: id,
+              api_key_id: apiKey.api_key_id,
             },
             (res) => {
               appendDialog(
-                <StatusKeyModal
-                  apiKey={apiKey} 
-                  afterClosed={(e) => e ==='undo' && updateApiKeyStatus()} 
-                />
+                <StatusKeyModal apiKey={apiKey} afterClosed={(e) => e === 'undo' && updateApiKeyStatus()} />
               );
               updateApiKeyStatus();
             }
@@ -125,20 +138,23 @@ const ApiKeysDetail = ({ config }) => {
       : dispatch(
           disableAPIKey(
             {
-              api_key_id: id,
+              api_key_id: apiKey.api_key_id,
             },
             (res) => {
               appendDialog(
-                <StatusKeyModal
-                  disabled
-                  apiKey={apiKey} 
-                  afterClosed={(e) => e ==='undo' && updateApiKeyStatus()} 
-                />
+                <StatusKeyModal disabled apiKey={apiKey} afterClosed={(e) => e === 'undo' && updateApiKeyStatus()} />
               );
               updateApiKeyStatus();
             }
           )
         );
+  };
+
+  const handleUpdate = (data) => {
+    setApiKey((prev) => ({
+      ...prev,
+      ...data,
+    }));
   };
 
   const handleActions = (type) => {
@@ -153,13 +169,15 @@ const ApiKeysDetail = ({ config }) => {
         appendDialog(<ReplaceKeyModal guid={apiKey.guid} />);
         break;
       case 'updateDailyCSPRLimit':
-        appendDialog(<UpdateDailyCSPRLimitModal guid={apiKey.guid} />);
+        appendDialog(
+          <UpdateDailyCSPRLimitModal guid={apiKey.guid} currentLimit={apiKey.day_limit} onUpdate={handleUpdate} />
+        );
         break;
       case 'updatePerTXCSPRLimit':
-        appendDialog(<UpdateTXLimitModal guid={apiKey.guid} />);
+        appendDialog(<UpdateTXLimitModal guid={apiKey.guid} currentLimit={apiKey.per_limit} onUpdate={handleUpdate} />);
         break;
       case 'changeWallet':
-        appendDialog(<ChangeWalletModal guid={apiKey.guid} data={apiKey}/>);
+        appendDialog(<ChangeWalletModal guid={apiKey.guid} data={apiKey} />);
         break;
       default:
         break;
@@ -221,9 +239,9 @@ const ApiKeysDetail = ({ config }) => {
               </div>
             ))}
           </div>
-          <WhiteListedIP className="max-h-120"/>
-          <ApiCalls className="max-h-120"/>
-          <WalletsHistory guid={query.get('guid')} className="max-h-120" />
+          <WhiteListedIP className='max-h-120' />
+          <ApiCalls className='max-h-120' />
+          <WalletsHistory guid={id} className='max-h-120' />
         </div>
       </div>
     </section>

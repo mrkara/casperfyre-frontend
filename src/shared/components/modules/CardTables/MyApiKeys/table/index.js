@@ -1,18 +1,12 @@
 import classNames from 'classnames';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { STATUS } from 'shared/common/enum';
-import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
-import { getGuid } from 'shared/core/services/auth';
-import { getAPIKeys } from 'stores/app/actions';
+import { getUserApiKeys } from 'stores/api/user/actions';
 import styles from './style.module.scss';
 
 const MyApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
-  const guid = getGuid();
-
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
 
   const dispatch = useDispatch();
@@ -20,7 +14,7 @@ const MyApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
   useEffect(() => {
     if (externalParams) {
       resetData();
-      setParams({ ...params, ...externalParams, guid }, (s) => {
+      setParams({ ...params, ...externalParams }, (s) => {
         fetchApiKeys(s, 1);
       });
     }
@@ -42,19 +36,14 @@ const MyApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
 
   const fetchApiKeys = (paramsValue = params, pageValue = page) => {
     dispatch(
-      getAPIKeys(
+      getUserApiKeys(
         { ...paramsValue, page: pageValue },
         (res) => {
-          // setHasMore(res.hasMore);
-          // appendData(res.items || []);
-          // setPage((prev) => +prev + 1);
-          setHasMore(false);
-          toast('Something went wrong. Please try again !');
+          setHasMore(res.hasMore);
+          appendData(res.items || []);
+          setPage((prev) => +prev + 1);
         },
-        (error) => {
-          setHasMore(false);
-          toast('Something went wrong. Please try again !');
-        }
+        (error) => {}
       )
     );
   };
@@ -78,7 +67,9 @@ const MyApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
       <Table.Body className='table-body-card'>
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
-            <Table.BodyCell>{data.api_key}</Table.BodyCell>
+            <Table.BodyCell className={classNames({ 'text-primary': data.active === STATUS.INACTIVE })}>
+              {data.api_key}
+            </Table.BodyCell>
             <Table.BodyCell className={classNames({ 'text-primary': data.active === STATUS.INACTIVE })}>
               {data.active === STATUS.ACTIVE ? 'Active' : 'Inactive'}
             </Table.BodyCell>

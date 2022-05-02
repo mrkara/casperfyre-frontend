@@ -166,18 +166,18 @@ const ApiKeysDetail = ({ config }) => {
         handleChangeAPIKeyStatus(apiKey.active === STATUS.INACTIVE);
         break;
       case 'replaceKey':
-        appendDialog(<ReplaceKeyModal guid={apiKey.guid} />);
+        appendDialog(<ReplaceKeyModal guid={id} />);
         break;
       case 'updateDailyCSPRLimit':
         appendDialog(
-          <UpdateDailyCSPRLimitModal guid={apiKey.guid} currentLimit={apiKey.day_limit} onUpdate={handleUpdate} />
+          <UpdateDailyCSPRLimitModal guid={id} currentLimit={apiKey.day_limit} onUpdate={handleUpdate} />
         );
         break;
       case 'updatePerTXCSPRLimit':
-        appendDialog(<UpdateTXLimitModal guid={apiKey.guid} currentLimit={apiKey.per_limit} onUpdate={handleUpdate} />);
+        appendDialog(<UpdateTXLimitModal guid={id} currentLimit={apiKey.per_limit} onUpdate={handleUpdate} />);
         break;
       case 'changeWallet':
-        appendDialog(<ChangeWalletModal guid={apiKey.guid} data={apiKey} />);
+        appendDialog(<ChangeWalletModal guid={id} data={apiKey} />);
         break;
       default:
         break;

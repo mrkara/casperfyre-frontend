@@ -27,11 +27,11 @@ export class ErrorHandler {
     } else if (e?.response?.status === 401 && !exception401.includes(e?.response.config.url)) {
       this.status = e?.response?.status;
       this.message = e?.response?.data?.detail;
-      // if (getToken()) {
-      //   window.location.href = '/auth/login';
-      //   removeToken();
-      // }
-      // removeGuid();
+      if (getToken()) {
+        window.location.href = '/auth/login';
+        removeToken();
+      }
+      removeGuid();
     } else {
       this.status = e?.response?.status || STATUS_CODE.UNEXPECTED;
       this.message = e?.response?.data?.detail || 'Something wrong. Please try again !';

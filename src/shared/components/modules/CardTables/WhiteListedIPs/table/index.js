@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
-import { useQuery } from 'shared/hooks/useQuery';
 import { disableIP, enableIP, getIps } from 'stores/api/admin/actions';
 import styles from './style.module.scss';
 
@@ -10,14 +10,14 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData, setData } =
     useTable();
 
-  const query = useQuery();
+  const { id } = useParams();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (externalParams) {
       resetData();
-      setParams({ ...params, ...externalParams, guid: query.get('guid') }, (s) => {
+      setParams({ ...params, ...externalParams, guid: id }, (s) => {
         fetchIPs(s, 1);
       });
     }

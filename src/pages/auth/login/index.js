@@ -130,7 +130,7 @@ const Login = () => {
     <AuthContainer className='login-page' showInstruction>
       {step === 1 && (
         <>
-          <h3 className='pb-6 font-semibold'>Login</h3>
+          <h3 className='pb-6 font-semibold'>Log in</h3>
           <form onSubmit={handleSubmit(onSubmitEmail)} className='flex flex-col space-y-5'>
             <Input placeholder='Email Address' {...register('email')} error={errors && errors?.email?.message} />
             <Button type='submit' className='w-full' disabled={!isValid}>

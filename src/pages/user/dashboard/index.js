@@ -3,20 +3,30 @@ import { useDispatch } from 'react-redux';
 import APIKeyInfo from 'shared/components/modules/CardInfo/APIKey';
 import WalletInfo from 'shared/components/modules/CardInfo/Wallet';
 import RecentApiCalls from 'shared/components/modules/CardTables/RecentApiCalls';
+import { useLoading } from 'shared/components/modules/Loading';
 import { getUserAPIKey, getUserWallet } from 'stores/api/user/actions';
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
+  const { setLoading } = useLoading();
+
   const [wallet, setWallet] = useState();
   const [apiKey, setApiKey] = useState();
 
   useEffect(() => {
-    dispatch(getUserAPIKey(null, (res) => {
-      setApiKey(res.detail);
-    }));
-    dispatch(getUserWallet(null, (res) => {
-      setWallet(res.detail);
-    }));
+    setLoading(true);
+    dispatch(
+      getUserAPIKey(null, (res) => {
+        setApiKey(res.detail);
+        setLoading(false);
+      })
+    );
+    dispatch(
+      getUserWallet(null, (res) => {
+        setWallet(res.detail);
+        setLoading(false);
+      })
+    );
   }, []);
 
   return (

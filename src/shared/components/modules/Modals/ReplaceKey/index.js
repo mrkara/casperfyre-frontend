@@ -1,24 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { replaceKey } from 'stores/api/admin/actions';
+import { replaceKey } from 'stores/api/shared/actions';
 
-const ReplaceKeyModal = (props) => {
-  const { close, guid } = props;
-
+const ReplaceKeyModal = ({ close, guid, onUpdate }) => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const handleCancel = () => {
     close();
   };
 
   const handleReplaceKey = () => {
+    setLoading(true);
     dispatch(
-      replaceKey({ guid }, (res) => {
-        console.log(res);
-        close();
-      })
+      replaceKey(
+        { guid },
+        (res) => {
+          onUpdate && onUpdate(res);
+          close();
+        },
+        () => {
+          setLoading(false);
+        }
+      )
     );
   };
 
@@ -30,7 +36,7 @@ const ReplaceKeyModal = (props) => {
               action can not be undone.'
       />
       <Dialog.Footer>
-        <Button className='w-full mt-6' color='primary' onClick={handleReplaceKey}>
+        <Button className='w-full mt-6' color='primary' onClick={handleReplaceKey} disabled={loading}>
           Replace Key
         </Button>
         <div className='mt-2.5 text-center'>

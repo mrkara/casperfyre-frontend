@@ -1,9 +1,7 @@
 import { all, takeLatest } from 'redux-saga/effects';
-import { get, post } from 'shared/core/services/saga';
+import { get } from 'shared/core/services/saga';
 import { fakeFilterListApi } from 'shared/core/utils';
 import { types } from 'stores/types';
-import { toast } from 'react-toastify';
-
 
 function* getUserAPIKey({ payload, resolve, reject }) {
   try {

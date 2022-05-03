@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { updateLimits } from 'stores/api/admin/actions';
+import { updateLimits } from 'stores/api/shared/actions';
 
 const UpdateTXLimitModal = ({ close, guid, currentLimit, onUpdate }) => {
   const [limit, setLimit] = useState('');

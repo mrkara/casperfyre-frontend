@@ -198,50 +198,6 @@ function* enableAPIKey({ payload, resolve, reject }) {
   }
 }
 
-function* replaceKey({ payload, resolve, reject }) {
-  try {
-    const res = yield post(['admin', 'create-apikey'], { data: payload });
-    toast.success('Replaced key successfully');
-    resolve(res);
-  } catch (error) {
-    toast(error.message);
-    reject(error);
-  }
-}
-
-function* createWallet({ payload, resolve, reject }) {
-  try {
-    const res = yield post(['admin', 'create-wallet'], { data: payload });
-    toast.success('Created wallet successfully');
-    resolve(res);
-  } catch (error) {
-    toast(error.message);
-    reject(error);
-  }
-}
-
-function* updateLimits({ payload, resolve, reject }) {
-  try {
-    const res = yield put(['admin', 'update-limits'], { data: payload });
-    toast.success(res.detail);
-    resolve(res);
-  } catch (error) {
-    toast(error.message);
-    reject(error);
-  }
-}
-
-function* getLimits({ payload, resolve, reject }) {
-  try {
-    const res = yield get(['admin', 'get-limits'], payload);
-    toast.success(res.detail);
-    resolve(res);
-  } catch (error) {
-    toast(error.message);
-    reject(error);
-  }
-}
-
 function* disableIP({ payload, resolve, reject }) {
   try {
     const res = yield post(['admin', 'disable-ip'], { data: payload });
@@ -310,10 +266,6 @@ export function* watchAdmin() {
     takeLatest(types.RESET_USER_PASSWORD, resetUserPassword),
     takeLatest(types.DISABLE_API_KEY, disableAPIKey),
     takeLatest(types.ENABLE_API_KEY, enableAPIKey),
-    takeLatest(types.REPLACE_KEY, replaceKey),
-    takeLatest(types.CREATE_WALLET, createWallet),
-    takeLatest(types.UPDATE_LIMITS, updateLimits),
-    takeLatest(types.GET_LIMITS, getLimits),
 
     takeLatest(types.DISABLE_IP, disableIP),
     takeLatest(types.ENABLE_IP, enableIP),

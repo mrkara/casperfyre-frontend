@@ -1,20 +1,62 @@
-import { ReactComponent as Copy } from 'assets/icons/copy.svg';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import MyApiKeys from 'shared/components/modules/CardTables/MyApiKeys';
 import MyWallets from 'shared/components/modules/CardTables/MyWallets';
+import ChangeWalletModal from 'shared/components/modules/Modals/ChangeWallet';
+import ReplaceKeyModal from 'shared/components/modules/Modals/ReplaceKey';
 import { Button, CopyButton } from 'shared/components/partials';
-import { getUserWallet } from 'stores/api/user/actions';
+import { useDialog } from 'shared/components/partials/Dialog/Provider';
+import { getUserAPIKey, getUserWallet } from 'stores/api/user/actions';
 
 const KeysAndWalletsPage = (props) => {
   const dispatch = useDispatch();
-  const [wallet, setWallet] = useState();
+  const [wallet, setWallet] = useState('');
+  const [apiKey, setApiKey] = useState('');
+
+  const { appendDialog } = useDialog();
 
   useEffect(() => {
-    dispatch(getUserWallet(null, (res) => {
-      setWallet(res.detail);
-    }));
+    dispatch(
+      getUserAPIKey(null, (res) => {
+        setApiKey(res.detail);
+      })
+    );
+    dispatch(
+      getUserWallet(null, (res) => {
+        setWallet(res.detail);
+      })
+    );
   }, []);
+
+  const handleUpdateKey = (apiKey) => {
+    setApiKey((prev) => ({
+      ...prev,
+      api_key: apiKey,
+    }));
+  };
+
+  const handleUpdateWallet = (address) => {
+    setWallet((prev) => ({
+      ...prev,
+      address: address,
+    }));
+  };
+
+  const handleOpenModal = (type) => {
+    switch (type) {
+      case 'replaceKey':
+        appendDialog(<ReplaceKeyModal onUpdate={handleUpdateKey} />);
+        break;
+
+      case 'changeWallet':
+        appendDialog(<ChangeWalletModal data={wallet} onUpdate={handleUpdateWallet} />);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <section className='section-keys-wallets'>
@@ -22,16 +64,21 @@ const KeysAndWalletsPage = (props) => {
         <div>
           <div className='flex justify-between items-center'>
             <div className='flex gap-2 items-center py-5'>
-              <p>
-                <b>Active API Key</b>: a1b2c33d4e5f6g7h8i9jakblc
-              </p>
-              <Copy />
+              <b className='whitespace-nowrap'>Active API Key:</b>
+              <p>{apiKey?.api_key}</p>
+              <input
+                value={apiKey?.api_key}
+                id='active-api-key-id'
+                readOnly
+                hidden
+              />
+              <CopyButton from='active-api-key-id' />
             </div>
             <div className='flex gap-x-2'>
-              <Button size='sm' rounded className='px-5 py-6'>
+              <Button as={Link} to={'/app/settings'} size='sm' rounded className='px-5 py-6'>
                 Update Limits
               </Button>
-              <Button size='sm' rounded className='px-5 py-6'>
+              <Button size='sm' rounded className='px-5 py-6' onClick={() => handleOpenModal('replaceKey')}>
                 Replace key
               </Button>
             </div>
@@ -41,17 +88,18 @@ const KeysAndWalletsPage = (props) => {
         <div>
           <div className='flex justify-between items-center'>
             <div className='flex gap-2 items-center py-5'>
-              <b className='whitespace-nowrap'>Active Wallet:</b> 
-              <input 
-                value={wallet?.address} 
-                className='px-3 input-readonly-copy-text w-96 text-center'
-                id="active-wallet-id"
+              <b className='whitespace-nowrap'>Active Wallet:</b>
+              <p>{wallet?.address}</p>
+              <input
+                value={wallet?.address}
+                id='active-wallet-id'
+                hidden
                 readOnly
               />
-              <CopyButton from="active-wallet-id" />
+              <CopyButton from='active-wallet-id' />
             </div>
             <div className='flex gap-x-2'>
-              <Button size='sm' rounded className='px-5 py-6'>
+              <Button size='sm' rounded className='px-5 py-6' onClick={() => handleOpenModal('changeWallet')}>
                 Change Wallet
               </Button>
             </div>

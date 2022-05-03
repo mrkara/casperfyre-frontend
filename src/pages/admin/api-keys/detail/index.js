@@ -16,7 +16,8 @@ import UpdateTXLimitModal from 'shared/components/modules/Modals/UpdateTxLimit';
 import { Button } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import withPageSetting from 'shared/HOC/withPageSetting';
-import { disableAPIKey, enableAPIKey, getAPIKey, getLimits, getWallet } from 'stores/api/admin/actions';
+import { disableAPIKey, enableAPIKey, getAPIKey, getWallet } from 'stores/api/admin/actions';
+import { getLimits } from 'stores/api/shared/actions';
 
 const BREADCRUMB_DATA = [
   {

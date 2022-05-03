@@ -4,20 +4,22 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
-import { createWallet, getWallet } from 'stores/api/admin/actions';
+import { getGuid } from 'shared/core/services/auth';
+import { getWallet } from 'stores/api/admin/actions';
+import { createWallet } from 'stores/api/shared/actions';
 import { useLoading } from '../../Loading';
 
-const ChangeWalletModal = (props) => {
-  const { close, guid } = props;
+const ChangeWalletModal = ({ close, guid, data, onUpdate }) => {
   const { setLoading } = useLoading();
   const [wallet, setWallet] = useState();
-
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (guid) {
       fetchWalletDetail();
+    } else {
+      setWallet(data);
     }
   }, [guid]);
 
@@ -26,6 +28,7 @@ const ChangeWalletModal = (props) => {
     dispatch(
       getWallet({ guid }, (res) => {
         setWallet(res.detail);
+        onUpdate && onUpdate(res);
         setLoading(false);
       })
     );
@@ -37,7 +40,8 @@ const ChangeWalletModal = (props) => {
 
   const handleCreateWallet = () => {
     dispatch(
-      createWallet({ guid }, (res) => {
+      createWallet({ guid: guid || getGuid() }, (res) => {
+        onUpdate && onUpdate(res);
         close(true);
       })
     );

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { AuthContainer } from 'shared/components/modules/AuthContainer';
 import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
 import { removeTempToken, setToken } from 'shared/core/services/auth';
+import { sendMFA } from 'stores/api/shared/actions';
 import { confirmRegistration, verifyCode } from 'stores/auth/actions';
 
 function VerifyCode() {
@@ -82,6 +83,10 @@ function VerifyCode() {
     }
   };
 
+  const handleResendCode = () => {
+    dispatch(sendMFA());
+  };
+
   return (
     <AuthContainer className='login-page' showInstruction>
       <div className='pb-6'>
@@ -105,10 +110,10 @@ function VerifyCode() {
           Verify
         </Button>
       </form>
-      <div className='flex pt-4'>
-        <Link className='text-primary ml-auto' to='/auth/sign-up'>
+      <div className='text-right pt-4'>
+        <Button variant='text' className='mt-4' onClick={handleResendCode}>
           Resend Code
-        </Link>
+        </Button>
       </div>
     </AuthContainer>
   );

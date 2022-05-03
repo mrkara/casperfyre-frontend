@@ -5,7 +5,6 @@ export const getApplications = generateAPIAction(types.GET_APPLICATIONS);
 export const getAPIKeys = generateAPIAction(types.GET_API_KEYS);
 export const getAPIKey = generateAPIAction(types.GET_API_KEY);
 export const getAPIKeyHolders = generateAPIAction(types.GET_API_KEY_HOLDERS);
-export const createWallet = generateAPIAction(types.CREATE_WALLET);
 export const getWallet = generateAPIAction(types.GET_WALLET);
 export const getWallets = generateAPIAction(types.GET_WALLETS);
 export const getHistories = generateAPIAction(types.GET_HISTORIES);
@@ -15,9 +14,6 @@ export const createAdmin = generateAPIAction(types.CREATE_ADMIN);
 export const resetUserPassword = generateAPIAction(types.RESET_USER_PASSWORD);
 export const disableAPIKey = generateAPIAction(types.DISABLE_API_KEY);
 export const enableAPIKey = generateAPIAction(types.ENABLE_API_KEY);
-export const replaceKey = generateAPIAction(types.REPLACE_KEY);
-export const updateLimits = generateAPIAction(types.UPDATE_LIMITS);
-export const getLimits = generateAPIAction(types.GET_LIMITS);
 
 export const createIP = generateAPIAction(types.CREATE_IP);
 export const disableIP = generateAPIAction(types.DISABLE_IP);
@@ -30,4 +26,3 @@ export const getUser = generateAPIAction(types.GET_USER);
 export const getUsers = generateAPIAction(types.GET_USERS);
 export const approveUser = generateAPIAction(types.APPROVE_USER);
 export const denyUser = generateAPIAction(types.DENY_USER);
-

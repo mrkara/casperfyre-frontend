@@ -1,8 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import GeneralSettings from 'shared/components/modules/CardInfo/GeneralSettings';
+import UpdateDailyCSPRLimitModal from 'shared/components/modules/Modals/UpdateDailyLimit';
+import UpdateTXLimitModal from 'shared/components/modules/Modals/UpdateTxLimit';
+import { Button } from 'shared/components/partials';
+import { useDialog } from 'shared/components/partials/Dialog/Provider';
+import { getGuid } from 'shared/core/services/auth';
 import withPageSetting from 'shared/HOC/withPageSetting';
-import { fetchUserInfo } from 'stores/auth/actions';
+import { getLimits } from 'stores/api/shared/actions';
+import { getUserAPIKey, getUserWallet } from 'stores/api/user/actions';
 
 const BREADCRUMB_DATA = [
   {
@@ -17,11 +23,80 @@ const BREADCRUMB_DATA = [
 const SettingsPage = ({ config }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
+  const [apiKey, setApiKey] = useState({});
+
+  const { appendDialog } = useDialog();
 
   useEffect(() => {
     config.setBreadcrumb(BREADCRUMB_DATA);
-    dispatch(fetchUserInfo());
+    fetchLimit();
+    fetchAPIKey();
+    fetchWallet();
   }, []);
+
+  const fetchLimit = () => {
+    dispatch(
+      getLimits(
+        {
+          guid: getGuid(),
+        },
+        (res) => {
+          setApiKey((prev) => ({ ...prev, ...res.detail }));
+        },
+        (err) => {}
+      )
+    );
+  };
+
+  const fetchAPIKey = () => {
+    dispatch(
+      getUserAPIKey(
+        {
+          guid: getGuid(),
+        },
+        (res) => {
+          setApiKey((prev) => ({ ...prev, ...res.detail }));
+        },
+        (err) => {}
+      )
+    );
+  };
+
+  const fetchWallet = () => {
+    dispatch(
+      getUserWallet(
+        {
+          guid: getGuid(),
+        },
+        (res) => {
+          setApiKey((prev) => ({ ...prev, address: res.detail.address }));
+        },
+        (err) => {}
+      )
+    );
+  };
+
+  const handleUpdate = (data) => {
+    setApiKey((prev) => ({
+      ...prev,
+      ...data,
+    }));
+  };
+
+  const handleActions = (type) => {
+    switch (type) {
+      case 'updateDailyCSPRLimit':
+        appendDialog(
+          <UpdateDailyCSPRLimitModal guid={getGuid()} currentLimit={apiKey?.day_limit} onUpdate={handleUpdate} />
+        );
+        break;
+      case 'updatePerTXCSPRLimit':
+        appendDialog(<UpdateTXLimitModal guid={getGuid()} currentLimit={apiKey?.per_limit} onUpdate={handleUpdate} />);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <section className='section-settings'>
@@ -45,34 +120,34 @@ const SettingsPage = ({ config }) => {
               },
               {
                 title: 'Daily CSPR Limit',
-                value: '',
-                onUpdate: () => console.log('update'),
+                value: apiKey?.day_limit,
+                onUpdate: () => handleActions('updateDailyCSPRLimit'),
               },
               {
                 title: 'Per TX CSPR Limit',
-                value: '',
-                onUpdate: () => console.log('update'),
+                value: apiKey?.per_limit,
+                onUpdate: () => handleActions('updatePerTXCSPRLimit'),
               },
               {
                 title: 'Receiving Wallet Address',
-                value: '',
+                value: apiKey?.address,
               },
               {
                 title: 'Total API calls',
-                value: '',
+                value: apiKey?.total_calls,
               },
               {
                 title: 'Total CSPR Sent',
-                value: '',
+                value: apiKey?.total_cspr_sent,
               },
             ].map((user, index) => (
               <div key={index} className='flex gap-x-3'>
                 <p className='text-sm'>{user.title}: </p>
                 <p className='text-sm font-semibold'>{user.value}</p>
                 {user.onUpdate && (
-                  <button className='text-xs bg-primary text-white rounded-full px-2 py' onClick={user.onUpdate}>
+                  <Button size='xs' className='rounded-full' onClick={user.onUpdate}>
                     Update
-                  </button>
+                  </Button>
                 )}
               </div>
             ))}

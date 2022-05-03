@@ -61,6 +61,7 @@ function* confirmUpdateEmail({ payload, resolve, reject }) {
 
   try {
     const res = yield post([user?.role, 'confirm-update-email'], { data: payload });
+    yield putSaga(setUser({ email: payload.email }));
     toast.success(res.detail);
     resolve(res);
   } catch (error) {

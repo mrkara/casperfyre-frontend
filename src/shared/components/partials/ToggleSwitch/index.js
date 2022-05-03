@@ -14,7 +14,7 @@ const ToggleSwitch = forwardRef(({ checked, disableChange = false, ...other }, r
   };
   return (
     <div>
-      <label className={styles.btnSwitch} htmlfor='toggle-wrapper'>
+      <label className={styles.btnSwitch} htmlFor='toggle-wrapper'>
         <input ref={ref} {...other} type='checkbox' id='toggle-wrapper' className='sr-only' checked={isChecked} />
         <div
           className={classNames(styles.toggle, {

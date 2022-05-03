@@ -17,4 +17,7 @@
   &:nth-child(odd) {
     @apply bg-gray1;
   }
+  &:last-child {
+    border-bottom: none;
+  }
 }

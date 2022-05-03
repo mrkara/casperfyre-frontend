@@ -162,9 +162,15 @@ Table.BodyRow = (props) => {
     }
   };
   return (
-    <div className={classNames('table-body-row', style.tableBodyRow, canExpand && 'table-row-can-expand')}>
+    <div
+      className={classNames(
+        'table-body-row border-b border-gray3',
+        style.tableBodyRow,
+        canExpand && 'table-row-can-expand'
+      )}
+    >
       <div
-        className={`${props.className || ''} text-[10px] flex items-center flex-row w-full py-2 border-b border-gray3 ${
+        className={`${props.className || ''} text-[10px] flex items-center flex-row w-full py-2 ${
           props.selectRowHandler ? 'cursor-pointer hover:bg-white1' : ''
         }`}
         onClick={doSelectRow}

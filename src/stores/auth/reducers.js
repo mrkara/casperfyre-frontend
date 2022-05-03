@@ -4,10 +4,14 @@ import { createReducer } from 'shared/core/services/redux';
 const userInitialState = null;
 
 const setUser = (state, payload) => {
-  return {
+  const user = {
     ...state,
     ...payload,
   };
+
+  user.role = ['admin', 'sub-admin'].includes(user.role) ? 'admin' : 'user';
+
+  return user;
 };
 
 const updateUser = (state, payload) => ({ ...state, ...payload });

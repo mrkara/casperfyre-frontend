@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken, removeToken, removeGuid, getTempToken } from './auth';
+import { getTempToken, getToken, removeGuid, removeToken } from './auth';
 
 const API_DOMAIN = process.env.REACT_APP_BASE_URL;
 export const STATUS_CODE = {
@@ -8,7 +8,13 @@ export const STATUS_CODE = {
   UNEXPECTED: 2,
 };
 
-const exception401 = ['admin/confirm-mfa', 'admin/update-email', 'admin/update-mfa'];
+const exception401 = [
+  'admin/confirm-mfa',
+  'user/confirm-mfa',
+  'admin/update-email',
+  'admin/update-mfa',
+  'admin/update-password',
+];
 
 export class ErrorHandler {
   status;

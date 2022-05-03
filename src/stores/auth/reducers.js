@@ -1,5 +1,5 @@
-import { combineReducers } from "redux";
-import { createReducer } from "shared/core/services/redux";
+import { combineReducers } from 'redux';
+import { createReducer } from 'shared/core/services/redux';
 
 const userInitialState = null;
 

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { formatDate } from 'shared/core/utils';
 import { getWallets } from 'stores/api/admin/actions';
@@ -9,16 +9,18 @@ import styles from './style.module.scss';
 const WalletsHistoryTable = React.forwardRef(({ externalParams }, ref) => {
   const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
 
+  const user = useSelector((state) => state.authReducer?.user);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (externalParams) {
       resetData();
-      setParams({ ...params, ...externalParams }, (s) => {
+      setParams({ ...params, ...externalParams, guid: user?.guid }, (s) => {
         fetchWalletsHistory(s, 1);
       });
     }
-  }, [externalParams]);
+  }, [externalParams, user]);
 
   const handleSort = async (key, direction) => {
     setParams(

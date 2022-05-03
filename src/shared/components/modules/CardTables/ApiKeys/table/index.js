@@ -80,8 +80,8 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell>{data.guid}</Table.BodyCell>
-            <Table.BodyCell className={classNames({ 'text-primary': data.active === STATUS.INACTIVE })}>
-              {data.active === STATUS.ACTIVE ? 'Active' : 'Inactive'}
+            <Table.BodyCell className={classNames({ 'text-primary': data.account_active === STATUS.INACTIVE })}>
+              {data.account_active === STATUS.ACTIVE ? 'Active' : 'Inactive'}
             </Table.BodyCell>
             <Table.BodyCell>{data.created_at}</Table.BodyCell>
             <Table.BodyCell>{data.email}</Table.BodyCell>

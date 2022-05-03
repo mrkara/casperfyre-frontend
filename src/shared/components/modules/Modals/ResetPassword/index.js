@@ -22,9 +22,7 @@ const schema = yup
   })
   .required();
 
-const ResetPasswordModal = (props) => {
-  const { close } = props;
-
+const ResetPasswordModal = ({ close, guid }) => {
   const submitBtn = useRef();
   const dispatch = useDispatch();
 
@@ -46,7 +44,7 @@ const ResetPasswordModal = (props) => {
 
   const onSubmit = (data) => {
     dispatch(
-      resetUserPassword({ ...data }, (res) => {
+      resetUserPassword({ ...data, guid }, (res) => {
         toast.success(res.detail);
         close();
       })

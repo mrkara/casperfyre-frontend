@@ -23,7 +23,11 @@ const VerifyAdminModal = ({ close, step = 1, type, active2fa, email }) => {
 
   const handleVerify = () => {
     if (step === 2) {
-      dispatch(confirmUpdateEmail({ mfa_code: code, email }, () => {}));
+      dispatch(
+        confirmUpdateEmail({ mfa_code: code, email }, () => {
+          close();
+        })
+      );
     } else {
       dispatch(
         confirmMFA({ mfa_code: code }, () => {

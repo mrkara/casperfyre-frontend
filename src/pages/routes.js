@@ -21,27 +21,25 @@ const AppRoutes = () => {
           <Suspense fallback={<div className='bg-white1 h-full w-full' />}>
             <AdminRoutes />
           </Suspense>
-        )
+        );
       } else {
         return (
           <Suspense fallback={<div className='bg-white1 h-full w-full' />}>
             <UserRoutes />
           </Suspense>
-        )
+        );
       }
     } else {
       return null;
     }
-  }
+  };
 
   return (
     <>
       <Header />
       <div className='content-wrapper flex'>
         <Sidebar />
-        <div className='py-2.5 px-6 h-full w-full overflow-y-auto overflow-x-auto'>
-          {renderRoute()}
-        </div>
+        <div className='py-2.5 px-6 h-full w-full overflow-y-auto overflow-x-auto'>{renderRoute()}</div>
       </div>
     </>
   );

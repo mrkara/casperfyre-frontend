@@ -68,9 +68,7 @@ const Sidebar = () => {
     <>
       <div className='mt-2.5 sidebar w-20 sm:w-60 transition-all duration-200 ease-in-out'>
         <ul className='pt-3 menu'>
-          {user && menuData[user.role]?.map((item, index) => (
-            <MenuItem key={index} item={item} />
-          ))}
+          {user && menuData[user.role]?.map((item, index) => <MenuItem key={index} item={item} />)}
         </ul>
       </div>
     </>

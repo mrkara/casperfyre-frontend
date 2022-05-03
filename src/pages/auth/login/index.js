@@ -92,7 +92,7 @@ const Login = () => {
             });
             return;
           }
-          if (detail.user?.twofa === '1') {
+          if (detail.twofa || detail.user?.twofa === '1') {
             history.push({
               pathname: `/auth/2fa/${detail.guid}`,
             });

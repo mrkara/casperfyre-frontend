@@ -10,6 +10,7 @@ import { resetPassword } from 'stores/auth/actions';
 import { PATTERN } from 'shared/common/pattern';
 import * as yup from 'yup';
 import style from './style.module.scss';
+import { useQuery } from 'shared/hooks/useQuery';
 
 const schema = yup
   .object()
@@ -41,11 +42,12 @@ function ResetPassword() {
 
   const dispatch = useDispatch();
   const params = useParams();
+  const query = useQuery();
   const history = useHistory();
 
   const onSubmit = (data) => {
     dispatch(
-      resetPassword({ ...data, hash: params.hash }, () => {
+      resetPassword({ ...data, hash: params.hash, email: query.get('email') }, () => {
         history.push('/auth/login');
       })
     );

@@ -1,8 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { PATTERN } from 'shared/common/pattern';
+import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
 import { createAdmin } from 'stores/api/admin/actions';
@@ -15,10 +16,10 @@ const schema = yup
   })
   .required();
 
-const AddAdminModal = (props) => {
-  const { close } = props;
-
+const AddAdminModal = ({ close }) => {
   const submitBtn = useRef();
+
+  const [loading, setLoading] = useState();
 
   const {
     register,
@@ -32,10 +33,18 @@ const AddAdminModal = (props) => {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
+    setLoading(true);
     dispatch(
-      createAdmin({ email: data.email }, () => {
-        close();
-      })
+      createAdmin(
+        { email: data.email },
+        () => {
+          setLoading(false);
+          close();
+        },
+        () => {
+          setLoading(false);
+        }
+      )
     );
   };
 
@@ -49,7 +58,12 @@ const AddAdminModal = (props) => {
         </form>
       </Dialog.Body>
       <Dialog.Footer className='mt-6'>
-        <Button className='w-full' color='success' onClick={() => submitBtn.current.click()} disabled={!isValid}>
+        <Button
+          className='w-full'
+          color='success'
+          onClick={() => submitBtn.current.click()}
+          disabled={!isValid || loading}
+        >
           Send Invite
         </Button>
       </Dialog.Footer>

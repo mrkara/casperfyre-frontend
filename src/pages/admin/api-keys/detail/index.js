@@ -176,12 +176,12 @@ const ApiKeysDetail = ({ config }) => {
 
   const handleAfterCreatedWallet = (cond) => {
     if (cond) fetchWallet();
-  }
+  };
 
   const handleActions = (type) => {
     switch (type) {
       case 'resetPassword':
-        appendDialog(<ResetPasswordModal />);
+        appendDialog(<ResetPasswordModal guid={id} />);
         break;
       case 'keyStatus':
         handleChangeAPIKeyStatus(apiKey.active === STATUS.INACTIVE);
@@ -190,15 +190,13 @@ const ApiKeysDetail = ({ config }) => {
         appendDialog(<ReplaceKeyModal guid={id} />);
         break;
       case 'updateDailyCSPRLimit':
-        appendDialog(
-          <UpdateDailyCSPRLimitModal guid={id} currentLimit={apiKey.day_limit} onUpdate={handleUpdate} />
-        );
+        appendDialog(<UpdateDailyCSPRLimitModal guid={id} currentLimit={apiKey.day_limit} onUpdate={handleUpdate} />);
         break;
       case 'updatePerTXCSPRLimit':
         appendDialog(<UpdateTXLimitModal guid={id} currentLimit={apiKey.per_limit} onUpdate={handleUpdate} />);
         break;
       case 'changeWallet':
-        appendDialog(<ChangeWalletModal guid={id} data={apiKey} afterClosed={handleAfterCreatedWallet}/>);
+        appendDialog(<ChangeWalletModal guid={id} data={apiKey} afterClosed={handleAfterCreatedWallet} />);
         break;
       default:
         break;

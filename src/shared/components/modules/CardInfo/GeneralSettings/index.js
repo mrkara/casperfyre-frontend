@@ -8,7 +8,7 @@ import { sendMFA } from 'stores/api/shared/actions';
 import VerifyAdminModal from '../../Modals/Verify';
 import styles from './style.module.scss';
 
-const GeneralSettings = (props) => {
+const GeneralSettings = () => {
   const user = useSelector((state) => state.authReducer?.user);
 
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const GeneralSettings = (props) => {
   return (
     <>
       <Card className='max-w-4xl'>
-        <CardHeader icon={<SettingsIcon />} title='Admin Settings' />
+        <CardHeader icon={<SettingsIcon />} title={`${user?.role === 'admin' ? 'Admin' : ''} Settings`} />
         <CardBody noSpacing>
           <div className='flex'>
             <div className={styles.blockItem}>

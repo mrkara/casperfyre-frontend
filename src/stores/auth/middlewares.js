@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { all, put, takeLatest } from 'redux-saga/effects';
+import { all, put as putSaga, select, takeLatest } from 'redux-saga/effects';
 import { getGuid, removeToken, setGuid } from 'shared/core/services/auth';
 import { get, post } from 'shared/core/services/saga';
 import { types } from 'stores/types';
@@ -68,7 +68,7 @@ function* confirmRegistration({ payload, resolve, reject }) {
 
 function* doLogout({ resolve }) {
   removeToken();
-  yield put(clearUser());
+  yield putSaga(clearUser());
   resolve();
 }
 
@@ -84,8 +84,9 @@ function* verifyCode({ payload, resolve, reject }) {
 }
 
 function* confirmMFA({ payload, resolve, reject }) {
+  const user = yield select((state) => state.authReducer?.user);
   try {
-    const res = yield post(['admin', 'confirm-mfa'], { data: payload });
+    const res = yield post([user.role, 'confirm-mfa'], { data: payload });
     toast.success(res.detail);
     resolve(res);
   } catch (error) {
@@ -99,7 +100,7 @@ function* fetchUserInfo({ resolve, reject }) {
     const guid = getGuid();
     const res = yield get(['user', 'me'], { guid });
 
-    yield put(setUser(res.detail));
+    yield putSaga(setUser(res.detail));
     resolve(res);
   } catch (error) {
     toast(error.message);

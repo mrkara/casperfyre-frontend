@@ -1,6 +1,6 @@
 // import { Loading } from '@shared/components/Loading';
 import classNames from 'classnames';
-import { createElement, useRef } from 'react';
+import { createElement, useEffect, useRef, useState } from 'react';
 import './style.module.scss';
 
 export const Button = (props) => {
@@ -14,9 +14,27 @@ export const Button = (props) => {
     as = 'button',
     rounded = false,
     onClick,
+    delay = false,
+    disabled,
     ...otherProps
   } = props;
+
+  const btnDelayRef = useRef(null);
+  const rippleDelayRef = useRef(null);
   const rippleRef = useRef(null);
+
+  const [isDisabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    setDisabled(disabled);
+  }, [disabled]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(btnDelayRef.current);
+      clearTimeout(rippleDelayRef.current);
+    };
+  }, []);
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -33,12 +51,18 @@ export const Button = (props) => {
       const top = e.clientY - rect.top - diameter / 2;
       ripple.style.left = `${left}px`;
       ripple.style.top = `${top}px`;
-      setTimeout(() => {
+      rippleDelayRef.current = setTimeout(() => {
         ripple.remove();
       }, 300);
     }
     if (onClick) {
       onClick(e);
+      if (delay) {
+        setDisabled(true);
+        btnDelayRef.current = setTimeout(() => {
+          setDisabled(false);
+        }, 1500);
+      }
     }
   };
 
@@ -66,6 +90,7 @@ export const Button = (props) => {
         className
       ),
       onClick: handleClick,
+      disabled: isDisabled,
       ...otherProps,
     },
     renderChildren

@@ -201,9 +201,9 @@ function* enableAPIKey({ payload, resolve, reject }) {
 function* replaceKey({ payload, resolve, reject }) {
   try {
     const res = yield post(['admin', 'create-apikey'], { data: payload });
+    toast.success('Replaced key successfully');
     resolve(res);
   } catch (error) {
-    console.log('error', error);
     toast(error.message);
     reject(error);
   }
@@ -212,6 +212,7 @@ function* replaceKey({ payload, resolve, reject }) {
 function* createWallet({ payload, resolve, reject }) {
   try {
     const res = yield post(['admin', 'create-wallet'], { data: payload });
+    toast.success('Created wallet successfully');
     resolve(res);
   } catch (error) {
     toast(error.message);

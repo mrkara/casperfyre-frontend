@@ -21,8 +21,8 @@ const SendToMail = (props) => {
           Back to Log In
         </Link>
         <p className='mt-5'>
-          Don’t get the email?{' '}
-          <Button color='text' onClick={props.retry}>
+          Don’t get the email?
+          <Button variant='text' onClick={props.retry}>
             Click here to resend it.
           </Button>
         </p>

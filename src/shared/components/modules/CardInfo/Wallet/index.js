@@ -37,7 +37,7 @@ const WalletInfo = ({ data }) => {
           />
           <CopyButton from='wallet-address-id' />
         </div>
-        <Button size='sm' rounded className='mt-3' onClick={handleOpenModal}>
+        <Button size='sm' rounded className='mt-3 px-2' onClick={handleOpenModal}>
           Change Wallet
         </Button>
       </CardBody>

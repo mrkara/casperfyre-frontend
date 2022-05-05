@@ -4,4 +4,6 @@ export const PATTERN = {
   PASSWORD: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
   PASSWORD_LETTER: /(?=.*?[a-zA-Z])/,
   PASSWORD_NUMBER: /(?=.*?[0-9])/,
+  PASSWORD_UPPERCASE: /(?=.*?[A-Z])/,
+  PASSWORD_SPECICAL_CHARACTERS: /(?=.*?[#?!@$%^&*-])/,
 };

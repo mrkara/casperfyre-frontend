@@ -66,12 +66,7 @@ const KeysAndWalletsPage = (props) => {
             <div className='flex gap-2 items-center py-5'>
               <b className='whitespace-nowrap'>Active API Key:</b>
               <p>{apiKey?.api_key}</p>
-              <input
-                value={apiKey?.api_key}
-                id='active-api-key-id'
-                readOnly
-                hidden
-              />
+              <input defaultValue={apiKey?.api_key} id='active-api-key-id' readOnly hidden />
               <CopyButton from='active-api-key-id' />
             </div>
             <div className='flex gap-x-2'>
@@ -90,12 +85,7 @@ const KeysAndWalletsPage = (props) => {
             <div className='flex gap-2 items-center py-5'>
               <b className='whitespace-nowrap'>Active Wallet:</b>
               <p>{wallet?.address}</p>
-              <input
-                value={wallet?.address}
-                id='active-wallet-id'
-                hidden
-                readOnly
-              />
+              <input defaultValue={wallet?.address} id='active-wallet-id' hidden readOnly />
               <CopyButton from='active-wallet-id' />
             </div>
             <div className='flex gap-x-2'>

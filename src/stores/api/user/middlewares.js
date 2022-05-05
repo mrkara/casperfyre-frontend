@@ -47,7 +47,7 @@ function* getUserWallets({ payload, resolve, reject }) {
 
 function* getUserHistory({ payload, resolve, reject }) {
   try {
-    const res = yield get(['user', 'history']);
+    const res = yield get(['user', 'get-history']);
     resolve(res);
   } catch (error) {
     reject(error);

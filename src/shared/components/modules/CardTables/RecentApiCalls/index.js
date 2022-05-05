@@ -4,19 +4,19 @@ import Toolbar from 'shared/components/modules/Toolbar';
 import { Card, CardBody, CardHeader } from 'shared/components/partials';
 import RecentApiCallsTable from './table';
 
-const RecentApiCalls = (props) => {
+const RecentApiCalls = () => {
   const [params, setParams] = useState();
   const handleToolbarChange = (params) => {
     setParams(params);
   };
 
   return (
-    <Card>
+    <Card className='max-h-120'>
       <CardHeader icon={<Buffer />} title='Recent API Calls' />
       <CardBody>
-        <div className='flex flex-col h-full'>
+        <div className='flex flex-col flex-1 min-h-0'>
           <Toolbar onChange={handleToolbarChange} />
-          <div className='flex-1 min-h-0'>
+          <div className='flex flex-col flex-1 min-h-0'>
             <RecentApiCallsTable externalParams={params} />
           </div>
         </div>

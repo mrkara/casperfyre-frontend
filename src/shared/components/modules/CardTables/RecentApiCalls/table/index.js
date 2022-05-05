@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
@@ -6,55 +6,19 @@ import { getUserHistory } from 'stores/api/user/actions';
 import styles from './style.module.scss';
 
 const RecentApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
-  const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (externalParams) {
-      resetData();
-      setParams({ ...params, ...externalParams }, (s) => {
-        fetchApiCalls(s, 1);
-      });
-    }
-  }, [externalParams]);
-
-  const handleSort = async (key, direction) => {
-    setParams(
-      {
-        ...params,
-        sort_key: key,
-        sort_direction: direction,
-      },
-      (s) => {
-        resetData();
-        fetchApiCalls(s, 1);
-      }
-    );
+  const api = (params, resolve, reject) => {
+    dispatch(getUserHistory(params, resolve, reject));
   };
 
-  const fetchApiCalls = (paramsValue = params, pageValue = page) => {
-    dispatch(
-      getUserHistory(
-        { ...paramsValue, page: pageValue },
-        (res) => {
-          setHasMore(res.hasMore);
-          appendData(res.items || []);
-          setPage((prev) => +prev + 1);
-        },
-        (error) => {
-          setHasMore(false);
-        }
-      )
-    );
-  };
+  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
 
   return (
     <Table
       {...register}
       styles={styles}
-      className='w-400'
-      onLoadMore={fetchApiCalls}
+      onLoadMore={fetchApi}
       hasMore={hasMore}
       dataLength={data.length}
       onSort={handleSort}

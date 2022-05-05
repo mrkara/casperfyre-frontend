@@ -84,7 +84,7 @@ function VerifyCode() {
   };
 
   const handleResendCode = () => {
-    dispatch(sendMFA());
+    dispatch(sendMFA({ guid: params.guid }));
   };
 
   return (

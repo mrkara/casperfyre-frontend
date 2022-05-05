@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog, useDialog } from 'shared/components/partials/Dialog/Provider';
 import { confirmUpdateEmail, sendMFA, updateMFA } from 'stores/api/shared/actions';
-import { confirmMFA, verifyCode } from 'stores/auth/actions';
+import { confirmMFA } from 'stores/auth/actions';
 import UpdateEmailAdminModal from '../UpdateEmail';
 import UpdatePasswordAdminModal from '../UpdatePasword';
 
 const VerifyAdminModal = ({ close, step = 1, type, active2fa, email }) => {
-  const [code, setCode] = useState();
+  const [code, setCode] = useState('');
 
   const dispatch = useDispatch();
   const { appendDialog } = useDialog();
@@ -63,10 +63,10 @@ const VerifyAdminModal = ({ close, step = 1, type, active2fa, email }) => {
         }
       />
       <Dialog.Body className='pt-6.25'>
-        <Input placeholder='Enter Verification Code' onChange={handleChangeVerifyCode} />
+        <Input value={code} placeholder='Enter Verification Code' onChange={handleChangeVerifyCode} />
       </Dialog.Body>
       <Dialog.Footer className='mt-6'>
-        <Button className='w-full' color='primary' disabled={!verifyCode} onClick={handleVerify}>
+        <Button className='w-full' color='primary' disabled={!code} onClick={handleVerify}>
           {step === 1 ? `Verify` : `Complete Email Change`}
         </Button>
         <div className='text-right'>

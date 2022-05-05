@@ -1,6 +1,7 @@
 import { ReactComponent as AddIcon } from 'assets/icons/add.svg';
 import { ReactComponent as ListCheck } from 'assets/icons/list-check.svg';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Toolbar from 'shared/components/modules/Toolbar';
 import { Card, CardBody, CardHeader } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
@@ -9,8 +10,14 @@ import WhiteListedIPTable from './table';
 
 const WhiteListedIP = (props) => {
   const [params, setParams] = useState();
-
   const { appendDialog } = useDialog();
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      setParams({ ...params, guid: id });
+    }
+  }, [id]);
 
   const handleToolbarChange = (params) => {
     setParams(params);

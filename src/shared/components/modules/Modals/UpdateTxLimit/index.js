@@ -4,13 +4,16 @@ import { useDispatch } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
 import { updateLimits } from 'stores/api/shared/actions';
+import { useLoading } from '../../Loading';
 
 const UpdateTXLimitModal = ({ close, guid, currentLimit, onUpdate }) => {
+  const { setLoading } = useLoading();
   const [limit, setLimit] = useState('');
 
   const dispatch = useDispatch();
 
   const handleUpdateTXLimit = () => {
+    setLoading(true);
     dispatch(
       updateLimits(
         { guid, per_limit: limit },
@@ -19,10 +22,11 @@ const UpdateTXLimitModal = ({ close, guid, currentLimit, onUpdate }) => {
             onUpdate({
               per_limit: limit,
             });
+          setLoading(false);
           handleCancel();
         },
-        (err) => {
-          handleCancel();
+        () => {
+          setLoading(false);
         }
       )
     );

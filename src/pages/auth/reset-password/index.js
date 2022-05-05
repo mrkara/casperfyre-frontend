@@ -4,13 +4,14 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { AuthContainer } from 'shared/components/modules/AuthContainer';
-import { Button, Input } from 'shared/components/partials';
-import { resetPassword } from 'stores/auth/actions';
 import { PATTERN } from 'shared/common/pattern';
+import { AuthContainer } from 'shared/components/modules/AuthContainer';
+import { useLoading } from 'shared/components/modules/Loading';
+import { Button, Input } from 'shared/components/partials';
+import { useQuery } from 'shared/hooks/useQuery';
+import { resetPassword } from 'stores/auth/actions';
 import * as yup from 'yup';
 import style from './style.module.scss';
-import { useQuery } from 'shared/hooks/useQuery';
 
 const schema = yup
   .object()
@@ -24,6 +25,8 @@ const schema = yup
   .required();
 
 function ResetPassword() {
+  const { setLoading } = useLoading();
+
   const {
     handleSubmit,
     register,
@@ -46,10 +49,19 @@ function ResetPassword() {
   const history = useHistory();
 
   const onSubmit = (data) => {
+    const email = query.get('email').replace(' ', '+');
+    setLoading(true);
     dispatch(
-      resetPassword({ ...data, hash: params.hash, email: query.get('email') }, () => {
-        history.push('/auth/login');
-      })
+      resetPassword(
+        { ...data, hash: params.hash, email },
+        () => {
+          setLoading(false);
+          history.push('/auth/login');
+        },
+        () => {
+          setLoading(false);
+        }
+      )
     );
   };
 
@@ -65,11 +77,19 @@ function ResetPassword() {
     return PATTERN.PASSWORD_NUMBER.test(watchPassword);
   };
 
+  const checkValidUpperCase = () => {
+    return PATTERN.PASSWORD_UPPERCASE.test(watchPassword);
+  };
+
+  const checkValidSpecialCharacters = () => {
+    return PATTERN.PASSWORD_SPECICAL_CHARACTERS.test(watchPassword);
+  };
+
   return (
     <AuthContainer className='login-page' showInstruction>
       <div className='pb-6'>
         <h3 className='font-semibold'>Set New Password</h3>
-        <p>for [user email address]</p>
+        <p>for {query.get('email').replace(' ', '+')}</p>
         <ul className='pt-5 flex flex-col gap-y-3'>
           <li className={`flex items-center gap-x-3 ${checkValidMin() && style.success}`}>
             <Checkmark className={`text-xs ${style.icon} text-gray2`} />
@@ -82,6 +102,14 @@ function ResetPassword() {
           <li className={`flex items-center gap-x-3 ${checkValidNumber() && style.success}`}>
             <Checkmark className={`text-xs ${style.icon} text-gray2`} />
             <p className={style.text}>1 Number</p>
+          </li>
+          <li className={`flex items-center gap-x-3 ${checkValidUpperCase() && style.success}`}>
+            <Checkmark className={`text-xs ${style.icon} text-gray2`} />
+            <p className={style.text}>1 Letter Uppercase</p>
+          </li>
+          <li className={`flex items-center gap-x-3 ${checkValidSpecialCharacters() && style.success}`}>
+            <Checkmark className={`text-xs ${style.icon} text-gray2`} />
+            <p className={style.text}>1 Special Characters</p>
           </li>
         </ul>
       </div>

@@ -29,6 +29,7 @@ function* sendLoginMail({ payload, resolve, reject }) {
 function* resetPassword({ payload, resolve, reject }) {
   try {
     const res = yield post(['user', 'reset-password'], { data: payload });
+    toast.success(res.detail);
     resolve(res.data);
   } catch (error) {
     toast(error.message);

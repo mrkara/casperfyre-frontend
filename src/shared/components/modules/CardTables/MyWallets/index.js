@@ -6,17 +6,18 @@ import MyWalletsTable from './table';
 
 const MyWallets = () => {
   const [params, setParams] = useState();
+
   const handleToolbarChange = (params) => {
     setParams(params);
   };
 
   return (
-    <Card>
+    <Card className='max-h-120'>
       <CardHeader icon={<Wallet />} title='My Wallets' />
       <CardBody>
-        <div>
+        <div className='flex flex-col flex-1 min-h-0'>
           <Toolbar onChange={handleToolbarChange} />
-          <div className='flex-1 min-h-0'>
+          <div className='flex flex-col flex-1 min-h-0'>
             <MyWalletsTable externalParams={params} />
           </div>
         </div>

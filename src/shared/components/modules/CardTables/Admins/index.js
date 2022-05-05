@@ -7,7 +7,7 @@ import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import AddAdminModal from './modal/add';
 import AdminsTable from './table';
 
-const Admins = (props) => {
+const Admins = () => {
   const [params, setParams] = useState();
 
   const { appendDialog } = useDialog();
@@ -21,7 +21,7 @@ const Admins = (props) => {
   };
 
   return (
-    <Card>
+    <Card className='max-h-120'>
       <CardHeader icon={<AdminsIcon />} title='Admins'>
         <div className='flex gap-x-1 items-center text-sm cursor-pointer' onClick={handleAddAdmin}>
           <AddIcon />

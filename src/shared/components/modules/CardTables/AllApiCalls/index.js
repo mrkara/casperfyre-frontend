@@ -5,14 +5,15 @@ import { Card, CardBody, CardHeader } from 'shared/components/partials';
 import CheckBox from 'shared/components/partials/CheckBox';
 import AllApiCallsTable from './table';
 
-const AllApiCalls = (props) => {
+const AllApiCalls = () => {
   const [params, setParams] = useState();
+
   const handleToolbarChange = (params) => {
     setParams(params);
   };
 
   return (
-    <Card>
+    <Card className='max-h-120'>
       <CardHeader icon={<Buffer />} title='All API Calls'>
         <div className='flex gap-x-2 items-center'>
           <CheckBox />
@@ -20,9 +21,9 @@ const AllApiCalls = (props) => {
         </div>
       </CardHeader>
       <CardBody>
-        <div className='flex flex-col h-full'>
+        <div className='flex flex-col flex-1 min-h-0'>
           <Toolbar onChange={handleToolbarChange} />
-          <div className='flex-1 min-h-0'>
+          <div className='flex flex-col flex-1 min-h-0'>
             <AllApiCallsTable externalParams={params} />
           </div>
         </div>

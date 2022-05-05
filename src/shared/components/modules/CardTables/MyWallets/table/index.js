@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { formatDate } from 'shared/core/utils';
@@ -7,52 +7,19 @@ import { getUserWallets } from 'stores/api/user/actions';
 import styles from './style.module.scss';
 
 const MyWalletsTable = React.forwardRef(({ externalParams }, ref) => {
-  const { data, register, hasMore, setHasMore, setParams, appendData, setPage, page, params, resetData } = useTable();
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (externalParams) {
-      resetData();
-      setParams({ ...params, ...externalParams }, (s) => {
-        fetchWalletsHistory(s, 1);
-      });
-    }
-  }, [externalParams]);
-
-  const handleSort = async (key, direction) => {
-    setParams(
-      {
-        ...params,
-        sort_key: key,
-        sort_direction: direction,
-      },
-      (s) => {
-        resetData();
-        fetchWalletsHistory(s, 1);
-      }
-    );
+  const api = (params, resolve, reject) => {
+    dispatch(getUserWallets(params, resolve, reject));
   };
 
-  const fetchWalletsHistory = (paramsValue = params, pageValue = page) => {
-    dispatch(
-      getUserWallets(
-        { ...paramsValue, page: pageValue },
-        (res) => {
-          setHasMore(res.hasMore);
-          appendData(res.items || []);
-          setPage((prev) => +prev + 1);
-        },
-        () => {}
-      )
-    );
-  };
+  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
 
   return (
     <Table
       {...register}
       styles={styles}
-      onLoadMore={fetchWalletsHistory}
+      onLoadMore={fetchApi}
       hasMore={hasMore}
       dataLength={data.length}
       onSort={handleSort}
@@ -72,9 +39,7 @@ const MyWalletsTable = React.forwardRef(({ externalParams }, ref) => {
             </Table.BodyCell>
             <Table.BodyCell>{formatDate(data.created_at)}</Table.BodyCell>
             <Table.BodyCell>{formatDate(data.inactive_at)}</Table.BodyCell>
-            <Table.BodyCell className={classNames(!data.active && 'text-primary')}>
-              {data.address}
-            </Table.BodyCell>
+            <Table.BodyCell className={classNames(!data.active && 'text-primary')}>{data.address}</Table.BodyCell>
             <Table.BodyCell>{data.balance}</Table.BodyCell>
           </Table.BodyRow>
         ))}

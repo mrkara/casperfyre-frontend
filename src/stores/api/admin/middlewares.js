@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { all, takeLatest } from 'redux-saga/effects';
-import { get, post, put } from 'shared/core/services/saga';
+import { get, post } from 'shared/core/services/saga';
 import { fakeFilterListApi, removeEmptyField } from 'shared/core/utils';
 import { types } from 'stores/types';
 
@@ -81,7 +81,7 @@ function* getAPIKey({ payload, resolve, reject }) {
 function* getHistories({ payload, resolve, reject }) {
   try {
     const newPayload = removeEmptyField(payload);
-    const res = yield get(['admin', 'history'], newPayload);
+    const res = yield get(['admin', 'get-history'], newPayload);
     /* this code will be remove in the future */
     const result = fakeFilterListApi(res.detail, payload);
     /* end */

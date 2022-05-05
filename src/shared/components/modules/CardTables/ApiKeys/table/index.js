@@ -1,67 +1,27 @@
 import classNames from 'classnames';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { STATUS } from 'shared/common/enum';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
-import { getGuid } from 'shared/core/services/auth';
 import { getAPIKeyHolders } from 'stores/api/admin/actions';
 import styles from './style.module.scss';
 
 const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
-  const guid = getGuid();
+  const api = (params, resolve, reject) => {
+    dispatch(getAPIKeyHolders(params, resolve, reject));
+  };
 
-  const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
+  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (externalParams) {
-      resetData();
-      setParams({ ...params, ...externalParams, guid }, (s) => {
-        fetchApiKeys(s, 1);
-      });
-    }
-  }, [externalParams]);
-
-  const handleSort = async (key, direction) => {
-    setParams(
-      {
-        ...params,
-        sort_key: key,
-        sort_direction: direction,
-      },
-      (s) => {
-        resetData();
-        fetchApiKeys(s, 1);
-      }
-    );
-  };
-
-  const fetchApiKeys = (paramsValue = params, pageValue = page) => {
-    dispatch(
-      getAPIKeyHolders(
-        { ...paramsValue, page: pageValue },
-        (res) => {
-          setHasMore(res.hasMore);
-          appendData(res.items || []);
-          setPage((prev) => +prev + 1);
-        },
-        (error) => {
-          setHasMore(false);
-          toast('Something went wrong. Please try again !');
-        }
-      )
-    );
-  };
 
   return (
     <Table
       {...register}
       styles={styles}
-      onLoadMore={fetchApiKeys}
+      onLoadMore={fetchApi}
       hasMore={hasMore}
       dataLength={data.length}
       onSort={handleSort}

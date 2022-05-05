@@ -3,7 +3,6 @@ import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { PATTERN } from 'shared/common/pattern';
-import { useLoading } from 'shared/components/modules/Loading';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
 import { createAdmin } from 'stores/api/admin/actions';

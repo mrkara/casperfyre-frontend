@@ -1,56 +1,25 @@
 import classNames from 'classnames';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { formatDate } from 'shared/core/utils';
 import { getWallets } from 'stores/api/admin/actions';
 import styles from './style.module.scss';
 
 const WalletsHistoryTable = React.forwardRef(({ externalParams }, ref) => {
-  const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
-
-  const user = useSelector((state) => state.authReducer?.user);
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (externalParams) {
-      resetData();
-      setParams({ ...params, ...externalParams, guid: user?.guid }, (s) => {
-        fetchWalletsHistory(s, 1);
-      });
-    }
-  }, [externalParams, user]);
-
-  const handleSort = async (key, direction) => {
-    setParams(
-      {
-        ...params,
-        sort_key: key,
-        sort_direction: direction,
-      },
-      (s) => {
-        resetData();
-        fetchWalletsHistory(s, 1);
-      }
-    );
+  const api = (params, resolve, reject) => {
+    dispatch(getWallets(params, resolve, reject));
   };
 
-  const fetchWalletsHistory = (paramsValue = params, pageValue = page) => {
-    dispatch(
-      getWallets({ ...paramsValue, page: pageValue }, (res) => {
-        setHasMore(res.hasMore);
-        appendData(res.items || []);
-        setPage((prev) => +prev + 1);
-      })
-    );
-  };
+  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
 
   return (
     <Table
       {...register}
       styles={styles}
-      onLoadMore={fetchWalletsHistory}
+      onLoadMore={fetchApi}
       hasMore={hasMore}
       dataLength={data.length}
       onSort={handleSort}

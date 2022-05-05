@@ -13,17 +13,21 @@ const APIKeyUsage = () => {
   const [apiKey, setApiKey] = useState();
 
   useEffect(() => {
-    dispatch(
-      getUserUsage(null, (res) => {
-        setData(res.detail);
-      })
-    );
+    fetchUserUsage();
     fetchAPIKey();
   }, []);
 
   const calcPercent = (top, bot) => {
     if (!top || !bot) return 0;
     return (top / bot) * 100;
+  };
+
+  const fetchUserUsage = () => {
+    dispatch(
+      getUserUsage(null, (res) => {
+        setData(res.detail);
+      })
+    );
   };
 
   const fetchAPIKey = () => {
@@ -46,12 +50,7 @@ const APIKeyUsage = () => {
         <div className='flex gap-2 items-center'>
           <b className='whitespace-nowrap'>My Key:</b>
           <p>{apiKey?.api_key}</p>
-          <input
-            value={apiKey?.api_key}
-            id='active-api-key-id'
-            readOnly
-            hidden
-          />
+          <input defaultValue={apiKey?.api_key} id='active-api-key-id' readOnly hidden />
           <CopyButton from='active-api-key-id' />
         </div>
       </CardHeader>

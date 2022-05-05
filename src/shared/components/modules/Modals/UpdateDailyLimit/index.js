@@ -4,25 +4,29 @@ import { useDispatch } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
 import { updateLimits } from 'stores/api/shared/actions';
+import { useLoading } from '../../Loading';
 
 const UpdateDailyCSPRLimitModal = ({ close, guid, currentLimit, onUpdate }) => {
+  const { setLoading } = useLoading();
   const [limit, setLimit] = useState('');
 
   const dispatch = useDispatch();
 
   const handleUpdateDailyLimit = () => {
+    setLoading(true);
     dispatch(
       updateLimits(
         { guid, day_limit: limit },
-        (res) => {
+        () => {
           onUpdate &&
             onUpdate({
               day_limit: limit,
             });
+          setLoading(false);
           handleCancel();
         },
-        (err) => {
-          handleCancel();
+        () => {
+          setLoading(false);
         }
       )
     );

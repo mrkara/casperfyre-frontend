@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import classNames from 'classnames';
-import { cloneElement, createContext, useContext, useEffect, useState } from 'react';
+import { cloneElement, createContext, useContext, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Loading } from 'shared/components/modules/Loading';
 import style from './style.module.scss';
@@ -79,6 +79,7 @@ Table.Header = (props) => {
         .map((child, i) =>
           cloneElement(child, {
             index: i + 1,
+            key: i,
           })
         )}
     </div>
@@ -122,11 +123,11 @@ Table.Header.Cell = Table.HeaderCell;
 
 Table.Body = (props) => {
   const { targetId, isTarget } = useContext(TableContext);
-
+ 
   return (
     <div
       {...(!isTarget ? { id: targetId } : {})}
-      className={`table-body ${props.className || ''} ${isTarget ? '' : 'overflow-y-scroll'}`}
+      className={`table-body flex-1 min-h-0 ${props.className || ''} ${isTarget ? '' : 'overflow-y-scroll'}`}
     >
       <InfiniteScroll
         className='flex flex-col w-full'
@@ -187,6 +188,7 @@ Table.BodyRow = (props) => {
           .map((child, i) =>
             cloneElement(child, {
               index: i + 1,
+              key: i,
             })
           )}
       </div>
@@ -219,12 +221,65 @@ Table.Body.ExpandRow = Table.BodyExpandRow;
 
 const DEFAULT_LIMIT = 10;
 
-const useTable = () => {
+const useTable = (props = {}) => {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [params, setParams] = useStateCallback({ limit: DEFAULT_LIMIT });
   const [tableId, setTableId] = useState();
+  let tableRef = useRef();
+
+  useEffect(() => {
+    if (tableId && !tableRef.current) {
+      const $table = document.getElementById(tableId);
+      tableRef.current = $table;
+    }
+  }, [tableId]);
+
+
+  useEffect(() => {
+    if (props.externalParams) {
+      resetData();
+      setParams({ ...params, ...props.externalParams }, (s) => {
+        props.api({ ...s, page: 1 }, handleFetchSuccess, handleFetchError);
+      });
+    }
+  }, [props.externalParams]);
+
+  const fetchApi = () => {
+    return props.api({ ...params, page }, handleFetchSuccess, handleFetchError);
+  }
+
+  const handleSort = async (key, direction) => {
+    setParams(
+      {
+        ...params,
+        sort_key: key,
+        sort_direction: direction,
+      },
+      (s) => {
+        resetData(() => {
+          props.api({ ...s, page: 1 }, handleFetchSuccess, handleFetchError);
+        });
+      }
+    );
+  };
+
+  const handleFetchSuccess = (res) => {
+    setHasMore(res.hasMore);
+    appendData(res.items || []);
+    setPage((prev) => +prev + 1);
+    const innerDiv = tableRef.current.querySelector('.infinite-scroll-component');
+    if (res.hasMore && tableRef.current.scrollHeight <= tableRef.current.clientHeight) {
+      innerDiv.style.height = `${tableRef.current.clientHeight + 50}px`;
+    } else {
+      innerDiv.style.height = 'auto';
+    }
+  }
+
+  const handleFetchError = (err) => {
+    setHasMore(false);
+  }
 
   const appendData = (res, reverse = false) => {
     if (reverse) {
@@ -238,17 +293,22 @@ const useTable = () => {
     setTableId(id);
   };
 
-  const resetData = () => {
-    const $table = document.getElementById(tableId);
+  const resetData = (callback = () => {}) => {
+    const $table = tableRef.current;
+    const $innerDiv = tableRef.current.querySelector('.infinite-scroll-component');
     if ($table) {
       $table.classList.add('opacity-0');
       $table.scrollTop = 0;
+      $innerDiv.style.height = 'auto';
       setTimeout(() => {
         setData([]);
         setPage(1);
         setHasMore(true);
         $table.classList.remove('opacity-0');
+        callback();
       }, 50);
+    } else {
+      callback();
     }
   };
 
@@ -257,6 +317,8 @@ const useTable = () => {
     setData,
     register: { register: getTableId },
     hasMore,
+    fetchApi,
+    handleSort,
     page,
     appendData,
     resetData,

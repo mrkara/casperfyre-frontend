@@ -39,9 +39,11 @@ const ChangeWalletModal = ({ close, guid, data, onUpdate }) => {
   };
 
   const handleCreateWallet = () => {
+    setLoading(true);
     dispatch(
       createWallet({ guid: guid || getGuid() }, (res) => {
         onUpdate && onUpdate(res);
+        setLoading(false);
         close(true);
       })
     );

@@ -63,6 +63,14 @@ const ResetPasswordModal = ({ close, guid }) => {
     return PATTERN.PASSWORD_NUMBER.test(watchPassword);
   };
 
+  const checkValidUpperCase = () => {
+    return PATTERN.PASSWORD_UPPERCASE.test(watchPassword);
+  };
+
+  const checkValidSpecialCharacters = () => {
+    return PATTERN.PASSWORD_SPECICAL_CHARACTERS.test(watchPassword);
+  };
+
   const handleCancel = () => {
     close();
   };
@@ -84,6 +92,14 @@ const ResetPasswordModal = ({ close, guid }) => {
             <li className={`flex items-center gap-x-3 ${checkValidNumber() && styles.success}`}>
               <Checkmark className={`text-xs ${styles.icon} text-gray2`} />
               <p className={styles.text}>1 Number</p>
+            </li>
+            <li className={`flex items-center gap-x-3 ${checkValidUpperCase() && styles.success}`}>
+              <Checkmark className={`text-xs ${styles.icon} text-gray2`} />
+              <p className={styles.text}>1 Letter Uppercase</p>
+            </li>
+            <li className={`flex items-center gap-x-3 ${checkValidSpecialCharacters() && styles.success}`}>
+              <Checkmark className={`text-xs ${styles.icon} text-gray2`} />
+              <p className={styles.text}>1 Special Characters</p>
             </li>
           </ul>
           <div className='mt-6.25 flex flex-col gap-y-2.5'>

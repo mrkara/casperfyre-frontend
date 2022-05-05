@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import { Table, useTable } from 'shared/components/partials/Table';
-import { getGuid } from 'shared/core/services/auth';
 import { getApplications } from 'stores/api/admin/actions';
 import ApproveModal from 'shared/components/modules/Modals/ApproveApplication';
 import DenyModal from 'shared/components/modules/Modals/DenyApplication';
@@ -11,47 +10,13 @@ import ViewModal from 'shared/components/modules/Modals/ViewApplication';
 import styles from './style.module.scss';
 
 const ApplicationsTable = React.forwardRef(({ externalParams }, ref) => {
-  const guid = getGuid();
-
+  const api = (params, resolve, reject) => {
+    dispatch(getApplications(params, resolve, reject));
+  };
   const { appendDialog } = useDialog();
-
-  const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData, setData } =
-    useTable();
+  const { data, fetchApi, register, hasMore, handleSort, setData } = useTable({ externalParams, api });
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (externalParams) {
-      resetData();
-      setParams({ ...params, ...externalParams, guid }, (s) => {
-        fetchApplications(s, 1);
-      });
-    }
-  }, [externalParams]);
-
-  const handleSort = async (key, direction) => {
-    setParams(
-      {
-        ...params,
-        sort_key: key,
-        sort_direction: direction,
-      },
-      (s) => {
-        resetData();
-        fetchApplications(s, 1);
-      }
-    );
-  };
-
-  const fetchApplications = (paramsValue = params, pageValue = page) => {
-    dispatch(
-      getApplications({ ...paramsValue, page: pageValue }, (res) => {
-        setHasMore(res.hasMore);
-        appendData(res.items || []);
-        setPage((prev) => +prev + 1);
-      })
-    );
-  };
 
   const handleRemove = (guid) => {
     const applicationIdx = data.findIndex((application) => application.guid === guid);
@@ -79,7 +44,7 @@ const ApplicationsTable = React.forwardRef(({ externalParams }, ref) => {
     <Table
       {...register}
       styles={styles}
-      onLoadMore={fetchApplications}
+      onLoadMore={fetchApi}
       hasMore={hasMore}
       dataLength={data.length}
       onSort={handleSort}

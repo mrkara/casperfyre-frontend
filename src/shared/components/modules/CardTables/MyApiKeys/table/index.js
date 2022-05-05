@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { STATUS } from 'shared/common/enum';
 import { Table, useTable } from 'shared/components/partials/Table';
@@ -7,52 +7,19 @@ import { getUserApiKeys } from 'stores/api/user/actions';
 import styles from './style.module.scss';
 
 const MyApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
-  const { data, register, hasMore, appendData, setHasMore, setPage, setParams, page, params, resetData } = useTable();
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (externalParams) {
-      resetData();
-      setParams({ ...params, ...externalParams }, (s) => {
-        fetchApiKeys(s, 1);
-      });
-    }
-  }, [externalParams]);
-
-  const handleSort = async (key, direction) => {
-    setParams(
-      {
-        ...params,
-        sort_key: key,
-        sort_direction: direction,
-      },
-      (s) => {
-        resetData();
-        fetchApiKeys(s, 1);
-      }
-    );
+  const api = (params, resolve, reject) => {
+    dispatch(getUserApiKeys(params, resolve, reject));
   };
 
-  const fetchApiKeys = (paramsValue = params, pageValue = page) => {
-    dispatch(
-      getUserApiKeys(
-        { ...paramsValue, page: pageValue },
-        (res) => {
-          setHasMore(res.hasMore);
-          appendData(res.items || []);
-          setPage((prev) => +prev + 1);
-        },
-        (error) => {}
-      )
-    );
-  };
+  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
 
   return (
     <Table
       {...register}
       styles={styles}
-      onLoadMore={fetchApiKeys}
+      onLoadMore={fetchApi}
       hasMore={hasMore}
       dataLength={data.length}
       onSort={handleSort}

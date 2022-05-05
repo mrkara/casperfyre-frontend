@@ -39,7 +39,7 @@ export const fakeFilterListApi = (data, payload) => {
   }
   const offsetStart = payload?.limit * (payload?.page - 1);
   const offsetEnd = payload?.limit * payload?.page;
-  const items = temp.splice(offsetStart, offsetEnd);
+  const items = temp.slice(offsetStart, offsetEnd);
   const hasMore = items.length >= payload.limit;
   return { items, hasMore };
 }

@@ -14,7 +14,7 @@ const AuthRoutes = () => {
   const { path } = useRouteMatch();
 
   return (
-    <Suspense fallback={<div className='bg-white1 h-full w-full' />}>
+    <Suspense fallback={<div className='bg-white1' />}>
       <Switch>
         <Route path={`${path}/login`} component={LoginRoutes} exact />
         <Route path={`${path}/signup`} component={SignUpRoutes} exact />

@@ -8,7 +8,7 @@ import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import AddIPModal from './modal/addIP';
 import WhiteListedIPTable from './table';
 
-const WhiteListedIP = (props) => {
+const WhiteListedIP = () => {
   const [params, setParams] = useState();
   const { appendDialog } = useDialog();
   const { id } = useParams();
@@ -25,11 +25,11 @@ const WhiteListedIP = (props) => {
   };
 
   const handleAddNewIP = () => {
-    appendDialog(<AddIPModal afterClosed={() => ref.current.refresh()} />);
+    appendDialog(<AddIPModal guid={id} afterClosed={() => ref.current.refresh()} />);
   };
 
   return (
-    <Card>
+    <Card className='max-h-120'>
       <CardHeader icon={<ListCheck />} title='Whitelisted IPs'>
         <div className='flex gap-x-1 items-center text-sm cursor-pointer' onClick={handleAddNewIP}>
           <AddIcon />

@@ -5,10 +5,8 @@ import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
 import { createIP } from 'stores/api/admin/actions';
 
-const AddIPModal = (props) => {
-  const { close } = props;
+const AddIPModal = ({ close, guid }) => {
   const [isCallingApi, setIsCallingApi] = useState();
-  const user = useSelector((state) => state.authReducer?.user);
 
   const [ip, setIP] = useState('');
 
@@ -24,7 +22,7 @@ const AddIPModal = (props) => {
       createIP(
         {
           ip,
-          guid: user.guid,
+          guid: guid,
         },
         () => {
           setIsCallingApi(false);

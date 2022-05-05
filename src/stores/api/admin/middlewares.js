@@ -203,8 +203,8 @@ function* enableAPIKey({ payload, resolve, reject }) {
 
 function* disableIP({ payload, resolve, reject }) {
   try {
-    const res = yield post(['admin', 'disable-ip'], { data: payload });
-    const ip = payload.ip_id.split('_')[0];
+    const { ip_id, ip } = payload;
+    const res = yield post(['admin', 'disable-ip'], { data: { ip_id } });
     toast.success(`You disabled ${ip}`);
     resolve(res);
   } catch (error) {
@@ -226,8 +226,8 @@ function* createIP({ payload, resolve, reject }) {
 
 function* enableIP({ payload, resolve, reject }) {
   try {
-    const res = yield post(['admin', 'enable-ip'], { data: payload });
-    const ip = payload.ip_id.split('_')[0];
+    const { ip_id, ip } = payload;
+    const res = yield post(['admin', 'enable-ip'], { data: { ip_id } });
     toast.success(`You allowed ${ip}`);
     resolve(res);
   } catch (error) {

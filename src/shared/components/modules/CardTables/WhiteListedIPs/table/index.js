@@ -15,19 +15,19 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
   const { data, fetchApi, refresh, register, hasMore, handleSort, setData } = useTable({ externalParams, api });
 
   useImperativeHandle(ref, () => ({
-    refresh
+    refresh,
   }));
 
   const handleIPStatus = (idx, status, ip, id) => {
     status === '1'
       ? dispatch(
-          disableIP({ ip_id: `${ip}_${id}` }, () => {
+          disableIP({ ip_id: id, ip }, () => {
             data[idx].active = '0';
             setData([...data]);
           })
         )
       : dispatch(
-          enableIP({ ip_id: `${ip}_${id}` }, () => {
+          enableIP({ ip_id: id, ip }, () => {
             data[idx].active = '1';
             setData([...data]);
           })

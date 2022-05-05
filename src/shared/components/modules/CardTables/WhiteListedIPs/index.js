@@ -1,6 +1,6 @@
 import { ReactComponent as AddIcon } from 'assets/icons/add.svg';
 import { ReactComponent as ListCheck } from 'assets/icons/list-check.svg';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Toolbar from 'shared/components/modules/Toolbar';
 import { Card, CardBody, CardHeader } from 'shared/components/partials';
@@ -12,6 +12,7 @@ const WhiteListedIP = (props) => {
   const [params, setParams] = useState();
   const { appendDialog } = useDialog();
   const { id } = useParams();
+  const ref = useRef();
 
   useEffect(() => {
     if (id) {
@@ -24,7 +25,7 @@ const WhiteListedIP = (props) => {
   };
 
   const handleAddNewIP = () => {
-    appendDialog(<AddIPModal />);
+    appendDialog(<AddIPModal afterClosed={() => ref.current.refresh()} />);
   };
 
   return (
@@ -39,7 +40,7 @@ const WhiteListedIP = (props) => {
         <div className='flex flex-col flex-1 min-h-0'>
           <Toolbar onChange={handleToolbarChange} />
           <div className='flex flex-col flex-1 min-h-0'>
-            <WhiteListedIPTable externalParams={params} />
+            <WhiteListedIPTable ref={ref} externalParams={params} />
           </div>
         </div>
       </CardBody>

@@ -38,7 +38,7 @@ const AddAdminModal = ({ close }) => {
         { email: data.email },
         () => {
           setLoading(false);
-          close();
+          close(true);
         },
         () => {
           setLoading(false);

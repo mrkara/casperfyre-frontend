@@ -18,13 +18,13 @@ const AppRoutes = () => {
     if (user) {
       if (user?.role === 'admin') {
         return (
-          <Suspense fallback={<div className='bg-white1' />}>
+          <Suspense fallback={null}>
             <AdminRoutes />
           </Suspense>
         );
       } else {
         return (
-          <Suspense fallback={<div className='bg-white1' />}>
+          <Suspense fallback={null}>
             <UserRoutes />
           </Suspense>
         );

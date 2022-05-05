@@ -1,5 +1,5 @@
 import Logo from 'assets/images/casper-logo.png';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { STATUS } from 'shared/common/enum';
@@ -35,6 +35,7 @@ const ApiKeysDetail = ({ config }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { appendDialog } = useDialog();
+  const historyTableRef = useRef();
 
   useEffect(() => {
     config.setBreadcrumb(BREADCRUMB_DATA);
@@ -176,7 +177,10 @@ const ApiKeysDetail = ({ config }) => {
   };
 
   const handleAfterCreatedWallet = (cond) => {
-    if (cond) fetchWallet();
+    if (cond) {
+      fetchWallet();
+      historyTableRef.current?.refresh();
+    }
   };
 
   const handleActions = (type) => {
@@ -261,7 +265,7 @@ const ApiKeysDetail = ({ config }) => {
           </div>
           <WhiteListedIP className='max-h-120' />
           <ApiCalls guid={id} className='max-h-120' />
-          <WalletsHistory guid={id} className='max-h-120' />
+          <WalletsHistory ref={historyTableRef} guid={id} className='max-h-120' />
         </div>
       </div>
     </section>

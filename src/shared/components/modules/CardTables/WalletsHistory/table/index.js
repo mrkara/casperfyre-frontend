@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import { Table, useTable } from 'shared/components/partials/Table';
 import { formatDate } from 'shared/core/utils';
@@ -13,7 +13,11 @@ const WalletsHistoryTable = React.forwardRef(({ externalParams }, ref) => {
     dispatch(getWallets(params, resolve, reject));
   };
 
-  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
+  const { data, fetchApi, refresh, register, hasMore, handleSort } = useTable({ externalParams, api });
+
+  useImperativeHandle(ref, () => ({
+    refresh
+  }));
 
   return (
     <Table

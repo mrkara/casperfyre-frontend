@@ -1,6 +1,6 @@
 import { ReactComponent as AddIcon } from 'assets/icons/add.svg';
 import { ReactComponent as AdminsIcon } from 'assets/icons/admins.svg';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Toolbar from 'shared/components/modules/Toolbar';
 import { Card, CardBody, CardHeader } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
@@ -9,15 +9,21 @@ import AdminsTable from './table';
 
 const Admins = () => {
   const [params, setParams] = useState();
-
+  const ref = useRef();
   const { appendDialog } = useDialog();
 
   const handleToolbarChange = (params) => {
     setParams(params);
   };
 
+  const handleAfterAddedAdmin = (val) => {
+    if (val) {
+      ref.current?.refresh();
+    }
+  }
+
   const handleAddAdmin = () => {
-    appendDialog(<AddAdminModal />);
+    appendDialog(<AddAdminModal afterClosed={handleAfterAddedAdmin} />);
   };
 
   return (
@@ -30,7 +36,7 @@ const Admins = () => {
       </CardHeader>
       <CardBody>
         <Toolbar onChange={handleToolbarChange} />
-        <AdminsTable externalParams={params} />
+        <AdminsTable ref={ref} externalParams={params} />
       </CardBody>
     </Card>
   );

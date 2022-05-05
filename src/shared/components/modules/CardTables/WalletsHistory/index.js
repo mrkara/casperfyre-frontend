@@ -1,10 +1,10 @@
 import { ReactComponent as Wallet } from 'assets/icons/wallet.svg';
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import Toolbar from 'shared/components/modules/Toolbar';
 import { Card, CardBody, CardHeader } from 'shared/components/partials';
 import WalletsHistoryTable from './table';
 
-const WalletsHistory = (props) => {
+const WalletsHistory = forwardRef((props, ref) => {
   const [params, setParams] = useState();
 
   const handleToolbarChange = (value) => {
@@ -24,12 +24,12 @@ const WalletsHistory = (props) => {
         <div className='flex flex-col flex-1 min-h-0'>
           <Toolbar onChange={handleToolbarChange} />
           <div className='flex flex-col flex-1 min-h-0'>
-            <WalletsHistoryTable externalParams={params} />
+            <WalletsHistoryTable ref={ref} externalParams={params} />
           </div>
         </div>
       </CardBody>
     </Card>
   );
-};
+});
 
 export default WalletsHistory;

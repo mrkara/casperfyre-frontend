@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
@@ -12,7 +12,11 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
     dispatch(getIps(params, resolve, reject));
   };
 
-  const { data, fetchApi, register, hasMore, handleSort, setData } = useTable({ externalParams, api });
+  const { data, fetchApi, refresh, register, hasMore, handleSort, setData } = useTable({ externalParams, api });
+
+  useImperativeHandle(ref, () => ({
+    refresh
+  }));
 
   const handleIPStatus = (idx, status, ip, id) => {
     status === '1'
@@ -60,7 +64,7 @@ const WhiteListedIPTable = React.forwardRef(({ externalParams }, ref) => {
                 rounded
                 onClick={() => handleIPStatus(idx, data.active, data.ip, data.id)}
               >
-                {data.active === '1' ? 'Disable' : 'Enable'}
+                {data.active === '1' ? 'Disable' : 'Allow'}
               </Button>
             </Table.BodyCell>
           </Table.BodyRow>

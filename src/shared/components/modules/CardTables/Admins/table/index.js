@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'shared/components/partials';
 import { Table, useTable } from 'shared/components/partials/Table';
@@ -13,7 +13,11 @@ const AdminsTable = React.forwardRef(({ externalParams }, ref) => {
     dispatch(getAdmins(params, resolve, reject));
   };
 
-  const { data, fetchApi, register, hasMore, handleSort, setData } = useTable({ externalParams, api });
+  const { data, fetchApi, refresh, register, hasMore, handleSort, setData } = useTable({ externalParams, api });
+  
+  useImperativeHandle(ref, () => ({
+    refresh
+  }));
 
   const handleAction = (idx, admin_approved, guid) => {
     if (admin_approved !== '1' && admin_approved !== '2') {

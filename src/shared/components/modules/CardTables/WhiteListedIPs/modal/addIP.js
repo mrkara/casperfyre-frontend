@@ -7,7 +7,7 @@ import { createIP } from 'stores/api/admin/actions';
 
 const AddIPModal = (props) => {
   const { close } = props;
-
+  const [isCallingApi, setIsCallingApi] = useState();
   const user = useSelector((state) => state.authReducer?.user);
 
   const [ip, setIP] = useState('');
@@ -19,6 +19,7 @@ const AddIPModal = (props) => {
   };
 
   const handleAddIP = () => {
+    setIsCallingApi(true);
     dispatch(
       createIP(
         {
@@ -26,6 +27,11 @@ const AddIPModal = (props) => {
           guid: user.guid,
         },
         () => {
+          setIsCallingApi(false);
+          close(true);
+        },
+        () => {
+          setIsCallingApi(false);
           close();
         }
       )
@@ -46,7 +52,7 @@ const AddIPModal = (props) => {
         <Input placeholder='IP address' onChange={handleChangeIP} />
       </Dialog.Body>
       <Dialog.Footer className='mt-6'>
-        <Button className='w-full' color='success' disabled={!ip} onClick={handleAddIP}>
+        <Button className='w-full' color='success' disabled={!ip || isCallingApi} onClick={handleAddIP}>
           <Add className='mr-2 text-xs' />
           Whitelist this IP
         </Button>

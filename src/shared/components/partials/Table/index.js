@@ -250,6 +250,12 @@ const useTable = (props = {}) => {
     return props.api({ ...params, page }, handleFetchSuccess, handleFetchError);
   }
 
+  const refresh = () => {
+    resetData(() => {
+      props.api({ ...params, page: 1 }, handleFetchSuccess, handleFetchError);
+    });
+  }
+
   const handleSort = async (key, direction) => {
     setParams(
       {
@@ -326,6 +332,7 @@ const useTable = (props = {}) => {
     setPage,
     params,
     setParams,
+    refresh
   };
 };
 

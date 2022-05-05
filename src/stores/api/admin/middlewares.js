@@ -134,7 +134,10 @@ function* disableUser({ payload, resolve, reject }) {
 function* getIps({ payload, resolve, reject }) {
   try {
     const res = yield get(['admin', 'get-ips'], payload);
-    resolve({ ...res, detail: res.detail, hasMore: false });
+    /* this code will be remove in the future */
+    const result = fakeFilterListApi(res.detail, payload);
+    /* end */
+    resolve(result);
   } catch (error) {
     reject(error);
   }

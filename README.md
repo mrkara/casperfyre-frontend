@@ -71,13 +71,13 @@ For this example, using an Ubuntu 20 Ec2 instance, our http vhost would look som
 </VirtualHost>
 ```
 
-### Usage Guide
+## Usage Guide
 
-**Start here -**
+### Start here
 
 aaaaa
 
-**Other notes -**
+### Other notes
 
 These features were scoped and determined to be the essential features needed for CasperFYRE. Email any questions to team@ledgerleap.com.
 

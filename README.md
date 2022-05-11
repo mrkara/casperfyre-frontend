@@ -18,9 +18,11 @@ The system requires the following softwares run a this frontend on top of the AP
  5. Yarn version 1+
 ```
 
+Ubuntu 18+ and Apache2 are optional and can be switched out for other common platforms, but the backend interactive setup script will not work in that case. The setup of the operating system and HTTP server software should be handled by the dev. Note, the http document root is **casperfyre-frontend/build**
+
 ## Setup
 
-Before doing anything else, make sure you're up to date.
+We generally would use the latest version of Ubuntu for testing installs. Example hosting server: AWS ec2 t2 medium with at least 10Gb SSD. Before doing anything else, make sure you're up to date.
 
 ```bash
 sudo apt-get update
@@ -28,7 +30,7 @@ sudo apt-get update
 
 ### Software
 
-We generally would use the latest version of Ubuntu for testing installs. Example hosting server: AWS ec2 t2 medium with at least 10Gb SSD. Setup the repo according to our VHOST path using the instruction below. Note, the actual VHOST path in this case would be set to **/var/www/casperfyre-frontend/build**
+Setup the repo according to our VHOST path using the instruction below. Note, the actual VHOST path in this case would be set to **/var/www/casperfyre-frontend/build**
 
 ```bash
 curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -

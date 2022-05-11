@@ -59,7 +59,7 @@ For this example, using an Ubuntu 20 Ec2 instance, our http vhost would look som
 <VirtualHost *:80>
   ServerName casperfyre.com
   DocumentRoot /var/www/casperfyre-frontend/build
-  Directory /var/www/casperfyre-frontend/build>
+  <Directory /var/www/casperfyre-frontend/build>
     Options -MultiViews
     AllowOverride All
     Require all granted

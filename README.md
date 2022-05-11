@@ -20,6 +20,12 @@ The system requires the following softwares run a this frontend on top of the AP
 
 ## Setup
 
+Before doing anything else, make sure you're up to date.
+
+```bash
+sudo apt-get update
+```
+
 ### Software
 
 We generally would use the latest version of Ubuntu for testing installs. Example hosting server: AWS ec2 t2 medium with at least 10Gb SSD. Setup the repo according to our VHOST path using the instruction below. Note, the actual VHOST path in this case would be set to **/var/www/casperfyre-frontend/build**
@@ -28,12 +34,13 @@ We generally would use the latest version of Ubuntu for testing installs. Exampl
 curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
 sudo apt install nodejs -y
 curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+source ~/.bashrc
 cd /var/www/
 git clone https://github.com/ledgerleapllc/casperfyre-frontend.git
 cd  casperfyre-frontend/
 ```
 
-Install packages and setup environment. You will need to modify **.env.production** variables to fit the server on which you're deploying. Then:
+Install packages and setup environment. You will need to modify **.env.production** variables to fit the server on which you're deploying. **REACT_APP_BASE_URL** should specify the URL of your backend API.
 
 ```bash
 yarn install

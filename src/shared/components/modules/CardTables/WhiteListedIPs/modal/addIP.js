@@ -1,6 +1,6 @@
 import { ReactComponent as Add } from 'assets/icons/add.svg';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, Input } from 'shared/components/partials';
 import { Dialog } from 'shared/components/partials/Dialog/Provider';
 import { createIP } from 'stores/api/admin/actions';

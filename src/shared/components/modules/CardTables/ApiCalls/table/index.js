@@ -52,7 +52,7 @@ const ApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
             </Table.BodyCell>
             <Table.BodyCell>{item.ip}</Table.BodyCell>
             <Table.BodyCell className='break-words'>{item.address}</Table.BodyCell>
-            <Table.BodyCell>{item.deploy_hash}</Table.BodyCell>
+            <Table.BodyCell className='break-words'>{item.deploy_hash}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
               <Button size='sm' rounded onClick={() => handleViewAPIDetail(item)}>
                 View

@@ -48,7 +48,10 @@ function* getUserWallets({ payload, resolve, reject }) {
 function* getUserHistory({ payload, resolve, reject }) {
   try {
     const res = yield get(['user', 'get-history']);
-    resolve(res);
+     /* this code will be remove in the future */
+     const result = fakeFilterListApi(res.detail, payload);
+     /* end */
+    resolve(result);
   } catch (error) {
     reject(error);
   }

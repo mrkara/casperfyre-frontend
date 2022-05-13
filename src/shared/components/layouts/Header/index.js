@@ -26,7 +26,7 @@ export const Header = () => {
           <Link to='/' className='flex items-center'>
             <img className={style.logo} src='/images/logo.png' alt='logo' />
           </Link>
-          <div className='w-auto'>
+          {user && <div className='w-auto'>
             <Menu>
               <MenuButton className='flex items-center gap-x-2'>
                 <UserProfile width={20} height={20} />
@@ -36,7 +36,7 @@ export const Header = () => {
                 <MenuItem onClick={doLogout}>Log Out</MenuItem>
               </MenuList>
             </Menu>
-          </div>
+          </div>}
         </div>
       </nav>
     </div>

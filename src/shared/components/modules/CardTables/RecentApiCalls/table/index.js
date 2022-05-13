@@ -1,18 +1,27 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import APICallsDetailModal from 'shared/components/modules/Modals/APICallsDetail';
 import { Button } from 'shared/components/partials';
+import { useDialog } from 'shared/components/partials/Dialog/Provider';
 import { Table, useTable } from 'shared/components/partials/Table';
+import { HistoryStatus } from 'shared/core/directive';
+import { formatDate } from 'shared/core/utils';
 import { getUserHistory } from 'stores/api/user/actions';
 import styles from './style.module.scss';
 
 const RecentApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
   const dispatch = useDispatch();
+  const { appendDialog } = useDialog();
 
   const api = (params, resolve, reject) => {
     dispatch(getUserHistory(params, resolve, reject));
   };
 
   const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
+  
+  const handleViewAPIDetail = (data) => {
+    appendDialog(<APICallsDetailModal data={data} />);
+  };
 
   return (
     <Table
@@ -36,16 +45,17 @@ const RecentApiCallsTable = React.forwardRef(({ externalParams }, ref) => {
       <Table.Body>
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
-            <Table.BodyCell>{data.userId}</Table.BodyCell>
-            <Table.BodyCell>{data.requestId}</Table.BodyCell>
-            <Table.BodyCell>{data.timestamp}</Table.BodyCell>
+            <Table.BodyCell>{data.id}</Table.BodyCell>
+            <Table.BodyCell>{formatDate(data.created_at)}</Table.BodyCell>
             <Table.BodyCell>{data.amount}</Table.BodyCell>
-            <Table.BodyCell>{data.status}</Table.BodyCell>
+            <Table.BodyCell>
+              <HistoryStatus data={data} />
+            </Table.BodyCell>
             <Table.BodyCell>{data.ip}</Table.BodyCell>
-            <Table.BodyCell>{data.recipient}</Table.BodyCell>
-            <Table.BodyCell>{data.txId}</Table.BodyCell>
+            <Table.BodyCell className='break-all'>{data.address}</Table.BodyCell>
+            <Table.BodyCell className='break-all'>{data.deploy_hash}</Table.BodyCell>
             <Table.BodyCell className='flex gap-x-2'>
-              <Button size='sm' rounded>
+              <Button size='sm' rounded onClick={() => handleViewAPIDetail(data)}>
                 View
               </Button>
             </Table.BodyCell>

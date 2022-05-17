@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import GeneralSettings from 'shared/components/modules/CardInfo/GeneralSettings';
 import UpdateDailyCSPRLimitModal from 'shared/components/modules/Modals/UpdateDailyLimit';
+import UpdateMonthlyCSPRLimitModal from 'shared/components/modules/Modals/UpdateMonthlyLimit';
 import UpdateTXLimitModal from 'shared/components/modules/Modals/UpdateTxLimit';
 import { Button } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
@@ -90,6 +91,11 @@ const SettingsPage = ({ config }) => {
           <UpdateDailyCSPRLimitModal guid={getGuid()} currentLimit={apiKey?.day_limit} onUpdate={handleUpdate} />
         );
         break;
+      case 'updateMonthlyCSPRLimit':
+          appendDialog(
+            <UpdateMonthlyCSPRLimitModal guid={getGuid()} currentLimit={apiKey?.month_limit} onUpdate={handleUpdate} />
+          );
+          break;
       case 'updatePerTXCSPRLimit':
         appendDialog(<UpdateTXLimitModal guid={getGuid()} currentLimit={apiKey?.per_limit} onUpdate={handleUpdate} />);
         break;
@@ -99,7 +105,7 @@ const SettingsPage = ({ config }) => {
   };
 
   return (
-    <section className='section-settings'>
+    <section className='section-settings flex justify-between'>
       <div className='section-body pt-4 max-w-4xl'>
         <GeneralSettings />
         <div className='section-content pt-12.5 flex flex-col gap-y-6'>
@@ -122,6 +128,11 @@ const SettingsPage = ({ config }) => {
                 title: 'Daily CSPR Limit',
                 value: apiKey?.day_limit,
                 onUpdate: () => handleActions('updateDailyCSPRLimit'),
+              },
+              {
+                title: 'Monthly CSPR Limit',
+                value: apiKey?.month_limit,
+                onUpdate: () => handleActions('updateMonthlyCSPRLimit'),
               },
               {
                 title: 'Per TX CSPR Limit',
@@ -153,6 +164,11 @@ const SettingsPage = ({ config }) => {
             ))}
           </div>
         </div>
+      </div>
+      <div className='pt-4'>
+        <Button as={'a'} target="_blank" href={`${process.env.REACT_APP_BASE_URL}/v1/docs`} rounded>
+          Developer Documentation
+        </Button>
       </div>
     </section>
   );

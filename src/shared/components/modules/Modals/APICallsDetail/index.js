@@ -36,7 +36,7 @@ const APICallsDetailModal = (props) => {
           <span className='font-semibold'><HistoryStatus data={data} /></span>
         </div>
         <div>
-          <span>TXID:</span>
+          <span>Deploy Hash:</span>
           <span>{data.deploy_hash}</span>
         </div>
       </Dialog.Body>

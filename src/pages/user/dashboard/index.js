@@ -30,13 +30,13 @@ const DashboardPage = () => {
   }, []);
 
   return (
-    <section className='section-dashboard'>
-      <div className='section-body'>
+    <section className='section-dashboard h-full'>
+      <div className='section-body h-full flex flex-col'>
         <div className='flex gap-10'>
           <APIKeyInfo data={apiKey} />
           <WalletInfo data={wallet} />
         </div>
-        <div className='section-content pt-12.5'>
+        <div className='section-content pt-12.5 flex-1 min-h-0'>
           <RecentApiCalls />
         </div>
       </div>

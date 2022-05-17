@@ -13,7 +13,7 @@ const MyWalletsTable = React.forwardRef(({ externalParams }, ref) => {
     dispatch(getUserWallets(params, resolve, reject));
   };
 
-  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
+  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api, defaultSort: {key: 'created_at', direction: 'desc'} });
 
   return (
     <Table
@@ -35,7 +35,7 @@ const MyWalletsTable = React.forwardRef(({ externalParams }, ref) => {
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell className={classNames(!data.active && 'text-primary')}>
-              {data.active ? 'Active' : 'Old'}
+              {+data.active ? 'Active' : 'Old'}
             </Table.BodyCell>
             <Table.BodyCell>{formatDate(data.created_at)}</Table.BodyCell>
             <Table.BodyCell>{formatDate(data.inactive_at)}</Table.BodyCell>

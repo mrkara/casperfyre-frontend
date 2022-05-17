@@ -66,3 +66,7 @@ button {
 .input-readonly-copy-text {
   @apply bg-transparent border-none outline-none;
 }
+
+.font-size-inherit {
+  font-size: inherit;
+}

@@ -239,10 +239,15 @@ const useTable = (props = {}) => {
 
   useEffect(() => {
     if (props.externalParams) {
-      resetData();
-      setParams({ ...params, ...props.externalParams }, (s) => {
-        props.api({ ...s, page: 1 }, handleFetchSuccess, handleFetchError);
-      });
+      if (props.defaultSort) {
+        const { key, direction } = props.defaultSort;
+        handleSort(key, direction);
+      } else {
+        resetData();
+        setParams({ ...params, ...props.externalParams }, (s) => {
+          props.api({ ...s, page: 1 }, handleFetchSuccess, handleFetchError);
+        });
+      }
     }
   }, [props.externalParams]);
 

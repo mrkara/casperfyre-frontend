@@ -6,12 +6,12 @@ import RecentApiCallsTable from './table';
 
 const RecentApiCalls = () => {
   const [params, setParams] = useState();
-  const handleToolbarChange = (params) => {
-    setParams(params);
+  const handleToolbarChange = (newParams) => {
+    setParams(newParams);
   };
 
   return (
-    <Card className='max-h-120'>
+    <Card className='h-full'>
       <CardHeader icon={<Buffer />} title='Recent API Calls' />
       <CardBody>
         <div className='flex flex-col flex-1 min-h-0'>

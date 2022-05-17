@@ -27,11 +27,19 @@ export const fakeFilterListApi = (data, payload) => {
   // sort
   if (payload.sort_key) {
     temp.sort((a, b) => {
-      if (a[payload.sort_key] < b[payload.sort_key])
-        return -1;
-      if ( a[payload.sort_key] > b[payload.sort_key])
-        return 1;
-      return 0;
+      if (!isNaN(parseInt(a[payload.sort_key])) && !isNaN(parseInt(b[payload.sort_key]))) {
+        if (parseInt(a[payload.sort_key]) < parseInt(b[payload.sort_key]))
+          return -1;
+        if (parseInt(a[payload.sort_key]) > parseInt(b[payload.sort_key]))
+          return 1;
+        return 0;
+      } else {
+        if (a[payload.sort_key] < b[payload.sort_key])
+          return -1;
+        if ( a[payload.sort_key] > b[payload.sort_key])
+          return 1;
+        return 0;
+      }
     });
     if (payload.sort_direction === 'desc') {
       temp = temp.reverse();

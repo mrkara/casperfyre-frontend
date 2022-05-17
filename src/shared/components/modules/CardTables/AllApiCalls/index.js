@@ -12,11 +12,15 @@ const AllApiCalls = () => {
     setParams(params);
   };
 
+  const handleCheckboxChange = (e) => {
+    setParams({ ...params, only_delivered: e.target.checked });
+  };
+
   return (
     <Card className='max-h-120'>
       <CardHeader icon={<Buffer />} title='All API Calls'>
         <div className='flex gap-x-2 items-center'>
-          <CheckBox />
+          <CheckBox onChange={handleCheckboxChange}/>
           <p>Only Show Delivered</p>
         </div>
       </CardHeader>

@@ -1,3 +1,5 @@
+import classNames from "classnames";
+
 export const HistoryStatus = ({ data }) => {
   const { success, fulfilled } = data;
   
@@ -25,4 +27,29 @@ export const HistoryStatus = ({ data }) => {
   return (
     <>{renderText()}</>
   )
+};
+
+export const IPAddress = ({ data }) => {
+  if (!data) return null;
+  return (
+    <>
+      <div className='flex space-x-1'>
+        <div className={classNames(+data.return_code === 200? 'text-success' : 'text-primary')}>{data.return_code}</div>
+        <div>-</div>
+        <div>IP {data.ip}</div>
+      </div>
+    </>
+  )
+};
+
+export const DeployHash = ({ data }) => {
+  return (
+    <a target="_blank" href={`https://cspr.live/deploy/${data.deploy_hash}`} className='text-primary font-size-inherit' rel="noreferrer">{data.deploy_hash}</a>
+  );
+};
+
+export const Recipient = ({ data }) => {
+  return (
+    <a target="_blank" href={`https://cspr.live/account/${data.address}`} className='text-primary font-size-inherit' rel="noreferrer">{data.address}</a>
+  );
 };

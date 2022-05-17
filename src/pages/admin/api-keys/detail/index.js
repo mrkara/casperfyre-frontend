@@ -12,6 +12,7 @@ import ReplaceKeyModal from 'shared/components/modules/Modals/ReplaceKey';
 import ResetPasswordModal from 'shared/components/modules/Modals/ResetPassword';
 import StatusKeyModal from 'shared/components/modules/Modals/StatusKey';
 import UpdateDailyCSPRLimitModal from 'shared/components/modules/Modals/UpdateDailyLimit';
+import UpdateMonthlyCSPRLimitModal from 'shared/components/modules/Modals/UpdateMonthlyLimit';
 import UpdateTXLimitModal from 'shared/components/modules/Modals/UpdateTxLimit';
 import { Button } from 'shared/components/partials';
 import { useDialog } from 'shared/components/partials/Dialog/Provider';
@@ -116,6 +117,11 @@ const ApiKeysDetail = ({ config }) => {
       onUpdate: () => handleActions('updateDailyCSPRLimit'),
     },
     {
+      title: 'Monthly CSPR Limit',
+      key: 'month_limit',
+      onUpdate: () => handleActions('updateMonthlyCSPRLimit'),
+    },
+    {
       title: 'Per TX CSPR Limit',
       key: 'per_limit',
       onUpdate: () => handleActions('updatePerTXCSPRLimit'),
@@ -196,6 +202,9 @@ const ApiKeysDetail = ({ config }) => {
         break;
       case 'updateDailyCSPRLimit':
         appendDialog(<UpdateDailyCSPRLimitModal guid={id} currentLimit={apiKey.day_limit} onUpdate={handleUpdate} />);
+        break;
+      case 'updateMonthlyCSPRLimit':
+        appendDialog(<UpdateMonthlyCSPRLimitModal guid={id} currentLimit={apiKey.month_limit} onUpdate={handleUpdate} />);
         break;
       case 'updatePerTXCSPRLimit':
         appendDialog(<UpdateTXLimitModal guid={id} currentLimit={apiKey.per_limit} onUpdate={handleUpdate} />);

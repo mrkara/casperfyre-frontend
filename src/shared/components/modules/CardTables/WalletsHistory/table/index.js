@@ -29,6 +29,7 @@ const WalletsHistoryTable = React.forwardRef(({ externalParams }, ref) => {
       onSort={handleSort}
     >
       <Table.Header>
+        <Table.HeaderCell>User ID</Table.HeaderCell>
         <Table.HeaderCell>Status</Table.HeaderCell>
         <Table.HeaderCell>Created Date</Table.HeaderCell>
         <Table.HeaderCell>Inactive Date</Table.HeaderCell>
@@ -38,6 +39,7 @@ const WalletsHistoryTable = React.forwardRef(({ externalParams }, ref) => {
       <Table.Body className='table-body-card'>
         {data.map((data, idx) => (
           <Table.BodyRow key={idx} className='py-4'>
+            <Table.BodyCell>{data.guid}</Table.BodyCell>
             <Table.BodyCell className={classNames(!data.active && 'text-primary')}>
               {data.active ? 'Active' : 'Old'}
             </Table.BodyCell>

@@ -4,7 +4,7 @@ import Toolbar from 'shared/components/modules/Toolbar';
 import { Card, CardBody, CardHeader } from 'shared/components/partials';
 import MyWalletsTable from './table';
 
-const MyWallets = () => {
+const MyWallets = React.forwardRef((_params, ref) => {
   const [params, setParams] = useState();
 
   const handleToolbarChange = (params) => {
@@ -12,18 +12,18 @@ const MyWallets = () => {
   };
 
   return (
-    <Card className='max-h-120'>
+    <Card className='h-full'>
       <CardHeader icon={<Wallet />} title='My Wallets' />
       <CardBody>
         <div className='flex flex-col flex-1 min-h-0'>
           <Toolbar onChange={handleToolbarChange} />
           <div className='flex flex-col flex-1 min-h-0'>
-            <MyWalletsTable externalParams={params} />
+            <MyWalletsTable ref={ref} externalParams={params} />
           </div>
         </div>
       </CardBody>
     </Card>
   );
-};
+});
 
 export default MyWallets;

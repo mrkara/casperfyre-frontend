@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MyApiKeys from 'shared/components/modules/CardTables/MyApiKeys';
@@ -13,7 +13,7 @@ const KeysAndWalletsPage = (props) => {
   const dispatch = useDispatch();
   const [wallet, setWallet] = useState('');
   const [apiKey, setApiKey] = useState('');
-
+  const myWalletsRef = useRef();
   const { appendDialog } = useDialog();
 
   useEffect(() => {
@@ -43,6 +43,12 @@ const KeysAndWalletsPage = (props) => {
     }));
   };
 
+  const handleAfterCreatedWallet = (cond) => {
+    if (cond) {
+      myWalletsRef.current?.refresh();
+    }
+  };
+
   const handleOpenModal = (type) => {
     switch (type) {
       case 'replaceKey':
@@ -50,7 +56,7 @@ const KeysAndWalletsPage = (props) => {
         break;
 
       case 'changeWallet':
-        appendDialog(<ChangeWalletModal data={wallet} onUpdate={handleUpdateWallet} />);
+        appendDialog(<ChangeWalletModal data={wallet} onUpdate={handleUpdateWallet} afterClosed={handleAfterCreatedWallet} />);
         break;
 
       default:
@@ -59,9 +65,9 @@ const KeysAndWalletsPage = (props) => {
   };
 
   return (
-    <section className='section-keys-wallets'>
-      <div className='section-body flex flex-col gap-y-6'>
-        <div>
+    <section className='section-keys-wallets h-full'>
+      <div className='section-body flex flex-col gap-y-6 h-full'>
+        <div className='h-1/2 flex flex-col'>
           <div className='flex justify-between items-center'>
             <div className='flex gap-2 items-center py-5'>
               <b className='whitespace-nowrap'>Active API Key:</b>
@@ -78,9 +84,11 @@ const KeysAndWalletsPage = (props) => {
               </Button>
             </div>
           </div>
-          <MyApiKeys />
+          <div className='flex-1 min-h-0'>
+            <MyApiKeys />
+          </div>
         </div>
-        <div>
+        <div className='h-1/2 flex flex-col'>
           <div className='flex justify-between items-center'>
             <div className='flex gap-2 items-center py-5'>
               <b className='whitespace-nowrap'>Active Wallet:</b>
@@ -94,7 +102,9 @@ const KeysAndWalletsPage = (props) => {
               </Button>
             </div>
           </div>
-          <MyWallets />
+          <div className='flex-1 min-h-0'>
+            <MyWallets ref={myWalletsRef}/>
+          </div>
         </div>
       </div>
     </section>

@@ -12,7 +12,7 @@ const MyApiKeys = () => {
   };
 
   return (
-    <Card className='max-h-120'>
+    <Card className='h-full'>
       <CardHeader icon={<Key />} title='My API Keys' />
       <CardBody>
         <div className='flex flex-col flex-1 min-h-0'>

@@ -17,7 +17,7 @@ const AllApiCalls = () => {
   };
 
   return (
-    <Card className='max-h-120'>
+    <Card className='h-full'>
       <CardHeader icon={<Buffer />} title='All API Calls'>
         <div className='flex gap-x-2 items-center'>
           <CheckBox onChange={handleCheckboxChange}/>

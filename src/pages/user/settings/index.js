@@ -25,7 +25,6 @@ const SettingsPage = ({ config }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
   const [apiKey, setApiKey] = useState({});
-
   const { appendDialog } = useDialog();
 
   useEffect(() => {
@@ -149,7 +148,7 @@ const SettingsPage = ({ config }) => {
               },
               {
                 title: 'Total CSPR Sent',
-                value: apiKey?.total_cspr_sent,
+                value: user?.cspr_actual,
               },
             ].map((user, index) => (
               <div key={index} className='flex gap-x-3'>
@@ -166,7 +165,7 @@ const SettingsPage = ({ config }) => {
         </div>
       </div>
       <div className='pt-4'>
-        <Button as={'a'} target="_blank" href={`${process.env.REACT_APP_BASE_URL}/v1/docs`} rounded>
+        <Button as={'a'} target="_blank" href={`${process.env.REACT_APP_BASE_URL}/docs`} rounded>
           Developer Documentation
         </Button>
       </div>

@@ -1,5 +1,5 @@
 import { ReactComponent as Close } from 'assets/icons/close.svg';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useLoading } from 'shared/components/modules/Loading';
@@ -14,12 +14,14 @@ const DenyModal = (props) => {
 
   const { setLoading } = useLoading();
   const dispatch = useDispatch();
+  const [denyReason, setDenyReason] = useState();
 
   const handleDeny = () => {
+    console.log(denyReason);
     setLoading(true);
     dispatch(
       denyUser(
-        { guid },
+        { guid, deny_reason: denyReason },
         () => {
           setLoading(false);
           onDeny && onDeny(guid);
@@ -39,7 +41,7 @@ const DenyModal = (props) => {
         <Close className='absolute top-1 -left-8' color='red' />
       </Dialog.Header>
       <Dialog.Body className='mt-6'>
-        <Input rows={4} placeholder='Enter reason....' />
+        <Input rows={4} value={denyReason} onChange={(e) => setDenyReason(e.target.value)} maxLength="2048" placeholder='Enter reason....' />
       </Dialog.Body>
       <Dialog.Footer className='mt-5'>
         <Button className='w-full' onClick={handleDeny}>

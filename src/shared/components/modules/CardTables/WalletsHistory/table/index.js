@@ -41,7 +41,7 @@ const WalletsHistoryTable = React.forwardRef(({ externalParams }, ref) => {
           <Table.BodyRow key={idx} className='py-4'>
             <Table.BodyCell>{data.guid}</Table.BodyCell>
             <Table.BodyCell className={classNames(!data.active && 'text-primary')}>
-              {data.active ? 'Active' : 'Old'}
+              {+data.active ? 'Active' : 'Old'}
             </Table.BodyCell>
             <Table.BodyCell>{formatDate(data.created_at)}</Table.BodyCell>
             <Table.BodyCell>{formatDate(data.inactive_at)}</Table.BodyCell>

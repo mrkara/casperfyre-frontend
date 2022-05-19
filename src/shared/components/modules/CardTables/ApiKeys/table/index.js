@@ -13,7 +13,7 @@ const ApiKeysTable = React.forwardRef(({ externalParams }, ref) => {
     dispatch(getAPIKeyHolders(params, resolve, reject));
   };
 
-  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api });
+  const { data, fetchApi, register, hasMore, handleSort } = useTable({ externalParams, api, defaultSort: {key: 'created_at', direction: 'desc'} });
 
   const dispatch = useDispatch();
 

@@ -255,7 +255,7 @@ const ApiKeysDetail = ({ config }) => {
             ))}
         </div>
         <div className='section-content pt-12.5 flex flex-col gap-y-6'>
-          <p className='text-sm font-semibold'>User Details</p>
+          <p className='text-sm font-semibold'>Api Keyholder Details</p>
           <div className='flex gap-y-3 flex-col'>
             {user.map((user, index) => (
               <div key={index} className='flex gap-x-3'>

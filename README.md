@@ -84,7 +84,18 @@ For this example, using an Ubuntu 20 Ec2 instance, our http vhost would look som
 
 ### Start here
 
-aaaaa
+After your admin account and credentials have been created and you have logged in, the first thing to see is the *Applications* tab. This is where new platform users wil appear for registration acceptance. As an admin, you can approve/deny users joining your API interface. The *API Keys* tab will show approved users, named *Keyholders* here. You can manage keyholders, their API keys, wallets, and settings here. The *API Logs* tab show a global view and API request history across all your keyholders. *Wallets* tab shows your keyholder's wallet details globally for management. *Settings* tab is for your admin account settings. You will find email/password/MFA settings here, as well as other admins you have assigned to manage your keyholders, known as *sub-admins*.
+
+As shown in the dashboard settings and documentation, API users can use syntax like the example below to interact with the public facing API.
+
+```bash
+curl -X POST https://api.casperfyre.com/v1/dispense \
+  -H 'Content-type: application/json' \
+  -H 'Authorization: token API_KEY' \
+  -d '{ "address": "CSPR_ADDRESS", "amount": 100 }'
+```
+
+This example curl request will dispense 100 token to the specified address. Please note, if you are deploying to your own instance and domain, the base URL will be your own URL that you setup, not **api.casperfyre.com**.
 
 ### Other notes
 
@@ -98,3 +109,8 @@ Testing done through yarn -> npm -> react-scripts
 yarn test
 ```
 
+### Documentation
+
+We use PHPDoc in the backend codebase to generate new API documentation each time there are changes to the API. You will find the newly generated documentation at /docs/index.html
+
+This documentation is also linked out and used to display to API users from the dashboard settings page.

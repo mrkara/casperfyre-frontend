@@ -11,14 +11,14 @@ Dispensory API interface for Casper mainnet. This is the frontend repo for this 
 The system requires the following softwares run a this frontend on top of the API server.
 
 ```
- 1. Ubuntu 18+
+ 1. Ubuntu 20+
  2. Apache2
  3. NodeJS version 16+
  4. NPM version 8+
  5. Yarn version 1+
 ```
 
-Ubuntu 18+ and Apache2 are optional and can be switched out for other common platforms, but the backend interactive setup script will not work in that case. The setup of the operating system and HTTP server software should be handled by the dev. Note, the http document root is **casperfyre-frontend/build**
+Ubuntu 20+ and Apache2 are optional and can be switched out for other common platforms, but the backend interactive setup script will not work in that case. The setup of the operating system and HTTP server software should be handled by the dev. Note, the http document root is **casperfyre-frontend/build**
 
 ## Setup
 

@@ -24,11 +24,15 @@ Ubuntu 20+ and Apache2 are optional and can be switched out for other common pla
 
 We generally would use the latest version of Ubuntu for testing installs. Example hosting server: AWS ec2 t2 medium with at least 10Gb SSD. Before doing anything else, make sure you're up to date.
 
+For Dev build, you can use Gitpod to launch. First, collect a backend API URL and insert it into .env.development where it says REACT_APP_BASE_URL. Then:
+
 ```bash
 sudo apt-get update
+yarn build
+yarn dev
 ```
 
-### Software
+### Software for Production Build
 
 Setup the repo according to our VHOST path using the instruction below. Note, the actual VHOST path in this case would be set to **/var/www/casperfyre-frontend/build**
 
